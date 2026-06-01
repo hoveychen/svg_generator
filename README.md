@@ -30,12 +30,19 @@ Flags:
 | `--retries` | `3` | max repair attempts when output is invalid |
 | `--min-elements` | `8` | reject lazy builds with fewer drawable elements |
 | `--canvas` | `1024` | square viewBox size hinted to the model |
+| `--png` | `false` | also render a PNG preview next to the SVG (needs `rsvg-convert` or macOS `qlmanage`) |
+| `--png-size` | `0` | PNG preview pixel size; `0` = use `--canvas` |
 | `-v` | `false` | verbose: print the prompt and each attempt to stderr |
+
+With `--png`, `boat.svg` also produces `boat.png` (renderer chosen automatically:
+`rsvg-convert` if present, otherwise macOS `qlmanage`). A preview failure is only
+a warning — the SVG is still written.
 
 ## Requirements
 
 - Go 1.22+ to build
 - the `claude` CLI on `PATH`, already authenticated
+- optional: `rsvg-convert` or macOS `qlmanage` for `--png` previews
 
 ## Install
 
