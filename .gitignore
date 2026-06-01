@@ -1,6 +1,5 @@
-# Compiled binary
+# Compiled binary (root-anchored so it does not match the cmd/generate_svg/ source dir)
 /generate_svg
-generate_svg
 
 # Agent scratch state (not version-controlled)
 TASKS.md
