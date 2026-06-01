@@ -28,6 +28,8 @@ func main() {
 		minElements = flag.Int("min-elements", 8, "reject builds with fewer drawable elements")
 		canvas      = flag.Int("canvas", 1024, "square viewBox size hinted to the model")
 		timeout     = flag.Duration("timeout", 3*time.Minute, "per-attempt timeout for the claude call")
+		png         = flag.Bool("png", false, "also render a PNG preview next to the SVG (needs rsvg-convert or macOS qlmanage)")
+		pngSize     = flag.Int("png-size", 0, "PNG preview pixel size; 0 = use --canvas")
 		verbose     = flag.Bool("v", false, "verbose: stream claude output and progress to stderr")
 	)
 	flag.Usage = func() {
@@ -74,4 +76,19 @@ func main() {
 
 	fmt.Fprintf(os.Stderr, "generate_svg: wrote %s (%d drawable elements, %d attempt(s))\n",
 		*out, res.Elements, res.Attempts)
+
+	if *png {
+		size := *pngSize
+		if size <= 0 {
+			size = *canvas
+		}
+		pngPath := gen.PNGPath(*out)
+		if err := gen.RenderPNG(*out, pngPath, size); err != nil {
+			// The SVG is the primary deliverable and already written; a preview
+			// failure is a warning, not a hard error.
+			fmt.Fprintf(os.Stderr, "generate_svg: PNG preview skipped: %v\n", err)
+		} else {
+			fmt.Fprintf(os.Stderr, "generate_svg: rendered preview %s (%dpx)\n", pngPath, size)
+		}
+	}
 }
