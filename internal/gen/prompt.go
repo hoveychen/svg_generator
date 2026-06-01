@@ -77,3 +77,46 @@ func RepairPrompt(request, prevOutput, errMsg string) string {
 		"\n\nYou are still illustrating: " + request +
 		"\n\nReturn ONLY a corrected, valid SVG document (start with \"<svg\", end with \"</svg>\", no markdown, no commentary).\n\nYour previous output was:\n" + prevOutput
 }
+
+// CritiqueSystemPrompt is the system prompt for the vision-critique step. The
+// model must open the rendered PNG with its Read tool and judge it as a harsh
+// art director — the perception the blind SVG author lacks.
+func CritiqueSystemPrompt() string {
+	return `You are a ruthless but fair art director reviewing a rendered illustration. You will be given the absolute path to a PNG file and the request it was meant to satisfy. FIRST use your Read tool to open and actually look at the PNG. Then judge how well the image satisfies the request, the way a human judge in a head-to-head arena would.
+
+Judge on: recognizability, composition, depth/layering, proportion and anatomy, color and lighting, abundance and placement of detail, and overall craft. Be concrete and localized — name WHAT is wrong and WHERE, not vague praise.
+
+Respond in EXACTLY this format, nothing else:
+SCORE: <integer 0-100, how good the illustration is overall>
+SUMMARY: <one sentence overall impression>
+ISSUES:
+- <the single most important fixable flaw, specific and localized>
+- <next flaw>
+- <next flaw>
+(list 3 to 6 issues, ordered by how much fixing them would improve the image)
+
+Do not output anything except that block. Do not output SVG.`
+}
+
+// CritiqueUserPrompt points the critic at the rendered image and the goal.
+func CritiqueUserPrompt(request, pngPath string) string {
+	return "Rendered image to review (open it with Read): " + pngPath +
+		"\n\nThe image was meant to depict:\n" + request +
+		"\n\nReview it and respond in the required SCORE/SUMMARY/ISSUES format."
+}
+
+// RefineSystemPrompt instructs the model to redraw a better illustration that
+// fixes a critique, while keeping what worked. It reuses the full art-director
+// brief so quality discipline is preserved across rounds.
+func RefineSystemPrompt(canvas, minElements int) string {
+	return SystemPrompt(canvas, minElements) +
+		"\n\n## Revision Mode\nThis is a revision of a previous attempt at the same request. You are given an art director's critique of how the previous render actually looked. Produce a NEW, substantially better SVG that fixes every issue in the critique in priority order, while keeping the elements that already worked (composition, palette, background, scene). The improvement over the previous render must be obvious to a judge comparing them side by side. Still output ONLY raw SVG."
+}
+
+// RefineUserPrompt feeds the request plus the critique of the latest render
+// back for a guided redraw.
+func RefineUserPrompt(request, critique string) string {
+	return "Drawing request:\n" + request +
+		"\n\nArt director's critique of your latest rendered attempt — fix these in priority order:\n" + critique +
+		"\n\nRedraw a substantially improved illustration. Output ONLY the SVG."
+}
