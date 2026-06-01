@@ -1,0 +1,17 @@
+# Compiled binary
+/generate_svg
+generate_svg
+
+# Agent scratch state (not version-controlled)
+TASKS.md
+.worktrees/
+
+# Generated output during local testing
+/sample.svg
+/out/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
