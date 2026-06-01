@@ -23,10 +23,24 @@ type Runner struct {
 
 // Run executes `claude -p --system-prompt <system> --output-format text`,
 // feeding the user prompt on stdin, and returns the model's text response.
+func (r Runner) Run(ctx context.Context, system, user string) (string, error) {
+	return r.run(ctx, system, user, nil)
+}
+
+// RunVision is like Run but allowlists the Read tool so the model can open and
+// look at local image files referenced (by absolute path) in the prompt. This
+// is what lets the critique step actually see the rendered PNG.
+func (r Runner) RunVision(ctx context.Context, system, user string) (string, error) {
+	return r.run(ctx, system, user, []string{"--allowedTools", "Read"})
+}
+
+// run is the shared invocation. extraArgs are appended after the base args.
 //
 // The command runs from a neutral temp directory so it does not auto-discover a
-// project-level CLAUDE.md from the caller's working directory.
-func (r Runner) Run(ctx context.Context, system, user string) (string, error) {
+// project-level CLAUDE.md from the caller's working directory. A custom
+// --system-prompt is always passed, which also prevents the user's default
+// system prompt / interaction modes from leaking into the output.
+func (r Runner) run(ctx context.Context, system, user string, extraArgs []string) (string, error) {
 	bin, err := exec.LookPath("claude")
 	if err != nil {
 		return "", fmt.Errorf("the `claude` CLI was not found on PATH: %w", err)
@@ -40,6 +54,7 @@ func (r Runner) Run(ctx context.Context, system, user string) (string, error) {
 	if strings.TrimSpace(r.Model) != "" {
 		args = append(args, "--model", r.Model)
 	}
+	args = append(args, extraArgs...)
 
 	cmd := exec.CommandContext(ctx, bin, args...)
 	cmd.Dir = os.TempDir()

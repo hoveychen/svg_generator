@@ -28,9 +28,10 @@ func main() {
 		minElements = flag.Int("min-elements", 8, "reject builds with fewer drawable elements")
 		canvas      = flag.Int("canvas", 1024, "square viewBox size hinted to the model")
 		timeout     = flag.Duration("timeout", 3*time.Minute, "per-attempt timeout for the claude call")
-		png         = flag.Bool("png", false, "also render a PNG preview next to the SVG (needs rsvg-convert or macOS qlmanage)")
-		pngSize     = flag.Int("png-size", 0, "PNG preview pixel size; 0 = use --canvas")
-		verbose     = flag.Bool("v", false, "verbose: stream claude output and progress to stderr")
+		png          = flag.Bool("png", false, "also render a PNG preview next to the SVG (needs rsvg-convert or macOS qlmanage)")
+		pngSize      = flag.Int("png-size", 0, "PNG preview pixel size; 0 = use --canvas")
+		refineRounds = flag.Int("refine-rounds", 0, "vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer)")
+		verbose      = flag.Bool("v", false, "verbose: stream claude output and progress to stderr")
 	)
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "generate_svg — LLM-driven SVG generator (MineBench-style prompting)\n\n")
@@ -49,14 +50,15 @@ func main() {
 	defer stop()
 
 	res, err := gen.Generate(ctx, gen.Options{
-		Request:     *prompt,
-		Model:       *model,
-		Canvas:      *canvas,
-		MinElements: *minElements,
-		Retries:     *retries,
-		Timeout:     *timeout,
-		Verbose:     *verbose,
-		Log:         os.Stderr,
+		Request:      *prompt,
+		Model:        *model,
+		Canvas:       *canvas,
+		MinElements:  *minElements,
+		Retries:      *retries,
+		RefineRounds: *refineRounds,
+		Timeout:      *timeout,
+		Verbose:      *verbose,
+		Log:          os.Stderr,
 	})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "generate_svg: %v\n", err)
@@ -76,6 +78,10 @@ func main() {
 
 	fmt.Fprintf(os.Stderr, "generate_svg: wrote %s (%d drawable elements, %d attempt(s))\n",
 		*out, res.Elements, res.Attempts)
+	if *refineRounds > 0 {
+		fmt.Fprintf(os.Stderr, "generate_svg: refined over %d round(s); best critique score %s\n",
+			res.RefineRounds, gen.ScoreLabel(res.Score))
+	}
 
 	if *png {
 		size := *pngSize

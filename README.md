@@ -32,11 +32,36 @@ Flags:
 | `--canvas` | `1024` | square viewBox size hinted to the model |
 | `--png` | `false` | also render a PNG preview next to the SVG (needs `rsvg-convert` or macOS `qlmanage`) |
 | `--png-size` | `0` | PNG preview pixel size; `0` = use `--canvas` |
+| `--refine-rounds` | `0` | vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer) |
 | `-v` | `false` | verbose: print the prompt and each attempt to stderr |
 
 With `--png`, `boat.svg` also produces `boat.png` (renderer chosen automatically:
 `rsvg-convert` if present, otherwise macOS `qlmanage`). A preview failure is only
 a warning — the SVG is still written.
+
+### Refine loop (`--refine-rounds`)
+
+The plain generator is *blind*: the model writes SVG as text and never sees the
+rendered result, so it cannot tell that a face's eyes came out crooked or a
+creature's silhouette is mushy. `--refine-rounds N` closes that perception gap:
+
+1. render the current SVG to PNG,
+2. a vision model opens the PNG (via its `Read` tool) and scores it `0-100` with
+   a prioritized list of concrete flaws,
+3. the model redraws guided by that critique,
+4. repeat for `N` rounds, then **return the highest-scoring version**.
+
+Important and honest caveats:
+
+- It is **best-of-iterations, not monotonic**. A redraw can come out *worse* than
+  the previous one; the loop keeps the best-scored version, so a bad round never
+  regresses your result — but a single round is not guaranteed to improve it.
+- Gains are largest on **fixable structural problems** (proportion, missing
+  detail, composition, silhouette). On subjects that need sub-pixel realism
+  (photographic human faces) perception helps but SVG generation precision is
+  still the ceiling.
+- Cost scales: each round is roughly one render + one vision critique + one
+  redraw (≈3 model calls). Complex subjects can be slow — raise `--timeout`.
 
 ## Requirements
 
@@ -63,6 +88,9 @@ go install github.com/hoveychen/svg_generator/cmd/generate_svg@latest
    checks it parses as XML, has a `viewBox`, and clears the element-count floor.
 4. **Repair** — on failure, re-prompts with the validation error and the
    previous output (mirroring MineBench's repair loop), up to `--retries` times.
+5. **Refine** *(optional, `--refine-rounds`)* — renders the SVG, has a vision
+   model critique the image, redraws from the critique, and keeps the
+   best-scored version. See the refine-loop section above.
 
 ## License
 
