@@ -142,3 +142,20 @@ func CountDrawable(svg string) int {
 	}
 	return n
 }
+
+// CountAnimations returns the number of SMIL animation elements (<animate>,
+// <animateTransform>, <animateMotion>, <animateColor>) in the SVG.
+func CountAnimations(svg string) int {
+	dec := xml.NewDecoder(strings.NewReader(svg))
+	n := 0
+	for {
+		tok, err := dec.Token()
+		if err != nil {
+			break
+		}
+		if se, ok := tok.(xml.StartElement); ok && strings.HasPrefix(strings.ToLower(se.Name.Local), "animate") {
+			n++
+		}
+	}
+	return n
+}

@@ -24,6 +24,9 @@ func refine(ctx context.Context, opts Options, runner Runner, initial *Result) (
 	defer os.RemoveAll(tmpDir)
 
 	refineSys := RefineSystemPrompt(opts.Canvas, opts.MinElements)
+	if opts.Animate {
+		refineSys = RefineSystemPromptAnimated(opts.Canvas, opts.MinElements)
+	}
 
 	current := initial.SVG
 	best := initial.SVG

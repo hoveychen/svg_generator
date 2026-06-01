@@ -15,6 +15,7 @@ type Options struct {
 	MinElements  int    // drawable-element floor
 	Retries      int    // max repair attempts after the first try
 	RefineRounds int    // vision-critique redraw rounds (0 = off)
+	Animate      bool   // emit a self-contained animated SVG (SMIL)
 	Timeout      time.Duration
 	Verbose      bool
 	// Log receives human-readable progress lines (e.g. os.Stderr). May be nil.
@@ -61,8 +62,12 @@ func Generate(ctx context.Context, opts Options) (*Result, error) {
 
 	runner := Runner{Model: opts.Model, Verbose: opts.Verbose}
 
-	opts.logf("[generate_svg] initial generation (model=%s)", modelLabel(opts.Model))
-	svg, attempts, err := runWithRepair(ctx, runner, SystemPrompt(opts.Canvas, opts.MinElements), UserPrompt(opts.Request), opts)
+	system := SystemPrompt(opts.Canvas, opts.MinElements)
+	if opts.Animate {
+		system = AnimateSystemPrompt(opts.Canvas, opts.MinElements)
+	}
+	opts.logf("[generate_svg] initial generation (model=%s%s)", modelLabel(opts.Model), animateLabel(opts.Animate))
+	svg, attempts, err := runWithRepair(ctx, runner, system, UserPrompt(opts.Request), opts)
 	if err != nil {
 		return nil, err
 	}
@@ -103,6 +108,12 @@ func runWithRepair(ctx context.Context, runner Runner, system, initialUser strin
 			user = RepairPrompt(opts.Request, truncate(svg, 4000), err.Error())
 			continue
 		}
+		if opts.Animate && CountAnimations(svg) == 0 {
+			lastErr = fmt.Errorf("animation requested but the SVG has no <animateTransform>/<animate> elements")
+			opts.logf("[generate_svg] attempt %d rejected: %v", attempt, lastErr)
+			user = RepairPrompt(opts.Request, truncate(svg, 4000), lastErr.Error()+". Add SMIL <animateTransform>/<animate> elements to the movable parts (see the animation rules).")
+			continue
+		}
 		return svg, attempt, nil
 	}
 	return "", maxAttempts, fmt.Errorf("gave up after %d attempts: %w", maxAttempts, lastErr)
@@ -113,6 +124,13 @@ func modelLabel(m string) string {
 		return "claude default"
 	}
 	return m
+}
+
+func animateLabel(animate bool) string {
+	if animate {
+		return ", animated"
+	}
+	return ""
 }
 
 func truncate(s string, max int) string {
