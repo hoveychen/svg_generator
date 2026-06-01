@@ -1,0 +1,358 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<defs>
+<radialGradient id="sky" cx="50%" cy="85%" r="90%">
+<stop offset="0%" stop-color="#f8b88c"/>
+<stop offset="20%" stop-color="#d97a6b"/>
+<stop offset="45%" stop-color="#6b4a7a"/>
+<stop offset="75%" stop-color="#2a2548"/>
+<stop offset="100%" stop-color="#0d1130"/>
+</radialGradient>
+<radialGradient id="sun" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#ffd9a8" stop-opacity="0.9"/>
+<stop offset="60%" stop-color="#e88a5e" stop-opacity="0.3"/>
+<stop offset="100%" stop-color="#e88a5e" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#3a3a6b"/>
+<stop offset="50%" stop-color="#1f2447"/>
+<stop offset="100%" stop-color="#0c0f25"/>
+</linearGradient>
+<linearGradient id="seaReflect" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#e8946a" stop-opacity="0.6"/>
+<stop offset="100%" stop-color="#e8946a" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="towerLight" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#b8b0a8"/>
+<stop offset="40%" stop-color="#f5ede0"/>
+<stop offset="60%" stop-color="#f5ede0"/>
+<stop offset="100%" stop-color="#7a7066"/>
+</linearGradient>
+<linearGradient id="towerRed" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#7a1a1a"/>
+<stop offset="40%" stop-color="#c93030"/>
+<stop offset="60%" stop-color="#c93030"/>
+<stop offset="100%" stop-color="#5a1010"/>
+</linearGradient>
+<linearGradient id="rock" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#3a2f3a"/>
+<stop offset="100%" stop-color="#100c1a"/>
+</linearGradient>
+<radialGradient id="lantern" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#fff8d0"/>
+<stop offset="50%" stop-color="#ffd76a"/>
+<stop offset="100%" stop-color="#e89030" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="beamGlow" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#fff4c0" stop-opacity="1"/>
+<stop offset="100%" stop-color="#fff4c0" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#fff4c0" stop-opacity="0.55"/>
+<stop offset="100%" stop-color="#fff4c0" stop-opacity="0"/>
+</linearGradient>
+<filter id="blur1" x="-20%" y="-20%" width="140%" height="140%">
+<feGaussianBlur stdDeviation="3"/>
+</filter>
+<filter id="blur2" x="-20%" y="-20%" width="140%" height="140%">
+<feGaussianBlur stdDeviation="8"/>
+</filter>
+</defs>
+
+<!-- Sky -->
+<rect width="1024" height="720" fill="url(#sky)"/>
+
+<!-- Sun glow on horizon -->
+<ellipse cx="780" cy="640" rx="280" ry="80" fill="url(#sun)"/>
+
+<!-- Stars -->
+<g fill="#fff8e0">
+<circle cx="80" cy="80" r="1.3"/>
+<circle cx="160" cy="140" r="0.9"/>
+<circle cx="220" cy="60" r="1.6"/>
+<circle cx="300" cy="120" r="1"/>
+<circle cx="380" cy="50" r="1.2"/>
+<circle cx="440" cy="160" r="0.8"/>
+<circle cx="520" cy="90" r="1.4"/>
+<circle cx="600" cy="40" r="1"/>
+<circle cx="680" cy="180" r="0.9"/>
+<circle cx="760" cy="80" r="1.3"/>
+<circle cx="840" cy="160" r="1"/>
+<circle cx="920" cy="60" r="1.5"/>
+<circle cx="990" cy="140" r="0.9"/>
+<circle cx="120" cy="220" r="0.8"/>
+<circle cx="280" cy="240" r="1.1"/>
+<circle cx="450" cy="280" r="0.7"/>
+<circle cx="610" cy="220" r="1"/>
+<circle cx="870" cy="280" r="0.8"/>
+<circle cx="40" cy="320" r="1.2"/>
+<circle cx="200" cy="360" r="0.7"/>
+<circle cx="350" cy="380" r="0.9"/>
+<circle cx="900" cy="350" r="1"/>
+<circle cx="970" cy="240" r="0.7"/>
+<circle cx="50" cy="180" r="0.7"/>
+<circle cx="250" cy="180" r="0.9"/>
+<circle cx="500" cy="200" r="0.7"/>
+<circle cx="720" cy="250" r="1.1"/>
+</g>
+<g fill="#fff8e0" opacity="0.85">
+<animate attributeName="opacity" values="0.4;1;0.4" dur="3.2s" repeatCount="indefinite"/>
+<circle cx="180" cy="100" r="1.8"/>
+<circle cx="560" cy="60" r="1.6"/>
+<circle cx="800" cy="120" r="1.7"/>
+</g>
+<g fill="#fff8e0" opacity="0.7">
+<animate attributeName="opacity" values="1;0.3;1" dur="4.1s" repeatCount="indefinite"/>
+<circle cx="340" cy="200" r="1.4"/>
+<circle cx="680" cy="100" r="1.5"/>
+<circle cx="940" cy="200" r="1.3"/>
+</g>
+
+<!-- Distant cloud strokes -->
+<g opacity="0.35" fill="#6b4a7a">
+<ellipse cx="200" cy="430" rx="180" ry="14"/>
+<ellipse cx="500" cy="460" rx="220" ry="10"/>
+<ellipse cx="850" cy="490" rx="180" ry="12"/>
+</g>
+
+<!-- Crescent moon -->
+<g transform="translate(180,180)">
+<circle r="32" fill="#f8eed0"/>
+<circle r="32" cx="11" cy="-6" fill="url(#sky)"/>
+<circle r="32" cx="11" cy="-6" fill="#2a2548" opacity="0.85"/>
+</g>
+
+<!-- Rotating lighthouse beams (from lantern at ~ 760,300) -->
+<g transform="translate(760,300)">
+<animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="9s" repeatCount="indefinite" additive="sum"/>
+<!-- Main beam -->
+<polygon points="0,0 900,-90 900,90" fill="url(#beam)" opacity="0.7" filter="url(#blur1)"/>
+<polygon points="0,0 900,-30 900,30" fill="#fff8d0" opacity="0.55" filter="url(#blur1)"/>
+</g>
+<g transform="translate(760,300)">
+<animateTransform attributeName="transform" type="rotate" from="180" to="540" dur="9s" repeatCount="indefinite" additive="sum"/>
+<polygon points="0,0 900,-70 900,70" fill="url(#beam)" opacity="0.45" filter="url(#blur1)"/>
+</g>
+
+<!-- Distant headland -->
+<path d="M0,600 L80,580 L180,590 L280,575 L360,585 L420,580 L500,590 L0,640 Z" fill="#1a1830" opacity="0.85"/>
+
+<!-- Sea -->
+<rect y="600" width="1024" height="280" fill="url(#sea)"/>
+<rect y="600" width="1024" height="280" fill="url(#seaReflect)" opacity="0.5"/>
+
+<!-- Sea horizontal shimmer lines -->
+<g stroke="#f0c090" stroke-opacity="0.35" stroke-width="1">
+<line x1="60" y1="620" x2="220" y2="620"/>
+<line x1="300" y1="625" x2="450" y2="625"/>
+<line x1="550" y1="630" x2="720" y2="630"/>
+<line x1="800" y1="618" x2="980" y2="618"/>
+<line x1="40" y1="650" x2="180" y2="650">
+<animate attributeName="opacity" values="0.6;0.1;0.6" dur="4s" repeatCount="indefinite"/>
+</line>
+<line x1="380" y1="660" x2="540" y2="660">
+<animate attributeName="opacity" values="0.1;0.6;0.1" dur="4.5s" repeatCount="indefinite"/>
+</line>
+<line x1="650" y1="655" x2="820" y2="655">
+<animate attributeName="opacity" values="0.5;0.1;0.5" dur="3.7s" repeatCount="indefinite"/>
+</line>
+<line x1="120" y1="690" x2="260" y2="690"/>
+<line x1="500" y1="700" x2="640" y2="700"/>
+<line x1="780" y1="705" x2="900" y2="705"/>
+</g>
+
+<!-- Distant waves -->
+<g fill="#f0d8b0" opacity="0.5">
+<path d="M0,640 Q60,632 120,640 T240,640 T360,640 T480,640 T600,640 T720,640 T840,640 T1024,640 L1024,650 L0,650 Z"/>
+</g>
+
+<!-- Rocky outcrop base -->
+<g>
+<path d="M0,760 L60,720 L120,740 L200,710 L280,730 L340,705 L420,725 L500,700 L560,720 L620,705 L700,730 L770,710 L840,740 L900,720 L980,745 L1024,730 L1024,1024 L0,1024 Z" fill="url(#rock)"/>
+<!-- Rock highlights (rim light from sunset) -->
+<path d="M60,720 L80,724 L100,718 L120,740 L100,732 L80,734 Z" fill="#7a5444" opacity="0.7"/>
+<path d="M200,710 L240,716 L280,730 L250,720 L220,718 Z" fill="#7a5444" opacity="0.6"/>
+<path d="M420,725 L460,718 L500,700 L530,710 L560,720 L520,716 L470,724 Z" fill="#7a5444" opacity="0.7"/>
+<path d="M700,730 L740,720 L770,710 L800,720 L840,740 L800,732 L750,728 Z" fill="#7a5444" opacity="0.6"/>
+<!-- Rock dark crevices -->
+<path d="M140,760 L160,820 L180,770 Z" fill="#000" opacity="0.4"/>
+<path d="M380,770 L400,830 L420,775 Z" fill="#000" opacity="0.4"/>
+<path d="M620,770 L640,820 L660,775 Z" fill="#000" opacity="0.4"/>
+<path d="M870,765 L890,810 L910,775 Z" fill="#000" opacity="0.4"/>
+</g>
+
+<!-- Splash waves crashing on rocks -->
+<g>
+<g opacity="0.85">
+<animate attributeName="opacity" values="0.4;1;0.4" dur="2.4s" repeatCount="indefinite"/>
+<path d="M80,720 Q70,680 90,670 Q100,690 110,675 Q120,695 130,680 Q140,705 150,690 Q160,710 170,700 Q150,720 120,725 Q90,728 80,720 Z" fill="#f5e8d0" opacity="0.9"/>
+<ellipse cx="120" cy="700" rx="50" ry="10" fill="#fff" opacity="0.5"/>
+</g>
+<g opacity="0.8">
+<animate attributeName="opacity" values="0.8;0.3;0.8" dur="2.8s" repeatCount="indefinite"/>
+<path d="M440,720 Q430,680 450,672 Q460,690 475,675 Q485,700 500,685 Q515,710 530,695 Q510,720 480,725 Q450,728 440,720 Z" fill="#f5e8d0" opacity="0.85"/>
+<ellipse cx="485" cy="705" rx="55" ry="9" fill="#fff" opacity="0.45"/>
+</g>
+<g opacity="0.9">
+<animate attributeName="opacity" values="0.3;0.9;0.3" dur="3.1s" repeatCount="indefinite"/>
+<path d="M780,720 Q770,680 790,670 Q800,690 815,675 Q825,700 840,685 Q855,710 870,695 Q850,720 820,725 Q790,728 780,720 Z" fill="#f5e8d0" opacity="0.9"/>
+<ellipse cx="820" cy="705" rx="55" ry="10" fill="#fff" opacity="0.5"/>
+</g>
+<g opacity="0.7">
+<animate attributeName="opacity" values="0.7;0.2;0.7" dur="3.4s" repeatCount="indefinite"/>
+<path d="M260,735 Q255,705 270,700 Q280,715 295,705 Q310,720 320,710 Q300,735 280,738 Q265,738 260,735 Z" fill="#f5e8d0" opacity="0.8"/>
+</g>
+<g opacity="0.7">
+<animate attributeName="opacity" values="0.2;0.7;0.2" dur="3s" repeatCount="indefinite"/>
+<path d="M620,735 Q615,705 630,700 Q640,715 655,705 Q670,720 680,710 Q660,735 640,738 Q625,738 620,735 Z" fill="#f5e8d0" opacity="0.8"/>
+</g>
+</g>
+
+<!-- Sea foam thin lines -->
+<g stroke="#e8d4b0" stroke-width="1.5" fill="none" opacity="0.6">
+<path d="M0,745 Q60,742 120,748 T240,745 T360,750 T480,745 T600,748 T720,745 T840,750 T1024,745"/>
+<path d="M0,790 Q80,786 160,792 T320,788 T480,795 T640,790 T800,795 T1024,790" opacity="0.4"/>
+</g>
+
+<!-- LIGHTHOUSE — placed on highest rock, around x=760 -->
+<g>
+<!-- Base / foundation rock ledge -->
+<path d="M680,720 L850,720 L870,760 L660,760 Z" fill="#2a2438"/>
+<path d="M680,720 L850,720 L840,728 L690,728 Z" fill="#4a3848"/>
+
+<!-- Keeper's house at base -->
+<g>
+<rect x="690" y="680" width="60" height="40" fill="#d8d0c0"/>
+<polygon points="685,680 720,655 755,680" fill="#7a2020"/>
+<rect x="700" y="694" width="10" height="14" fill="#3a3a5a"/>
+<rect x="720" y="694" width="10" height="14" fill="#ffd76a" opacity="0.85">
+<animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+</rect>
+<rect x="732" y="694" width="10" height="14" fill="#3a3a5a"/>
+<!-- Window glow spill -->
+<ellipse cx="725" cy="708" rx="22" ry="8" fill="#ffd76a" opacity="0.18"/>
+</g>
+
+<!-- TOWER (tall, tapered, red-and-white striped) -->
+<g>
+<!-- Tower body - tapered using polygon -->
+<polygon points="740,720 780,720 786,360 734,360" fill="url(#towerLight)"/>
+
+<!-- Red stripes -->
+<polygon points="734,360 786,360 787,395 733,395" fill="url(#towerRed)"/>
+<polygon points="734,430 786,430 787,465 733,465" fill="url(#towerRed)"/>
+<polygon points="734,500 786,500 787,535 733,535" fill="url(#towerRed)"/>
+<polygon points="734,570 786,570 787,605 733,605" fill="url(#towerRed)"/>
+<polygon points="734,640 786,640 787,675 733,675" fill="url(#towerRed)"/>
+<polygon points="734,710 786,710 786,720 740,720" fill="url(#towerRed)"/>
+
+<!-- Tower shadow side -->
+<polygon points="772,360 786,360 780,720 770,720" fill="#000" opacity="0.25"/>
+<!-- Tower light side -->
+<polygon points="734,360 744,360 742,720 740,720" fill="#fff" opacity="0.18"/>
+
+<!-- Tower windows -->
+<rect x="755" y="420" width="8" height="14" rx="2" fill="#1a1a2a"/>
+<rect x="755" y="525" width="8" height="14" rx="2" fill="#1a1a2a"/>
+<rect x="755" y="630" width="8" height="14" rx="2" fill="#1a1a2a"/>
+
+<!-- Gallery platform under lantern -->
+<rect x="724" y="340" width="72" height="10" fill="#3a3030"/>
+<rect x="722" y="338" width="76" height="4" fill="#5a4848"/>
+<!-- Railing -->
+<g stroke="#2a2020" stroke-width="1.5">
+<line x1="728" y1="340" x2="728" y2="328"/>
+<line x1="738" y1="340" x2="738" y2="328"/>
+<line x1="748" y1="340" x2="748" y2="328"/>
+<line x1="760" y1="340" x2="760" y2="328"/>
+<line x1="772" y1="340" x2="772" y2="328"/>
+<line x1="782" y1="340" x2="782" y2="328"/>
+<line x1="792" y1="340" x2="792" y2="328"/>
+<line x1="726" y1="328" x2="794" y2="328" stroke-width="2"/>
+</g>
+
+<!-- Lantern room base -->
+<rect x="736" y="305" width="48" height="25" fill="#2a2030"/>
+<!-- Lantern glass with glow -->
+<rect x="740" y="285" width="40" height="22" fill="url(#lantern)"/>
+<rect x="740" y="285" width="40" height="22" fill="none" stroke="#3a2820" stroke-width="1.5"/>
+<!-- Lantern muntins -->
+<line x1="753" y1="285" x2="753" y2="307" stroke="#3a2820" stroke-width="1"/>
+<line x1="767" y1="285" x2="767" y2="307" stroke="#3a2820" stroke-width="1"/>
+<!-- Glow core pulse -->
+<circle cx="760" cy="296" r="14" fill="#fff8d0" opacity="0.7">
+<animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite"/>
+<animate attributeName="r" values="12;16;12" dur="2.2s" repeatCount="indefinite"/>
+</circle>
+<circle cx="760" cy="296" r="6" fill="#ffffff" opacity="0.95"/>
+
+<!-- Dome / cupola -->
+<path d="M736,285 Q760,255 784,285 Z" fill="#5a1818"/>
+<path d="M736,285 Q760,265 784,285 Q760,275 736,285 Z" fill="#7a2828"/>
+<!-- Finial spike -->
+<line x1="760" y1="258" x2="760" y2="238" stroke="#2a2020" stroke-width="2"/>
+<circle cx="760" cy="238" r="2.5" fill="#2a2020"/>
+<polygon points="760,228 757,238 763,238" fill="#2a2020"/>
+
+<!-- Bright halo around lantern -->
+<circle cx="760" cy="296" r="40" fill="url(#beamGlow)" opacity="0.6">
+<animate attributeName="opacity" values="0.4;0.7;0.4" dur="2.2s" repeatCount="indefinite"/>
+</circle>
+</g>
+
+<!-- Tower glow reflection on rocks -->
+<ellipse cx="760" cy="725" rx="100" ry="8" fill="#ffd76a" opacity="0.18"/>
+</g>
+
+<!-- Lantern reflection on water -->
+<g opacity="0.5">
+<ellipse cx="760" cy="780" rx="6" ry="60" fill="#ffe8a0">
+<animate attributeName="opacity" values="0.3;0.6;0.3" dur="2.5s" repeatCount="indefinite"/>
+</ellipse>
+<ellipse cx="760" cy="800" rx="14" ry="3" fill="#ffe8a0" opacity="0.6"/>
+<ellipse cx="760" cy="830" rx="20" ry="2" fill="#ffe8a0" opacity="0.4"/>
+</g>
+
+<!-- Seagulls (foreground / midground) -->
+<g fill="none" stroke="#1a1525" stroke-width="2.5" stroke-linecap="round">
+<g id="gull1">
+<animateTransform attributeName="transform" type="translate" values="0,0; 10,-4; 0,0" dur="3.5s" repeatCount="indefinite"/>
+<path d="M280,220 q10,-10 20,0 q10,-10 20,0"/>
+</g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0,0; -8,3; 0,0" dur="4s" repeatCount="indefinite"/>
+<path d="M360,300 q8,-8 16,0 q8,-8 16,0" stroke-width="2"/>
+</g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0,0; 6,-2; 0,0" dur="3.2s" repeatCount="indefinite"/>
+<path d="M460,260 q7,-7 14,0 q7,-7 14,0" stroke-width="2"/>
+</g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0,0; -12,5; 0,0" dur="4.5s" repeatCount="indefinite"/>
+<path d="M540,200 q9,-9 18,0 q9,-9 18,0" stroke-width="2.2"/>
+</g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0,0; 8,-3; 0,0" dur="3.8s" repeatCount="indefinite"/>
+<path d="M620,340 q6,-6 12,0 q6,-6 12,0" stroke-width="1.8" opacity="0.7"/>
+</g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0,0; -6,2; 0,0" dur="3.3s" repeatCount="indefinite"/>
+<path d="M880,260 q7,-7 14,0 q7,-7 14,0" stroke-width="2"/>
+</g>
+<g>
+<animateTransform attributeName="transform" type="translate" values="0,0; 5,-2; 0,0" dur="4.2s" repeatCount="indefinite"/>
+<path d="M150,360 q6,-6 12,0 q6,-6 12,0" stroke-width="1.8" opacity="0.7"/>
+</g>
+</g>
+
+<!-- Foreground rock detail / dark vignette -->
+<path d="M0,860 L120,840 L240,855 L380,830 L520,845 L660,825 L800,840 L920,825 L1024,835 L1024,1024 L0,1024 Z" fill="#0a0815"/>
+<path d="M60,860 Q80,855 100,862 Q90,870 70,868 Z" fill="#2a2030" opacity="0.6"/>
+<path d="M300,855 Q330,848 360,860 Q340,870 310,868 Z" fill="#2a2030" opacity="0.6"/>
+<path d="M580,850 Q610,843 640,855 Q620,865 590,863 Z" fill="#2a2030" opacity="0.6"/>
+<path d="M860,855 Q890,848 920,860 Q900,870 870,868 Z" fill="#2a2030" opacity="0.6"/>
+
+<!-- Atmospheric haze near base -->
+<rect y="700" width="1024" height="40" fill="#d97a6b" opacity="0.08"/>
+<rect y="710" width="1024" height="30" fill="#f0c090" opacity="0.06"/>
+
+</svg>

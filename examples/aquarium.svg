@@ -1,0 +1,427 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<defs>
+<linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#0a3a5c"/>
+<stop offset="0.25" stop-color="#0e5780"/>
+<stop offset="0.6" stop-color="#1378a3"/>
+<stop offset="1" stop-color="#0c4868"/>
+</linearGradient>
+<linearGradient id="surface" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#7fd6f0" stop-opacity="0.9"/>
+<stop offset="1" stop-color="#1378a3" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#bff0ff" stop-opacity="0.55"/>
+<stop offset="1" stop-color="#bff0ff" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="gravel" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#6b5a3a"/>
+<stop offset="0.5" stop-color="#8a7649"/>
+<stop offset="1" stop-color="#4a3c25"/>
+</linearGradient>
+<linearGradient id="chest" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#a35a22"/>
+<stop offset="1" stop-color="#5a2d10"/>
+</linearGradient>
+<linearGradient id="lid" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#c97a3a"/>
+<stop offset="1" stop-color="#7a3f18"/>
+</linearGradient>
+<radialGradient id="gold" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0" stop-color="#fff2a8"/>
+<stop offset="0.6" stop-color="#f1c33b"/>
+<stop offset="1" stop-color="#8a6a14"/>
+</radialGradient>
+<linearGradient id="clown" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#ffb14a"/>
+<stop offset="0.5" stop-color="#ff7a18"/>
+<stop offset="1" stop-color="#c14a07"/>
+</linearGradient>
+<linearGradient id="blueTang" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#4fb6ff"/>
+<stop offset="1" stop-color="#1a4f9a"/>
+</linearGradient>
+<linearGradient id="yellow" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#fff15a"/>
+<stop offset="1" stop-color="#d99700"/>
+</linearGradient>
+<linearGradient id="purple" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#d39bff"/>
+<stop offset="1" stop-color="#6a2da8"/>
+</linearGradient>
+<linearGradient id="kelp" x1="0" y1="1" x2="0" y2="0">
+<stop offset="0" stop-color="#0b3a14"/>
+<stop offset="1" stop-color="#3aa14a"/>
+</linearGradient>
+<linearGradient id="kelp2" x1="0" y1="1" x2="0" y2="0">
+<stop offset="0" stop-color="#0c4220"/>
+<stop offset="1" stop-color="#5fc862"/>
+</linearGradient>
+<radialGradient id="bubble" cx="0.35" cy="0.35" r="0.6">
+<stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+<stop offset="0.5" stop-color="#cfeeff" stop-opacity="0.5"/>
+<stop offset="1" stop-color="#cfeeff" stop-opacity="0.05"/>
+</radialGradient>
+<radialGradient id="rock" cx="0.5" cy="0.3" r="0.7">
+<stop offset="0" stop-color="#7a7d82"/>
+<stop offset="1" stop-color="#2c2f35"/>
+</radialGradient>
+<filter id="blur1"><feGaussianBlur stdDeviation="3"/></filter>
+<filter id="blur2"><feGaussianBlur stdDeviation="6"/></filter>
+</defs>
+
+<!-- Water background -->
+<rect width="1024" height="1024" fill="url(#water)"/>
+
+<!-- Surface shimmer -->
+<rect x="0" y="0" width="1024" height="120" fill="url(#surface)"/>
+<g opacity="0.6">
+<path d="M0 70 Q 80 50 160 70 T 320 70 T 480 70 T 640 70 T 800 70 T 1024 70 L 1024 0 L 0 0 Z" fill="#9fe3f5" opacity="0.35"/>
+<path d="M0 95 Q 100 78 200 95 T 400 95 T 600 95 T 800 95 T 1024 95" stroke="#cdf2ff" stroke-width="2" fill="none" opacity="0.5">
+<animate attributeName="d" dur="6s" repeatCount="indefinite" values="M0 95 Q 100 78 200 95 T 400 95 T 600 95 T 800 95 T 1024 95;M0 95 Q 100 110 200 95 T 400 95 T 600 95 T 800 95 T 1024 95;M0 95 Q 100 78 200 95 T 400 95 T 600 95 T 800 95 T 1024 95"/>
+</path>
+</g>
+
+<!-- Light rays -->
+<g opacity="0.55">
+<polygon points="180,0 260,0 420,1024 320,1024" fill="url(#ray)"/>
+<polygon points="500,0 540,0 600,1024 540,1024" fill="url(#ray)"/>
+<polygon points="780,0 870,0 760,1024 660,1024" fill="url(#ray)"/>
+<animate attributeName="opacity" dur="7s" repeatCount="indefinite" values="0.45;0.7;0.45"/>
+</g>
+
+<!-- Distant background fish (silhouettes for depth) -->
+<g opacity="0.35" filter="url(#blur2)">
+<g id="far-school">
+<path d="M120 300 q15 -10 30 0 q-5 -8 -15 -8 q-10 0 -15 8 z l-12 4 l5 -8 z" fill="#9fd6e8"/>
+<path d="M170 320 q15 -10 30 0 q-5 -8 -15 -8 q-10 0 -15 8 z l-12 4 l5 -8 z" fill="#9fd6e8"/>
+<path d="M210 290 q15 -10 30 0 q-5 -8 -15 -8 q-10 0 -15 8 z l-12 4 l5 -8 z" fill="#9fd6e8"/>
+<path d="M150 360 q15 -10 30 0 q-5 -8 -15 -8 q-10 0 -15 8 z l-12 4 l5 -8 z" fill="#9fd6e8"/>
+<path d="M250 340 q15 -10 30 0 q-5 -8 -15 -8 q-10 0 -15 8 z l-12 4 l5 -8 z" fill="#9fd6e8"/>
+<animateTransform attributeName="transform" type="translate" dur="22s" repeatCount="indefinite" values="0 0; 60 -10; 0 0"/>
+</g>
+</g>
+
+<g opacity="0.4" filter="url(#blur1)">
+<g id="midbg-fish">
+<ellipse cx="800" cy="450" rx="28" ry="12" fill="#5a9fc8"/>
+<polygon points="828,450 845,440 845,460" fill="#5a9fc8"/>
+<animateTransform attributeName="transform" type="translate" dur="18s" repeatCount="indefinite" values="0 0; -80 15; 0 0"/>
+</g>
+</g>
+
+<!-- Mid-depth seaweed (back layer) -->
+<g opacity="0.85">
+<g id="kelp-back-1">
+<path d="M60 1024 Q 50 850 80 750 Q 60 620 90 500" stroke="url(#kelp)" stroke-width="22" fill="none" stroke-linecap="round"/>
+<path d="M60 1024 Q 50 850 80 750 Q 60 620 90 500" stroke="#5fc862" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>
+<animateTransform attributeName="transform" type="rotate" values="-2 75 1024; 2 75 1024; -2 75 1024" dur="5s" repeatCount="indefinite"/>
+</g>
+<g id="kelp-back-2">
+<path d="M940 1024 Q 960 850 930 720 Q 970 600 940 480" stroke="url(#kelp)" stroke-width="20" fill="none" stroke-linecap="round"/>
+<animateTransform attributeName="transform" type="rotate" values="2 940 1024; -2 940 1024; 2 940 1024" dur="6s" repeatCount="indefinite"/>
+</g>
+</g>
+
+<!-- Gravel mound -->
+<path d="M0 920 Q 200 860 380 880 Q 540 850 700 890 Q 880 870 1024 905 L 1024 1024 L 0 1024 Z" fill="url(#gravel)"/>
+<g opacity="0.6">
+<ellipse cx="150" cy="930" rx="14" ry="5" fill="#3d3220"/>
+<ellipse cx="220" cy="945" rx="10" ry="4" fill="#3d3220"/>
+<ellipse cx="320" cy="922" rx="12" ry="4" fill="#3d3220"/>
+<ellipse cx="450" cy="935" rx="14" ry="5" fill="#5a4a30"/>
+<ellipse cx="580" cy="918" rx="11" ry="4" fill="#3d3220"/>
+<ellipse cx="700" cy="940" rx="13" ry="5" fill="#3d3220"/>
+<ellipse cx="820" cy="925" rx="12" ry="4" fill="#5a4a30"/>
+<ellipse cx="900" cy="945" rx="14" ry="5" fill="#3d3220"/>
+<ellipse cx="60" cy="950" rx="16" ry="5" fill="#3d3220"/>
+<ellipse cx="380" cy="960" rx="18" ry="6" fill="#5a4a30"/>
+<ellipse cx="640" cy="965" rx="15" ry="5" fill="#3d3220"/>
+</g>
+
+<!-- Rocks -->
+<g>
+<path d="M180 920 Q 200 860 260 850 Q 320 855 340 905 Q 345 925 320 935 L 200 935 Q 175 930 180 920 Z" fill="url(#rock)"/>
+<path d="M195 905 Q 230 880 280 882" stroke="#a8acb2" stroke-width="3" fill="none" opacity="0.5"/>
+<path d="M820 905 Q 850 855 900 858 Q 945 875 950 910 Q 940 930 905 935 L 840 935 Q 815 925 820 905 Z" fill="url(#rock)"/>
+<path d="M835 895 Q 870 875 915 880" stroke="#a8acb2" stroke-width="3" fill="none" opacity="0.5"/>
+<path d="M520 905 Q 540 880 575 882 Q 600 890 600 910 Q 590 920 565 922 L 535 920 Q 515 915 520 905 Z" fill="url(#rock)" opacity="0.9"/>
+</g>
+
+<!-- Treasure chest -->
+<g id="chest">
+<!-- shadow -->
+<ellipse cx="490" cy="930" rx="130" ry="14" fill="#000" opacity="0.35"/>
+<!-- body -->
+<rect x="380" y="830" width="220" height="95" rx="6" fill="url(#chest)"/>
+<!-- straps -->
+<rect x="380" y="845" width="220" height="10" fill="#3a1a08"/>
+<rect x="380" y="900" width="220" height="10" fill="#3a1a08"/>
+<rect x="430" y="830" width="14" height="95" fill="#3a1a08"/>
+<rect x="536" y="830" width="14" height="95" fill="#3a1a08"/>
+<!-- lid -->
+<path d="M380 830 Q 380 770 490 760 Q 600 770 600 830 Z" fill="url(#lid)"/>
+<path d="M380 830 Q 380 770 490 760 Q 600 770 600 830" stroke="#3a1a08" stroke-width="3" fill="none"/>
+<!-- lid straps -->
+<path d="M430 830 Q 432 790 444 778" stroke="#3a1a08" stroke-width="10" fill="none"/>
+<path d="M550 830 Q 548 790 536 778" stroke="#3a1a08" stroke-width="10" fill="none"/>
+<!-- lock -->
+<rect x="478" y="848" width="26" height="22" rx="3" fill="#d8a83a"/>
+<rect x="486" y="855" width="10" height="8" fill="#5a3f10"/>
+<!-- gold spilling -->
+<g>
+<circle cx="420" cy="918" r="6" fill="url(#gold)"/>
+<circle cx="440" cy="922" r="5" fill="url(#gold)"/>
+<circle cx="460" cy="918" r="7" fill="url(#gold)"/>
+<circle cx="478" cy="924" r="5" fill="url(#gold)"/>
+<circle cx="510" cy="920" r="6" fill="url(#gold)"/>
+<circle cx="540" cy="924" r="5" fill="url(#gold)"/>
+<circle cx="560" cy="918" r="7" fill="url(#gold)"/>
+<circle cx="585" cy="922" r="5" fill="url(#gold)"/>
+<rect x="410" y="908" width="10" height="4" rx="1" fill="url(#gold)"/>
+<rect x="550" y="908" width="10" height="4" rx="1" fill="url(#gold)"/>
+<!-- glow -->
+<ellipse cx="490" cy="860" rx="60" ry="20" fill="#fff2a8" opacity="0.25">
+<animate attributeName="opacity" dur="3s" repeatCount="indefinite" values="0.2;0.45;0.2"/>
+</ellipse>
+</g>
+<!-- highlight -->
+<path d="M390 775 Q 440 765 500 766" stroke="#ffd9a0" stroke-width="3" fill="none" opacity="0.6"/>
+</g>
+
+<!-- Foreground seaweed -->
+<g id="kelp-front-1">
+<path d="M260 1024 Q 240 870 280 760 Q 250 650 290 540" stroke="url(#kelp2)" stroke-width="26" fill="none" stroke-linecap="round"/>
+<path d="M260 1024 Q 240 870 280 760 Q 250 650 290 540" stroke="#7be07f" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.5"/>
+<animateTransform attributeName="transform" type="rotate" values="-3 275 1024; 3 275 1024; -3 275 1024" dur="4.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+</g>
+
+<g id="kelp-front-2">
+<path d="M720 1024 Q 740 850 705 720 Q 745 600 715 480" stroke="url(#kelp2)" stroke-width="24" fill="none" stroke-linecap="round"/>
+<path d="M720 1024 Q 740 850 705 720 Q 745 600 715 480" stroke="#7be07f" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>
+<animateTransform attributeName="transform" type="rotate" values="3 720 1024; -3 720 1024; 3 720 1024" dur="5.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+</g>
+
+<g id="kelp-front-3">
+<path d="M120 1024 Q 100 880 140 800 Q 110 700 150 620" stroke="url(#kelp2)" stroke-width="20" fill="none" stroke-linecap="round" opacity="0.9"/>
+<animateTransform attributeName="transform" type="rotate" values="-4 135 1024; 4 135 1024; -4 135 1024" dur="4s" repeatCount="indefinite"/>
+</g>
+
+<!-- Anemone (clownfish home) -->
+<g id="anemone">
+<ellipse cx="490" cy="935" rx="80" ry="14" fill="#7a2d4a" opacity="0.4"/>
+<g>
+<path d="M420 935 Q 410 880 425 870" stroke="#e85a8a" stroke-width="10" fill="none" stroke-linecap="round"/>
+<path d="M440 935 Q 435 870 455 860" stroke="#f078a0" stroke-width="10" fill="none" stroke-linecap="round"/>
+<path d="M555 935 Q 560 870 545 858" stroke="#e85a8a" stroke-width="10" fill="none" stroke-linecap="round"/>
+<path d="M575 935 Q 585 880 568 875" stroke="#f078a0" stroke-width="10" fill="none" stroke-linecap="round"/>
+<animateTransform attributeName="transform" type="rotate" values="-2 490 935; 2 490 935; -2 490 935" dur="4s" repeatCount="indefinite"/>
+</g>
+</g>
+
+<!-- ===== FISH ===== -->
+
+<!-- Blue tang fish (mid-left) -->
+<g id="blue-tang">
+<g>
+<animateTransform attributeName="transform" type="translate" dur="9s" repeatCount="indefinite" values="0 0; 12 -8; 0 0; -8 6; 0 0"/>
+<!-- body -->
+<path d="M180 480 Q 220 430 290 440 Q 360 450 380 490 Q 360 530 290 540 Q 220 550 180 500 Z" fill="url(#blueTang)"/>
+<!-- darker stripe -->
+<path d="M210 460 Q 280 450 350 470 Q 330 510 280 525 Q 230 520 215 495 Z" fill="#143a72" opacity="0.7"/>
+<!-- yellow tail -->
+<polygon points="380,490 430,450 425,495 430,535" fill="#ffd700"/>
+<polygon points="380,490 415,475 412,505" fill="#f5a800"/>
+<!-- fins -->
+<path d="M260 440 Q 270 415 295 432 Z" fill="#1a4f9a"/>
+<path d="M260 540 Q 270 565 295 545 Z" fill="#1a4f9a"/>
+<!-- pectoral -->
+<path d="M250 495 Q 235 510 245 520 Q 260 515 265 505 Z" fill="#143a72">
+<animateTransform attributeName="transform" type="rotate" values="-8 250 500; 8 250 500; -8 250 500" dur="0.8s" repeatCount="indefinite"/>
+</path>
+<!-- eye -->
+<circle cx="220" cy="478" r="7" fill="#fff"/>
+<circle cx="221" cy="479" r="4" fill="#0a1a30"/>
+<circle cx="223" cy="476" r="1.5" fill="#fff"/>
+<!-- highlight -->
+<path d="M210 460 Q 250 448 300 452" stroke="#7fd0ff" stroke-width="3" fill="none" opacity="0.6"/>
+</g>
+</g>
+
+<!-- Clownfish (focal, mid-right) -->
+<g id="clownfish">
+<g>
+<animateTransform attributeName="transform" type="translate" dur="7s" repeatCount="indefinite" values="0 0; -14 -6; 4 4; -8 2; 0 0"/>
+<!-- body -->
+<path d="M560 620 Q 600 560 700 575 Q 780 595 800 625 Q 780 670 700 685 Q 600 690 560 640 Z" fill="url(#clown)"/>
+<!-- white bands -->
+<path d="M630 575 Q 625 625 638 685 Q 650 690 660 685 Q 650 625 660 575 Q 645 570 630 575 Z" fill="#fff8ec"/>
+<path d="M720 580 Q 715 630 720 685 Q 735 690 745 685 Q 738 630 745 580 Q 735 575 720 580 Z" fill="#fff8ec"/>
+<!-- black outlines on bands -->
+<path d="M626 580 Q 622 628 633 685" stroke="#1a0a04" stroke-width="3" fill="none"/>
+<path d="M662 580 Q 658 628 664 685" stroke="#1a0a04" stroke-width="3" fill="none"/>
+<path d="M716 582 Q 712 632 718 686" stroke="#1a0a04" stroke-width="3" fill="none"/>
+<path d="M748 582 Q 745 632 748 686" stroke="#1a0a04" stroke-width="3" fill="none"/>
+<!-- tail -->
+<path d="M800 625 Q 840 590 855 610 Q 850 630 855 650 Q 840 670 800 640 Z" fill="#ff7a18"/>
+<path d="M810 625 Q 835 615 850 625" stroke="#1a0a04" stroke-width="2" fill="none"/>
+<path d="M810 640 Q 835 645 850 640" stroke="#1a0a04" stroke-width="2" fill="none"/>
+<!-- dorsal fin -->
+<path d="M620 570 Q 660 540 720 555 Q 700 575 660 580 Z" fill="#ff8a2a"/>
+<path d="M620 570 Q 660 540 720 555" stroke="#1a0a04" stroke-width="2.5" fill="none"/>
+<!-- ventral -->
+<path d="M650 685 Q 680 705 700 690" fill="#ff8a2a"/>
+<path d="M650 685 Q 680 705 700 690" stroke="#1a0a04" stroke-width="2" fill="none"/>
+<!-- pectoral -->
+<path d="M600 630 Q 580 655 605 660 Q 615 645 615 635 Z" fill="#ff8a2a" stroke="#1a0a04" stroke-width="2">
+<animateTransform attributeName="transform" type="rotate" values="-10 600 635; 12 600 635; -10 600 635" dur="0.7s" repeatCount="indefinite"/>
+</path>
+<!-- body outline -->
+<path d="M560 620 Q 600 560 700 575 Q 780 595 800 625 Q 780 670 700 685 Q 600 690 560 640 Z" stroke="#1a0a04" stroke-width="3" fill="none"/>
+<!-- eye -->
+<circle cx="595" cy="610" r="9" fill="#fff8ec"/>
+<circle cx="596" cy="612" r="6" fill="#1a0a04"/>
+<circle cx="599" cy="608" r="2" fill="#fff"/>
+<!-- mouth -->
+<path d="M566 638 Q 575 645 580 640" stroke="#1a0a04" stroke-width="2" fill="none"/>
+<!-- highlight on body -->
+<path d="M590 585 Q 640 575 680 580" stroke="#ffd9a0" stroke-width="3" fill="none" opacity="0.7"/>
+</g>
+</g>
+
+<!-- Yellow tang (top-right) -->
+<g id="yellow-tang">
+<g>
+<animateTransform attributeName="transform" type="translate" dur="11s" repeatCount="indefinite" values="0 0; -20 8; -4 -4; 0 0"/>
+<path d="M740 280 Q 770 230 830 235 Q 880 250 875 285 Q 870 320 830 330 Q 770 332 740 295 Z" fill="url(#yellow)"/>
+<polygon points="740,285 700,255 705,290 700,325" fill="#f5b800"/>
+<path d="M790 235 Q 810 215 845 230 Q 825 250 800 245 Z" fill="#e09500"/>
+<path d="M790 330 Q 810 348 845 332 Q 825 320 800 322 Z" fill="#e09500"/>
+<circle cx="855" cy="270" r="6" fill="#fff"/>
+<circle cx="856" cy="271" r="3.5" fill="#1a0a04"/>
+<path d="M870 280 Q 875 285 870 290" stroke="#1a0a04" stroke-width="2" fill="none"/>
+<path d="M770 250 Q 810 245 850 252" stroke="#fff5a0" stroke-width="2.5" fill="none" opacity="0.6"/>
+</g>
+</g>
+
+<!-- Purple/pink fish (deep mid) -->
+<g id="purple-fish">
+<g>
+<animateTransform attributeName="transform" type="translate" dur="13s" repeatCount="indefinite" values="0 0; 18 6; 6 -4; 0 0"/>
+<ellipse cx="340" cy="720" rx="50" ry="22" fill="url(#purple)"/>
+<polygon points="295,720 260,700 265,720 260,740" fill="#8a3fc8"/>
+<path d="M340 698 Q 360 680 380 700 Q 360 705 340 705 Z" fill="#8a3fc8"/>
+<path d="M340 742 Q 360 760 380 740 Q 360 738 340 738 Z" fill="#8a3fc8"/>
+<circle cx="375" cy="715" r="5" fill="#fff"/>
+<circle cx="376" cy="716" r="3" fill="#1a0a04"/>
+<path d="M305 712 Q 350 708 380 715" stroke="#f0c4ff" stroke-width="2.5" fill="none" opacity="0.7"/>
+<!-- scale dots -->
+<circle cx="330" cy="715" r="1.5" fill="#4a1a78" opacity="0.6"/>
+<circle cx="345" cy="720" r="1.5" fill="#4a1a78" opacity="0.6"/>
+<circle cx="360" cy="715" r="1.5" fill="#4a1a78" opacity="0.6"/>
+<circle cx="345" cy="730" r="1.5" fill="#4a1a78" opacity="0.6"/>
+</g>
+</g>
+
+<!-- Small striped fish (top-left) -->
+<g id="small-striped">
+<g>
+<animateTransform attributeName="transform" type="translate" dur="8s" repeatCount="indefinite" values="0 0; 14 -4; 0 0"/>
+<ellipse cx="310" cy="220" rx="32" ry="14" fill="#ffd166"/>
+<rect x="295" y="208" width="3" height="24" fill="#5a2d10"/>
+<rect x="310" y="208" width="3" height="24" fill="#5a2d10"/>
+<rect x="325" y="208" width="3" height="24" fill="#5a2d10"/>
+<polygon points="278,220 258,208 262,220 258,232" fill="#e09500"/>
+<path d="M310 206 Q 320 195 335 205 Z" fill="#e09500"/>
+<circle cx="335" cy="216" r="3.5" fill="#fff"/>
+<circle cx="336" cy="217" r="2" fill="#1a0a04"/>
+</g>
+</g>
+
+<!-- Tiny fish bottom-right -->
+<g id="tiny-fish">
+<g>
+<animateTransform attributeName="transform" type="translate" dur="10s" repeatCount="indefinite" values="0 0; -16 4; -4 -2; 0 0"/>
+<ellipse cx="880" cy="750" rx="22" ry="9" fill="#ff5a7a"/>
+<polygon points="858,750 845,742 848,750 845,758" fill="#c8304a"/>
+<path d="M880 743 Q 890 735 900 743 Z" fill="#c8304a"/>
+<circle cx="897" cy="748" r="3" fill="#fff"/>
+<circle cx="898" cy="749" r="1.7" fill="#1a0a04"/>
+</g>
+</g>
+
+<!-- Bubbles streams -->
+<g id="bubbles-1">
+<circle cx="270" cy="900" r="7" fill="url(#bubble)" stroke="#cfeeff" stroke-width="1" opacity="0.85">
+<animate attributeName="cy" from="920" to="60" dur="6s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur="6s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="270;278;266;270" dur="6s" repeatCount="indefinite"/>
+</circle>
+<circle cx="275" cy="950" r="5" fill="url(#bubble)" stroke="#cfeeff" stroke-width="1" opacity="0.8">
+<animate attributeName="cy" from="950" to="80" dur="7s" begin="-2s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur="7s" begin="-2s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="275;282;270;275" dur="7s" begin="-2s" repeatCount="indefinite"/>
+</circle>
+<circle cx="265" cy="900" r="4" fill="url(#bubble)" stroke="#cfeeff" stroke-width="0.8" opacity="0.7">
+<animate attributeName="cy" from="930" to="100" dur="8s" begin="-4s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur="8s" begin="-4s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="265;272;260;265" dur="8s" begin="-4s" repeatCount="indefinite"/>
+</circle>
+</g>
+
+<g id="bubbles-2">
+<circle cx="490" cy="855" r="6" fill="url(#bubble)" stroke="#cfeeff" stroke-width="1" opacity="0.85">
+<animate attributeName="cy" from="855" to="60" dur="7s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur="7s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="490;497;485;490" dur="7s" repeatCount="indefinite"/>
+</circle>
+<circle cx="495" cy="855" r="4" fill="url(#bubble)" stroke="#cfeeff" stroke-width="0.8" opacity="0.75">
+<animate attributeName="cy" from="855" to="80" dur="6s" begin="-3s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur="6s" begin="-3s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="495;502;488;495" dur="6s" begin="-3s" repeatCount="indefinite"/>
+</circle>
+<circle cx="485" cy="855" r="3" fill="url(#bubble)" stroke="#cfeeff" stroke-width="0.5" opacity="0.7">
+<animate attributeName="cy" from="855" to="100" dur="9s" begin="-1.5s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur="9s" begin="-1.5s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="485;492;480;485" dur="9s" begin="-1.5s" repeatCount="indefinite"/>
+</circle>
+</g>
+
+<g id="bubbles-3">
+<circle cx="870" cy="900" r="6" fill="url(#bubble)" stroke="#cfeeff" stroke-width="1" opacity="0.85">
+<animate attributeName="cy" from="920" to="60" dur="8s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur="8s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="870;878;864;870" dur="8s" repeatCount="indefinite"/>
+</circle>
+<circle cx="875" cy="950" r="4" fill="url(#bubble)" stroke="#cfeeff" stroke-width="0.8" opacity="0.75">
+<animate attributeName="cy" from="950" to="80" dur="7s" begin="-3.5s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur="7s" begin="-3.5s" repeatCount="indefinite"/>
+<animate attributeName="cx" values="875;882;870;875" dur="7s" begin="-3.5s" repeatCount="indefinite"/>
+</circle>
+</g>
+
+<!-- ambient floating particles -->
+<g opacity="0.5">
+<circle cx="150" cy="400" r="1.5" fill="#cfeeff">
+<animate attributeName="cy" values="400;380;400" dur="6s" repeatCount="indefinite"/>
+</circle>
+<circle cx="400" cy="300" r="1" fill="#cfeeff">
+<animate attributeName="cy" values="300;280;300" dur="7s" repeatCount="indefinite"/>
+</circle>
+<circle cx="650" cy="450" r="1.5" fill="#cfeeff">
+<animate attributeName="cy" values="450;430;450" dur="8s" repeatCount="indefinite"/>
+</circle>
+<circle cx="850" cy="500" r="1" fill="#cfeeff">
+<animate attributeName="cy" values="500;480;500" dur="5s" repeatCount="indefinite"/>
+</circle>
+<circle cx="250" cy="600" r="1" fill="#cfeeff">
+<animate attributeName="cy" values="600;580;600" dur="9s" repeatCount="indefinite"/>
+</circle>
+<circle cx="550" cy="400" r="1.5" fill="#cfeeff">
+<animate attributeName="cy" values="400;380;400" dur="7s" repeatCount="indefinite"/>
+</circle>
+</g>
+
+<!-- subtle front glass reflection -->
+<rect x="0" y="0" width="1024" height="1024" fill="url(#surface)" opacity="0.05"/>
+</svg>

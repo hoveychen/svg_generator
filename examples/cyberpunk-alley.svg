@@ -1,0 +1,468 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#1a0833"/>
+<stop offset="0.4" stop-color="#3d1259"/>
+<stop offset="0.75" stop-color="#7a1f5c"/>
+<stop offset="1" stop-color="#2a0d3a"/>
+</linearGradient>
+<linearGradient id="fogGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#ff3a8a" stop-opacity="0"/>
+<stop offset="0.5" stop-color="#ff3a8a" stop-opacity="0.18"/>
+<stop offset="1" stop-color="#5a1a4a" stop-opacity="0.35"/>
+</linearGradient>
+<linearGradient id="bldgFar" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#2a1850"/>
+<stop offset="1" stop-color="#180a30"/>
+</linearGradient>
+<linearGradient id="bldgMid" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#1a0d35"/>
+<stop offset="1" stop-color="#0a0420"/>
+</linearGradient>
+<linearGradient id="bldgNear" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#120820"/>
+<stop offset="1" stop-color="#050108"/>
+</linearGradient>
+<linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#2a0f3a"/>
+<stop offset="0.3" stop-color="#1a0a2a"/>
+<stop offset="1" stop-color="#080414"/>
+</linearGradient>
+<radialGradient id="streetGlow" cx="0.5" cy="0.2" r="0.7">
+<stop offset="0" stop-color="#ff5cb0" stop-opacity="0.55"/>
+<stop offset="0.5" stop-color="#ff3a8a" stop-opacity="0.18"/>
+<stop offset="1" stop-color="#ff3a8a" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="cyanGlow" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0" stop-color="#7df9ff" stop-opacity="0.95"/>
+<stop offset="0.4" stop-color="#22d3ee" stop-opacity="0.45"/>
+<stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="magentaGlow" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0" stop-color="#ffb4e5" stop-opacity="0.95"/>
+<stop offset="0.4" stop-color="#ff2d8a" stop-opacity="0.5"/>
+<stop offset="1" stop-color="#ff2d8a" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="yellowGlow" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0" stop-color="#fff7a8" stop-opacity="0.95"/>
+<stop offset="0.4" stop-color="#ffcb3a" stop-opacity="0.45"/>
+<stop offset="1" stop-color="#ffcb3a" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="umbrellaGlow" cx="0.5" cy="0.3" r="0.6">
+<stop offset="0" stop-color="#ff4d9d" stop-opacity="0.85"/>
+<stop offset="1" stop-color="#8a1a4a" stop-opacity="1"/>
+</radialGradient>
+<linearGradient id="reflect1" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#22d3ee" stop-opacity="0.55"/>
+<stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="reflect2" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#ff2d8a" stop-opacity="0.6"/>
+<stop offset="1" stop-color="#ff2d8a" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="reflect3" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#ffcb3a" stop-opacity="0.5"/>
+<stop offset="1" stop-color="#ffcb3a" stop-opacity="0"/>
+</linearGradient>
+<filter id="blur4" x="-20%" y="-20%" width="140%" height="140%">
+<feGaussianBlur stdDeviation="4"/>
+</filter>
+<filter id="blur8" x="-20%" y="-20%" width="140%" height="140%">
+<feGaussianBlur stdDeviation="8"/>
+</filter>
+<filter id="blur14" x="-30%" y="-30%" width="160%" height="160%">
+<feGaussianBlur stdDeviation="14"/>
+</filter>
+<filter id="blur2" x="-10%" y="-10%" width="120%" height="120%">
+<feGaussianBlur stdDeviation="2"/>
+</filter>
+</defs>
+
+<!-- Sky -->
+<rect width="1024" height="720" fill="url(#sky)"/>
+
+<!-- Distant atmospheric glow -->
+<ellipse cx="512" cy="640" rx="520" ry="200" fill="url(#streetGlow)"/>
+
+<!-- Far buildings (atmospheric haze) -->
+<g opacity="0.7">
+<rect x="60" y="280" width="80" height="380" fill="url(#bldgFar)"/>
+<rect x="160" y="220" width="110" height="440" fill="url(#bldgFar)"/>
+<rect x="290" y="260" width="70" height="400" fill="url(#bldgFar)"/>
+<rect x="380" y="180" width="130" height="480" fill="url(#bldgFar)"/>
+<rect x="530" y="240" width="90" height="420" fill="url(#bldgFar)"/>
+<rect x="640" y="200" width="100" height="460" fill="url(#bldgFar)"/>
+<rect x="760" y="260" width="80" height="400" fill="url(#bldgFar)"/>
+<rect x="860" y="220" width="110" height="440" fill="url(#bldgFar)"/>
+</g>
+
+<!-- Distant tiny window lights -->
+<g opacity="0.85" fill="#ffd47a">
+<rect x="78" y="310" width="3" height="3"/><rect x="92" y="340" width="3" height="3"/><rect x="110" y="370" width="3" height="3"/><rect x="78" y="400" width="3" height="3"/><rect x="120" y="430" width="3" height="3"/>
+<rect x="180" y="260" width="3" height="3"/><rect x="210" y="290" width="3" height="3"/><rect x="240" y="320" width="3" height="3"/><rect x="200" y="360" width="3" height="3"/><rect x="220" y="400" width="3" height="3"/><rect x="180" y="450" width="3" height="3"/>
+<rect x="400" y="220" width="3" height="3"/><rect x="430" y="250" width="3" height="3"/><rect x="470" y="280" width="3" height="3"/><rect x="410" y="310" width="3" height="3"/><rect x="450" y="350" width="3" height="3"/><rect x="490" y="390" width="3" height="3"/>
+<rect x="550" y="280" width="3" height="3"/><rect x="580" y="320" width="3" height="3"/><rect x="610" y="360" width="3" height="3"/>
+<rect x="660" y="240" width="3" height="3"/><rect x="690" y="280" width="3" height="3"/><rect x="720" y="320" width="3" height="3"/><rect x="700" y="380" width="3" height="3"/>
+<rect x="780" y="300" width="3" height="3"/><rect x="820" y="340" width="3" height="3"/>
+<rect x="880" y="260" width="3" height="3"/><rect x="920" y="300" width="3" height="3"/><rect x="950" y="340" width="3" height="3"/><rect x="900" y="400" width="3" height="3"/>
+</g>
+
+<!-- Distant cyan sign blur -->
+<g filter="url(#blur14)" opacity="0.55">
+<rect x="180" y="280" width="80" height="20" fill="#22d3ee"/>
+<rect x="660" y="340" width="60" height="14" fill="#ff2d8a"/>
+<rect x="880" y="300" width="70" height="18" fill="#ffcb3a"/>
+</g>
+
+<!-- Mid-distance fog band -->
+<rect x="0" y="380" width="1024" height="320" fill="url(#fogGrad)" opacity="0.6"/>
+
+<!-- Mid buildings - left side -->
+<g>
+<polygon points="0,180 0,700 280,700 280,200 240,200 240,180 200,180 200,160 160,160 160,180 120,180 120,200 80,200 80,180" fill="url(#bldgMid)"/>
+<!-- Antenna/spires -->
+<line x1="160" y1="160" x2="160" y2="100" stroke="#0d0420" stroke-width="3"/>
+<line x1="200" y1="180" x2="200" y2="130" stroke="#0d0420" stroke-width="2"/>
+<circle cx="160" cy="100" r="3" fill="#ff2d8a"/>
+</g>
+
+<!-- Mid buildings - right side -->
+<g>
+<polygon points="744,180 744,700 1024,700 1024,160 980,160 980,140 940,140 940,120 900,120 900,140 860,140 860,160 820,160 820,180 780,180 780,200 760,200 760,180" fill="url(#bldgMid)"/>
+<line x1="900" y1="120" x2="900" y2="60" stroke="#0d0420" stroke-width="3"/>
+<line x1="940" y1="140" x2="940" y2="90" stroke="#0d0420" stroke-width="2"/>
+<circle cx="900" cy="60" r="3" fill="#ff2d8a"/>
+<circle cx="940" cy="90" r="2" fill="#ffcb3a"/>
+</g>
+
+<!-- Mid-building windows - small grid pattern left -->
+<g fill="#ffb84d" opacity="0.7">
+<rect x="20" y="240" width="6" height="10"/><rect x="35" y="240" width="6" height="10"/><rect x="50" y="240" width="6" height="10"/>
+<rect x="20" y="270" width="6" height="10"/><rect x="50" y="270" width="6" height="10"/>
+<rect x="20" y="300" width="6" height="10"/><rect x="35" y="300" width="6" height="10"/>
+<rect x="100" y="240" width="6" height="10"/><rect x="115" y="240" width="6" height="10"/>
+<rect x="100" y="270" width="6" height="10"/><rect x="130" y="270" width="6" height="10"/>
+<rect x="115" y="300" width="6" height="10"/><rect x="130" y="300" width="6" height="10"/>
+<rect x="100" y="340" width="6" height="10"/><rect x="115" y="340" width="6" height="10"/>
+<rect x="180" y="240" width="6" height="10"/><rect x="195" y="240" width="6" height="10"/>
+<rect x="180" y="280" width="6" height="10"/><rect x="195" y="280" width="6" height="10"/><rect x="210" y="280" width="6" height="10"/>
+<rect x="180" y="320" width="6" height="10"/><rect x="210" y="320" width="6" height="10"/>
+<rect x="180" y="360" width="6" height="10"/><rect x="195" y="360" width="6" height="10"/>
+<rect x="240" y="240" width="6" height="10"/><rect x="255" y="240" width="6" height="10"/>
+<rect x="240" y="280" width="6" height="10"/><rect x="255" y="280" width="6" height="10"/>
+<rect x="240" y="320" width="6" height="10"/>
+</g>
+
+<!-- Mid-building windows right -->
+<g fill="#7df9ff" opacity="0.55">
+<rect x="780" y="240" width="6" height="10"/><rect x="795" y="240" width="6" height="10"/>
+<rect x="780" y="270" width="6" height="10"/><rect x="810" y="270" width="6" height="10"/>
+<rect x="795" y="300" width="6" height="10"/><rect x="810" y="300" width="6" height="10"/>
+<rect x="780" y="340" width="6" height="10"/>
+<rect x="860" y="200" width="6" height="10"/><rect x="875" y="200" width="6" height="10"/>
+<rect x="860" y="230" width="6" height="10"/><rect x="890" y="230" width="6" height="10"/>
+<rect x="875" y="260" width="6" height="10"/><rect x="905" y="260" width="6" height="10"/>
+<rect x="860" y="290" width="6" height="10"/><rect x="890" y="290" width="6" height="10"/>
+<rect x="940" y="180" width="6" height="10"/><rect x="955" y="180" width="6" height="10"/>
+<rect x="940" y="210" width="6" height="10"/><rect x="970" y="210" width="6" height="10"/>
+<rect x="955" y="240" width="6" height="10"/>
+<rect x="990" y="200" width="6" height="10"/><rect x="990" y="230" width="6" height="10"/>
+</g>
+
+<!-- LEFT BUILDING NEON SIGNS -->
+<!-- Vertical kanji-style sign 1 -->
+<g transform="translate(40,240)">
+<ellipse cx="20" cy="80" rx="40" ry="100" fill="url(#magentaGlow)" filter="url(#blur8)" opacity="0.9"/>
+<rect x="10" y="0" width="20" height="180" fill="#1a0820" stroke="#ff2d8a" stroke-width="1.5"/>
+<rect x="13" y="10" width="14" height="14" fill="none" stroke="#ff5cb0" stroke-width="1.5"/>
+<rect x="13" y="30" width="14" height="14" fill="none" stroke="#ff5cb0" stroke-width="1.5"/>
+<line x1="13" y1="37" x2="27" y2="37" stroke="#ff5cb0" stroke-width="1.5"/>
+<rect x="13" y="50" width="14" height="14" fill="none" stroke="#ff5cb0" stroke-width="1.5"/>
+<line x1="20" y1="50" x2="20" y2="64" stroke="#ff5cb0" stroke-width="1.5"/>
+<rect x="13" y="70" width="14" height="14" fill="none" stroke="#ff5cb0" stroke-width="1.5"/>
+<line x1="13" y1="77" x2="27" y2="77" stroke="#ff5cb0" stroke-width="1.5"/>
+<line x1="20" y1="70" x2="20" y2="84" stroke="#ff5cb0" stroke-width="1.5"/>
+<rect x="13" y="90" width="14" height="14" fill="none" stroke="#ff5cb0" stroke-width="1.5"/>
+<rect x="13" y="110" width="14" height="14" fill="none" stroke="#ff5cb0" stroke-width="1.5"/>
+<line x1="13" y1="117" x2="27" y2="117" stroke="#ff5cb0" stroke-width="1.5"/>
+<rect x="13" y="130" width="14" height="14" fill="none" stroke="#ff5cb0" stroke-width="1.5"/>
+<line x1="20" y1="130" x2="20" y2="144" stroke="#ff5cb0" stroke-width="1.5"/>
+<rect x="13" y="150" width="14" height="14" fill="none" stroke="#ff5cb0" stroke-width="1.5"/>
+</g>
+
+<!-- Horizontal cyan neon -->
+<g transform="translate(80,440)">
+<ellipse cx="80" cy="20" rx="120" ry="35" fill="url(#cyanGlow)" filter="url(#blur8)" opacity="0.85"/>
+<rect x="0" y="5" width="160" height="32" fill="#0d1a28" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="80" y="28" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" fill="#7df9ff" text-anchor="middle" letter-spacing="2">NEO TOKYO</text>
+</g>
+
+<!-- Yellow sign left -->
+<g transform="translate(160,540)">
+<ellipse cx="50" cy="20" rx="80" ry="30" fill="url(#yellowGlow)" filter="url(#blur8)" opacity="0.85"/>
+<rect x="0" y="5" width="100" height="30" fill="#1a1408" stroke="#ffcb3a" stroke-width="1.5"/>
+<text x="50" y="27" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#fff7a8" text-anchor="middle">電気街</text>
+</g>
+
+<!-- RIGHT BUILDING NEON SIGNS -->
+<!-- Big vertical sign right -->
+<g transform="translate(820,200)">
+<ellipse cx="30" cy="120" rx="55" ry="140" fill="url(#cyanGlow)" filter="url(#blur14)" opacity="0.85"/>
+<rect x="15" y="10" width="30" height="240" fill="#08161a" stroke="#22d3ee" stroke-width="2"/>
+<text x="30" y="40" font-family="Arial Black, sans-serif" font-size="24" font-weight="900" fill="#7df9ff" text-anchor="middle">電</text>
+<text x="30" y="75" font-family="Arial Black, sans-serif" font-size="24" font-weight="900" fill="#7df9ff" text-anchor="middle">脳</text>
+<text x="30" y="110" font-family="Arial Black, sans-serif" font-size="24" font-weight="900" fill="#7df9ff" text-anchor="middle">街</text>
+<text x="30" y="145" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" fill="#7df9ff" text-anchor="middle">2 0</text>
+<text x="30" y="170" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" fill="#7df9ff" text-anchor="middle">7 7</text>
+<rect x="20" y="180" width="20" height="2" fill="#7df9ff"/>
+<text x="30" y="210" font-family="Arial, sans-serif" font-size="14" fill="#7df9ff" text-anchor="middle">バ</text>
+<text x="30" y="230" font-family="Arial, sans-serif" font-size="14" fill="#7df9ff" text-anchor="middle">ー</text>
+</g>
+
+<!-- Magenta sign right -->
+<g transform="translate(760,460)">
+<ellipse cx="80" cy="25" rx="120" ry="40" fill="url(#magentaGlow)" filter="url(#blur8)" opacity="0.9"/>
+<rect x="0" y="5" width="160" height="40" fill="#1a0814" stroke="#ff2d8a" stroke-width="1.5"/>
+<text x="80" y="30" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" fill="#ffb4e5" text-anchor="middle" letter-spacing="3">SUSHI</text>
+<rect x="10" y="36" width="140" height="2" fill="#ff5cb0"/>
+</g>
+
+<!-- Floating holographic ad -->
+<g transform="translate(380,140)" opacity="0.75">
+<rect x="0" y="0" width="260" height="60" fill="#0a0420" stroke="#22d3ee" stroke-width="1" opacity="0.8"/>
+<ellipse cx="130" cy="30" rx="140" ry="40" fill="url(#cyanGlow)" filter="url(#blur14)" opacity="0.5"/>
+<text x="130" y="32" font-family="Arial Black, sans-serif" font-size="22" font-weight="900" fill="#7df9ff" text-anchor="middle" letter-spacing="4">CYBER</text>
+<text x="130" y="52" font-family="Arial, sans-serif" font-size="10" fill="#ff5cb0" text-anchor="middle" letter-spacing="6">CORPORATION 株式会社</text>
+</g>
+
+<!-- Pipes and structural elements on left -->
+<g stroke="#1a0d20" stroke-width="6" fill="none">
+<path d="M 280,200 L 280,400 L 250,420 L 250,600"/>
+<path d="M 270,250 L 270,350 L 230,380"/>
+</g>
+<g stroke="#0a0410" stroke-width="3" fill="none">
+<path d="M 280,200 L 280,400 L 250,420 L 250,600"/>
+</g>
+
+<!-- Pipes on right -->
+<g stroke="#1a0d20" stroke-width="6" fill="none">
+<path d="M 744,180 L 744,360 L 770,380 L 770,600"/>
+<path d="M 750,260 L 750,340 L 790,360"/>
+</g>
+
+<!-- Air conditioning units -->
+<g fill="#0a0410" stroke="#1a0820" stroke-width="1">
+<rect x="220" y="320" width="40" height="30"/>
+<line x1="225" y1="328" x2="255" y2="328" stroke="#2a1830" stroke-width="1"/>
+<line x1="225" y1="335" x2="255" y2="335" stroke="#2a1830" stroke-width="1"/>
+<line x1="225" y1="342" x2="255" y2="342" stroke="#2a1830" stroke-width="1"/>
+<rect x="760" y="380" width="40" height="30"/>
+<line x1="765" y1="388" x2="795" y2="388" stroke="#2a1830" stroke-width="1"/>
+<line x1="765" y1="395" x2="795" y2="395" stroke="#2a1830" stroke-width="1"/>
+<line x1="765" y1="402" x2="795" y2="402" stroke="#2a1830" stroke-width="1"/>
+</g>
+
+<!-- Hanging cables stretching across the alley -->
+<g stroke="#0a0410" stroke-width="2" fill="none" opacity="0.9">
+<path d="M 280,210 Q 512,260 744,210"/>
+<path d="M 280,240 Q 512,300 744,240"/>
+<path d="M 280,280 Q 512,340 744,280"/>
+</g>
+<g stroke="#1a0820" stroke-width="1" fill="none" opacity="0.7">
+<path d="M 280,260 Q 512,320 744,260"/>
+<path d="M 280,300 Q 512,360 744,300"/>
+</g>
+
+<!-- Hanging paper lanterns -->
+<g transform="translate(380,260)">
+<line x1="0" y1="0" x2="0" y2="20" stroke="#1a0820" stroke-width="1"/>
+<ellipse cx="0" cy="35" rx="14" ry="18" fill="#ff5050" opacity="0.95"/>
+<ellipse cx="0" cy="35" rx="14" ry="18" fill="url(#magentaGlow)" filter="url(#blur4)" opacity="0.7"/>
+<line x1="-14" y1="35" x2="14" y2="35" stroke="#1a0820" stroke-width="0.6"/>
+<line x1="-14" y1="28" x2="14" y2="28" stroke="#1a0820" stroke-width="0.4" opacity="0.5"/>
+<line x1="-14" y1="42" x2="14" y2="42" stroke="#1a0820" stroke-width="0.4" opacity="0.5"/>
+<text x="0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#1a0820" text-anchor="middle" font-weight="bold">居</text>
+</g>
+<g transform="translate(460,290)">
+<line x1="0" y1="0" x2="0" y2="20" stroke="#1a0820" stroke-width="1"/>
+<ellipse cx="0" cy="35" rx="14" ry="18" fill="#ff5050" opacity="0.95"/>
+<ellipse cx="0" cy="35" rx="14" ry="18" fill="url(#magentaGlow)" filter="url(#blur4)" opacity="0.7"/>
+<line x1="-14" y1="35" x2="14" y2="35" stroke="#1a0820" stroke-width="0.6"/>
+<text x="0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#1a0820" text-anchor="middle" font-weight="bold">酒</text>
+</g>
+<g transform="translate(560,300)">
+<line x1="0" y1="0" x2="0" y2="20" stroke="#1a0820" stroke-width="1"/>
+<ellipse cx="0" cy="35" rx="14" ry="18" fill="#ff5050" opacity="0.95"/>
+<ellipse cx="0" cy="35" rx="14" ry="18" fill="url(#magentaGlow)" filter="url(#blur4)" opacity="0.7"/>
+<line x1="-14" y1="35" x2="14" y2="35" stroke="#1a0820" stroke-width="0.6"/>
+<text x="0" y="40" font-family="Arial, sans-serif" font-size="12" fill="#1a0820" text-anchor="middle" font-weight="bold">屋</text>
+</g>
+<g transform="translate(640,280)">
+<line x1="0" y1="0" x2="0" y2="20" stroke="#1a0820" stroke-width="1"/>
+<ellipse cx="0" cy="35" rx="14" ry="18" fill="#ff5050" opacity="0.95"/>
+<ellipse cx="0" cy="35" rx="14" ry="18" fill="url(#magentaGlow)" filter="url(#blur4)" opacity="0.7"/>
+<line x1="-14" y1="35" x2="14" y2="35" stroke="#1a0820" stroke-width="0.6"/>
+</g>
+
+<!-- Far building at end of alley (vanishing point) -->
+<rect x="400" y="380" width="220" height="280" fill="url(#bldgFar)" opacity="0.8"/>
+<g fill="#ff5cb0" opacity="0.6">
+<rect x="420" y="420" width="4" height="6"/><rect x="435" y="420" width="4" height="6"/><rect x="450" y="420" width="4" height="6"/>
+<rect x="420" y="440" width="4" height="6"/><rect x="465" y="440" width="4" height="6"/>
+<rect x="500" y="420" width="4" height="6"/><rect x="515" y="420" width="4" height="6"/>
+<rect x="500" y="450" width="4" height="6"/><rect x="530" y="450" width="4" height="6"/>
+<rect x="560" y="430" width="4" height="6"/><rect x="580" y="430" width="4" height="6"/>
+<rect x="560" y="460" width="4" height="6"/>
+</g>
+<!-- Sign on distant building -->
+<g transform="translate(440,500)">
+<ellipse cx="70" cy="15" rx="80" ry="22" fill="url(#magentaGlow)" filter="url(#blur8)" opacity="0.7"/>
+<rect x="0" y="5" width="140" height="22" fill="#1a0814" stroke="#ff2d8a" stroke-width="1"/>
+<text x="70" y="21" font-family="Arial Black, sans-serif" font-size="12" font-weight="900" fill="#ffb4e5" text-anchor="middle" letter-spacing="2">EAT・DRINK</text>
+</g>
+
+<!-- Wet pavement -->
+<rect x="0" y="660" width="1024" height="364" fill="url(#ground)"/>
+
+<!-- Reflection of central building/light -->
+<ellipse cx="512" cy="700" rx="350" ry="40" fill="url(#streetGlow)" opacity="0.7"/>
+
+<!-- Long color reflections on wet street -->
+<g opacity="0.7">
+<path d="M 80,665 Q 100,800 60,1000 L 200,1000 Q 240,820 180,665 Z" fill="url(#reflect2)" filter="url(#blur4)"/>
+<path d="M 140,665 Q 150,750 120,900 L 230,900 Q 250,770 200,665 Z" fill="url(#reflect1)" filter="url(#blur4)" opacity="0.6"/>
+<path d="M 820,665 Q 830,790 800,1000 L 920,1000 Q 950,820 900,665 Z" fill="url(#reflect1)" filter="url(#blur4)"/>
+<path d="M 780,665 Q 790,780 760,900 L 880,900 Q 900,800 850,665 Z" fill="url(#reflect2)" filter="url(#blur4)" opacity="0.55"/>
+<path d="M 200,665 Q 210,740 190,840 L 260,840 Q 270,750 240,665 Z" fill="url(#reflect3)" filter="url(#blur4)" opacity="0.7"/>
+<path d="M 440,665 Q 460,750 420,850 L 580,850 Q 600,750 560,665 Z" fill="url(#reflect2)" filter="url(#blur8)" opacity="0.5"/>
+</g>
+
+<!-- Puddle highlights -->
+<g opacity="0.5">
+<ellipse cx="300" cy="780" rx="60" ry="6" fill="#7df9ff" filter="url(#blur4)"/>
+<ellipse cx="700" cy="800" rx="80" ry="7" fill="#ff5cb0" filter="url(#blur4)"/>
+<ellipse cx="180" cy="880" rx="100" ry="8" fill="#ffcb3a" filter="url(#blur4)" opacity="0.4"/>
+<ellipse cx="850" cy="920" rx="90" ry="7" fill="#7df9ff" filter="url(#blur4)" opacity="0.4"/>
+</g>
+
+<!-- Subtle perspective lines on pavement -->
+<g stroke="#3a1850" stroke-width="0.5" opacity="0.4">
+<line x1="0" y1="800" x2="1024" y2="800"/>
+<line x1="0" y1="900" x2="1024" y2="900"/>
+</g>
+
+<!-- Street curbs converging -->
+<g opacity="0.6">
+<polygon points="0,720 280,680 280,690 0,735" fill="#0a0410"/>
+<polygon points="1024,720 744,680 744,690 1024,735" fill="#0a0410"/>
+</g>
+
+<!-- THE LONE FIGURE WITH UMBRELLA (focal point, slightly left-center, walking away) -->
+<g transform="translate(470,560)">
+<!-- ground halo from rim light -->
+<ellipse cx="40" cy="200" rx="55" ry="12" fill="#ff2d8a" opacity="0.25" filter="url(#blur8)"/>
+<!-- reflection of figure -->
+<g opacity="0.35" transform="translate(0,210) scale(1,-0.5)" filter="url(#blur2)">
+<ellipse cx="40" cy="0" rx="65" ry="20" fill="#3a1530"/>
+<rect x="20" y="0" width="40" height="80" fill="#1a0a1a"/>
+</g>
+<!-- umbrella shadow -->
+<ellipse cx="40" cy="20" rx="70" ry="10" fill="#000000" opacity="0.3" filter="url(#blur4)"/>
+<!-- umbrella -->
+<path d="M -28,25 Q 40,-20 108,25 Q 105,28 90,25 Q 85,22 75,25 Q 70,22 60,25 Q 55,22 45,25 Q 40,22 35,25 Q 25,22 20,25 Q 10,22 5,25 Q -5,22 -10,25 Q -25,28 -28,25 Z" fill="url(#umbrellaGlow)"/>
+<!-- umbrella ribs -->
+<g stroke="#5a1a3a" stroke-width="0.8" fill="none" opacity="0.7">
+<path d="M 40,5 Q 5,15 -25,25"/>
+<path d="M 40,5 Q 22,12 5,22"/>
+<path d="M 40,5 L 40,25"/>
+<path d="M 40,5 Q 58,12 75,22"/>
+<path d="M 40,5 Q 75,15 105,25"/>
+</g>
+<!-- umbrella top highlight -->
+<path d="M -28,25 Q 40,-20 108,25" stroke="#ff8ac4" stroke-width="1.5" fill="none" opacity="0.9"/>
+<!-- umbrella tip -->
+<line x1="40" y1="5" x2="40" y2="-8" stroke="#1a0820" stroke-width="1.5"/>
+<circle cx="40" cy="-8" r="2" fill="#ff5cb0"/>
+<!-- handle -->
+<line x1="40" y1="25" x2="40" y2="120" stroke="#1a0820" stroke-width="2.5"/>
+<line x1="40" y1="25" x2="40" y2="120" stroke="#3a2030" stroke-width="1"/>
+<!-- body silhouette in long coat -->
+<path d="M 22,55 Q 18,80 18,120 L 22,180 Q 25,195 30,200 L 50,200 Q 55,195 58,180 L 62,120 Q 62,80 58,55 Q 52,48 40,48 Q 28,48 22,55 Z" fill="#0a0410"/>
+<!-- coat highlights (rim light from neon) -->
+<path d="M 22,55 Q 18,80 18,120 L 20,180 Q 22,195 27,200 L 30,200 L 28,180 L 21,120 Q 21,82 25,58 Z" fill="#5a1a3a" opacity="0.7"/>
+<path d="M 58,55 Q 62,80 62,120 L 60,180 Q 58,195 53,200 L 50,200 L 52,180 L 59,120 Q 59,82 55,58 Z" fill="#1a3a5a" opacity="0.6"/>
+<!-- head -->
+<circle cx="40" cy="50" r="9" fill="#0a0410"/>
+<path d="M 32,46 Q 32,38 40,38 Q 48,38 48,46 L 48,52 L 32,52 Z" fill="#0a0410"/>
+<!-- collar -->
+<path d="M 28,56 L 40,62 L 52,56 L 50,62 L 40,68 L 30,62 Z" fill="#000"/>
+<!-- legs hint -->
+<rect x="30" y="195" width="8" height="20" fill="#0a0410"/>
+<rect x="42" y="195" width="8" height="20" fill="#0a0410"/>
+<!-- shoes wet glint -->
+<ellipse cx="34" cy="215" rx="6" ry="2" fill="#1a1a30" opacity="0.8"/>
+<ellipse cx="46" cy="215" rx="6" ry="2" fill="#1a1a30" opacity="0.8"/>
+</g>
+
+<!-- Rain streaks (foreground, varied intensity) -->
+<g stroke="#a0d8ff" stroke-width="0.6" opacity="0.35">
+<line x1="50" y1="100" x2="44" y2="140"/>
+<line x1="120" y1="50" x2="114" y2="100"/>
+<line x1="200" y1="80" x2="194" y2="130"/>
+<line x1="280" y1="20" x2="272" y2="80"/>
+<line x1="360" y1="60" x2="354" y2="110"/>
+<line x1="440" y1="30" x2="434" y2="90"/>
+<line x1="520" y1="70" x2="514" y2="120"/>
+<line x1="600" y1="40" x2="594" y2="100"/>
+<line x1="680" y1="80" x2="674" y2="130"/>
+<line x1="760" y1="50" x2="754" y2="110"/>
+<line x1="840" y1="90" x2="834" y2="140"/>
+<line x1="920" y1="40" x2="914" y2="100"/>
+<line x1="80" y1="200" x2="73" y2="260"/>
+<line x1="180" y1="250" x2="173" y2="310"/>
+<line x1="320" y1="220" x2="313" y2="280"/>
+<line x1="660" y1="240" x2="653" y2="300"/>
+<line x1="800" y1="270" x2="793" y2="330"/>
+<line x1="960" y1="220" x2="953" y2="280"/>
+</g>
+<g stroke="#cfe9ff" stroke-width="1" opacity="0.5">
+<line x1="100" y1="400" x2="92" y2="470"/>
+<line x1="240" y1="430" x2="232" y2="500"/>
+<line x1="380" y1="380" x2="372" y2="450"/>
+<line x1="650" y1="420" x2="642" y2="490"/>
+<line x1="780" y1="460" x2="772" y2="530"/>
+<line x1="900" y1="400" x2="892" y2="470"/>
+<line x1="60" y1="550" x2="50" y2="630"/>
+<line x1="200" y1="580" x2="190" y2="660"/>
+<line x1="340" y1="540" x2="330" y2="620"/>
+<line x1="700" y1="560" x2="690" y2="640"/>
+<line x1="850" y1="540" x2="840" y2="620"/>
+<line x1="950" y1="580" x2="940" y2="660"/>
+</g>
+<g stroke="#ffffff" stroke-width="1.4" opacity="0.65">
+<line x1="120" y1="700" x2="108" y2="790"/>
+<line x1="280" y1="730" x2="268" y2="820"/>
+<line x1="380" y1="680" x2="368" y2="770"/>
+<line x1="620" y1="700" x2="608" y2="790"/>
+<line x1="760" y1="730" x2="748" y2="820"/>
+<line x1="880" y1="680" x2="868" y2="770"/>
+<line x1="40" y1="850" x2="26" y2="950"/>
+<line x1="200" y1="880" x2="186" y2="980"/>
+<line x1="900" y1="860" x2="886" y2="960"/>
+<line x1="980" y1="900" x2="966" y2="1000"/>
+</g>
+
+<!-- Splash ripples on wet pavement near figure -->
+<g fill="none" stroke="#a0d8ff" stroke-width="0.8" opacity="0.6">
+<ellipse cx="440" cy="790" rx="8" ry="2"/>
+<ellipse cx="600" cy="820" rx="10" ry="2.5"/>
+<ellipse cx="300" cy="850" rx="6" ry="1.5"/>
+<ellipse cx="720" cy="870" rx="8" ry="2"/>
+</g>
+
+<!-- Foreground vignette / atmospheric fog overlay -->
+<rect x="0" y="0" width="1024" height="1024" fill="url(#fogGrad)" opacity="0.25"/>
+<radialGradient id="vignette" cx="0.5" cy="0.5" r="0.7"><stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.7"/></radialGradient>
+<rect x="0" y="0" width="1024" height="1024" fill="url(#vignette)"/>
+
+</svg>

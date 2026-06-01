@@ -1,0 +1,606 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#1a1b3a"/>
+<stop offset="30%" stop-color="#3d2c5e"/>
+<stop offset="55%" stop-color="#8e4a5c"/>
+<stop offset="72%" stop-color="#e07a4d"/>
+<stop offset="85%" stop-color="#f4b15a"/>
+<stop offset="100%" stop-color="#fde0a8"/>
+</linearGradient>
+<radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0%" stop-color="#fff4c2"/>
+<stop offset="40%" stop-color="#ffd87a"/>
+<stop offset="80%" stop-color="#f08a3a" stop-opacity="0.5"/>
+<stop offset="100%" stop-color="#f08a3a" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="sunglow" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0%" stop-color="#ffe39a" stop-opacity="0.7"/>
+<stop offset="100%" stop-color="#ffe39a" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="mtnFar" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#6e4666"/>
+<stop offset="100%" stop-color="#3a2a48"/>
+</linearGradient>
+<linearGradient id="mtnMid" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#4a334e"/>
+<stop offset="100%" stop-color="#251b30"/>
+</linearGradient>
+<linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#3a2b3a"/>
+<stop offset="60%" stop-color="#241827"/>
+<stop offset="100%" stop-color="#150f1c"/>
+</linearGradient>
+<linearGradient id="rock" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#4a3a48"/>
+<stop offset="100%" stop-color="#1d1422"/>
+</linearGradient>
+<linearGradient id="stoneLit" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#7d5c5a"/>
+<stop offset="45%" stop-color="#c89070"/>
+<stop offset="60%" stop-color="#e0a37a"/>
+<stop offset="100%" stop-color="#5a3a48"/>
+</linearGradient>
+<linearGradient id="stoneShade" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#3a2a38"/>
+<stop offset="100%" stop-color="#5a3e48"/>
+</linearGradient>
+<linearGradient id="roof" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#6a2a3a"/>
+<stop offset="50%" stop-color="#a83a48"/>
+<stop offset="100%" stop-color="#4a1a28"/>
+</linearGradient>
+<linearGradient id="roofTall" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#4a1a28"/>
+<stop offset="50%" stop-color="#9a3340"/>
+<stop offset="100%" stop-color="#2a0e1a"/>
+</linearGradient>
+<linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#5a4a6a"/>
+<stop offset="50%" stop-color="#3a2e4a"/>
+<stop offset="100%" stop-color="#1a1428"/>
+</linearGradient>
+<radialGradient id="window" cx="0.5" cy="0.5" r="0.5">
+<stop offset="0%" stop-color="#fff4b0"/>
+<stop offset="60%" stop-color="#f4a040"/>
+<stop offset="100%" stop-color="#a04020" stop-opacity="0"/>
+</radialGradient>
+<filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+<feGaussianBlur stdDeviation="2"/>
+</filter>
+<filter id="bigsoft" x="-50%" y="-50%" width="200%" height="200%">
+<feGaussianBlur stdDeviation="8"/>
+</filter>
+</defs>
+
+<!-- SKY -->
+<rect width="1024" height="1024" fill="url(#sky)"/>
+
+<!-- Distant stars -->
+<g fill="#fff4d6" opacity="0.7">
+<circle cx="120" cy="80" r="1.2"/>
+<circle cx="220" cy="50" r="0.8"/>
+<circle cx="340" cy="120" r="1"/>
+<circle cx="80" cy="180" r="0.7"/>
+<circle cx="450" cy="60" r="1.1"/>
+<circle cx="180" cy="220" r="0.6"/>
+<circle cx="300" cy="200" r="0.8"/>
+<circle cx="900" cy="90" r="1"/>
+<circle cx="820" cy="40" r="0.7"/>
+<circle cx="960" cy="160" r="0.9"/>
+</g>
+
+<!-- Sun glow halo -->
+<circle cx="760" cy="540" r="280" fill="url(#sunglow)"/>
+<!-- Sun -->
+<circle cx="760" cy="540" r="85" fill="url(#sun)"/>
+<circle cx="760" cy="540" r="50" fill="#fff8d8" opacity="0.85"/>
+
+<!-- Distant mountain range -->
+<path d="M0,620 L80,560 L160,590 L240,530 L320,570 L420,500 L520,550 L620,510 L720,560 L820,520 L920,570 L1024,540 L1024,720 L0,720 Z" fill="url(#mtnFar)" opacity="0.85"/>
+
+<!-- Mid mountains with haze -->
+<path d="M0,680 L100,620 L200,650 L310,590 L420,640 L540,600 L660,650 L780,610 L900,640 L1024,610 L1024,760 L0,760 Z" fill="url(#mtnMid)" opacity="0.9"/>
+
+<!-- Mist band -->
+<rect x="0" y="640" width="1024" height="80" fill="#e0a080" opacity="0.18" filter="url(#bigsoft)"/>
+
+<!-- Birds in distance -->
+<g fill="none" stroke="#2a1a30" stroke-width="2" stroke-linecap="round" opacity="0.7">
+<path d="M540,300 q8,-8 16,0 q8,-8 16,0"/>
+<path d="M600,260 q6,-6 12,0 q6,-6 12,0"/>
+<path d="M480,340 q5,-5 10,0 q5,-5 10,0"/>
+<path d="M640,330 q4,-4 8,0 q4,-4 8,0"/>
+</g>
+
+<!-- ROCKY HILL base silhouette -->
+<path d="M0,820 L60,780 L140,760 L220,740 L300,720 L360,700 L420,680 L480,665 L540,660 L600,665 L660,675 L720,695 L780,720 L860,750 L940,780 L1024,810 L1024,1024 L0,1024 Z" fill="url(#hill)"/>
+
+<!-- Rocky cliff face highlight (sunlit side) -->
+<path d="M540,660 L600,665 L660,675 L720,695 L780,720 L860,750 L940,780 L1024,810 L1024,900 L600,900 Z" fill="#5a3a48" opacity="0.6"/>
+<path d="M660,675 L720,695 L780,720 L860,750 L940,780 L1024,810 L1024,860 L780,860 Z" fill="#7a5260" opacity="0.5"/>
+
+<!-- Rock chunks at base -->
+<g fill="url(#rock)">
+<path d="M40,860 q30,-20 60,-10 q20,15 -10,30 q-30,10 -50,-20 Z"/>
+<path d="M880,880 q40,-25 80,-15 q30,20 -20,40 q-40,15 -60,-25 Z"/>
+<path d="M180,920 q35,-15 70,-5 q25,15 -15,30 q-40,10 -55,-25 Z"/>
+<path d="M780,950 q30,-12 55,-2 q15,18 -20,28 q-35,5 -35,-26 Z"/>
+</g>
+
+<!-- MOAT WATER -->
+<ellipse cx="512" cy="935" rx="500" ry="38" fill="url(#water)"/>
+<ellipse cx="512" cy="935" rx="500" ry="38" fill="none" stroke="#7a6080" stroke-width="0.8" opacity="0.4"/>
+
+<!-- Water highlights -->
+<g stroke="#d09060" stroke-width="1.2" opacity="0.5" fill="none">
+<path d="M100,925 q40,3 80,0"/>
+<path d="M250,938 q50,3 90,0"/>
+<path d="M420,945 q40,2 80,0"/>
+<path d="M620,940 q40,2 80,0"/>
+<path d="M780,930 q40,2 80,0"/>
+</g>
+<g stroke="#fff4c0" stroke-width="0.6" opacity="0.4" fill="none">
+<path d="M340,930 q30,2 60,0"/>
+<path d="M580,945 q30,1 60,0"/>
+<path d="M150,948 q30,1 50,0"/>
+</g>
+
+<!-- Reflection of castle (subtle) -->
+<g opacity="0.18">
+<path d="M380,915 L380,955 L440,955 L440,915 Z" fill="#5a3a48"/>
+<path d="M580,910 L580,955 L640,955 L640,910 Z" fill="#5a3a48"/>
+<path d="M460,920 L460,950 L560,950 L560,920 Z" fill="#5a3a48"/>
+</g>
+
+<!-- WINDING PATH up the hill -->
+<path d="M180,1010 Q280,960 340,920 Q380,895 410,870 Q440,845 460,820 Q480,795 490,775 Q500,758 510,748" fill="none" stroke="#6a5040" stroke-width="22" stroke-linecap="round" opacity="0.85"/>
+<path d="M180,1010 Q280,960 340,920 Q380,895 410,870 Q440,845 460,820 Q480,795 490,775 Q500,758 510,748" fill="none" stroke="#8a6a52" stroke-width="14" stroke-linecap="round"/>
+<path d="M180,1010 Q280,960 340,920 Q380,895 410,870 Q440,845 460,820 Q480,795 490,775" fill="none" stroke="#a88060" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+
+<!-- Small path stones -->
+<g fill="#3a2830" opacity="0.7">
+<circle cx="260" cy="975" r="2"/>
+<circle cx="320" cy="945" r="1.8"/>
+<circle cx="380" cy="905" r="1.5"/>
+<circle cx="425" cy="865" r="1.4"/>
+<circle cx="465" cy="820" r="1.3"/>
+</g>
+
+<!-- BRIDGE PATH approaching gate -->
+<path d="M380,925 L440,925 L440,945 L380,945 Z" fill="#3a2418"/>
+
+<!-- DRAWBRIDGE (down) crossing moat -->
+<path d="M460,830 L495,830 L500,945 L455,945 Z" fill="#5a3a22"/>
+<path d="M460,830 L495,830 L500,945 L455,945 Z" fill="none" stroke="#2a1810" stroke-width="1.5"/>
+<g stroke="#2a1810" stroke-width="1" fill="none">
+<line x1="463" y1="855" x2="496" y2="855"/>
+<line x1="465" y1="880" x2="498" y2="880"/>
+<line x1="467" y1="905" x2="499" y2="905"/>
+<line x1="469" y1="925" x2="500" y2="925"/>
+</g>
+<!-- Drawbridge chains -->
+<line x1="462" y1="832" x2="445" y2="775" stroke="#2a1a18" stroke-width="1.5"/>
+<line x1="496" y1="832" x2="515" y2="775" stroke="#2a1a18" stroke-width="1.5"/>
+
+<!-- ============ OUTER CURTAIN WALL ============ -->
+<!-- Outer wall (lower ring) - lit side -->
+<path d="M340,820 L340,760 L680,760 L680,820 Z" fill="url(#stoneLit)"/>
+<path d="M340,820 L340,760 L460,760 L460,820 Z" fill="url(#stoneShade)" opacity="0.85"/>
+
+<!-- Outer wall stones texture -->
+<g stroke="#3a2838" stroke-width="0.6" opacity="0.6">
+<line x1="340" y1="775" x2="680" y2="775"/>
+<line x1="340" y1="790" x2="680" y2="790"/>
+<line x1="340" y1="805" x2="680" y2="805"/>
+<line x1="360" y1="765" x2="360" y2="820"/>
+<line x1="385" y1="765" x2="385" y2="820"/>
+<line x1="410" y1="765" x2="410" y2="820"/>
+<line x1="435" y1="765" x2="435" y2="820"/>
+<line x1="460" y1="765" x2="460" y2="820"/>
+<line x1="485" y1="765" x2="485" y2="820"/>
+<line x1="510" y1="765" x2="510" y2="820"/>
+<line x1="535" y1="765" x2="535" y2="820"/>
+<line x1="560" y1="765" x2="560" y2="820"/>
+<line x1="585" y1="765" x2="585" y2="820"/>
+<line x1="610" y1="765" x2="610" y2="820"/>
+<line x1="635" y1="765" x2="635" y2="820"/>
+<line x1="660" y1="765" x2="660" y2="820"/>
+</g>
+
+<!-- Outer wall crenellations -->
+<g fill="url(#stoneLit)">
+<rect x="340" y="752" width="12" height="12"/>
+<rect x="360" y="752" width="12" height="12"/>
+<rect x="380" y="752" width="12" height="12"/>
+<rect x="400" y="752" width="12" height="12"/>
+<rect x="420" y="752" width="12" height="12"/>
+<rect x="450" y="752" width="12" height="12"/>
+<rect x="500" y="752" width="12" height="12"/>
+<rect x="520" y="752" width="12" height="12"/>
+<rect x="548" y="752" width="12" height="12"/>
+<rect x="576" y="752" width="12" height="12"/>
+<rect x="604" y="752" width="12" height="12"/>
+<rect x="632" y="752" width="12" height="12"/>
+<rect x="660" y="752" width="12" height="12"/>
+</g>
+
+<!-- Gatehouse opening in outer wall -->
+<path d="M464,820 L464,775 Q477.5,755 491,775 L491,820 Z" fill="#1a0e14"/>
+
+<!-- ============ GATEHOUSE (central, foreground) ============ -->
+<!-- Gatehouse main body -->
+<rect x="440" y="640" width="80" height="135" fill="url(#stoneLit)"/>
+<rect x="440" y="640" width="28" height="135" fill="url(#stoneShade)" opacity="0.7"/>
+
+<!-- Gatehouse stones -->
+<g stroke="#3a2838" stroke-width="0.6" opacity="0.6">
+<line x1="440" y1="655" x2="520" y2="655"/>
+<line x1="440" y1="670" x2="520" y2="670"/>
+<line x1="440" y1="685" x2="520" y2="685"/>
+<line x1="440" y1="700" x2="520" y2="700"/>
+<line x1="440" y1="715" x2="520" y2="715"/>
+<line x1="440" y1="730" x2="520" y2="730"/>
+<line x1="440" y1="745" x2="520" y2="745"/>
+<line x1="440" y1="760" x2="520" y2="760"/>
+<line x1="460" y1="640" x2="460" y2="775"/>
+<line x1="480" y1="640" x2="480" y2="775"/>
+<line x1="500" y1="640" x2="500" y2="775"/>
+</g>
+
+<!-- Gate archway -->
+<path d="M464,775 L464,730 Q480,710 496,730 L496,775 Z" fill="#0e0810"/>
+<path d="M464,775 L464,730 Q480,710 496,730 L496,775 Z" fill="none" stroke="#3a2418" stroke-width="2"/>
+<!-- Portcullis grid in shadow -->
+<g stroke="#5a3a24" stroke-width="0.8" opacity="0.6">
+<line x1="468" y1="730" x2="468" y2="775"/>
+<line x1="476" y1="722" x2="476" y2="775"/>
+<line x1="484" y1="720" x2="484" y2="775"/>
+<line x1="492" y1="724" x2="492" y2="775"/>
+<line x1="465" y1="745" x2="495" y2="745"/>
+<line x1="465" y1="760" x2="495" y2="760"/>
+</g>
+
+<!-- Gatehouse windows (lit) -->
+<rect x="455" y="695" width="6" height="14" fill="url(#window)"/>
+<rect x="498" y="695" width="6" height="14" fill="url(#window)"/>
+<rect x="476" y="665" width="8" height="12" fill="url(#window)"/>
+
+<!-- Gatehouse crenellations -->
+<g fill="url(#stoneLit)">
+<rect x="438" y="628" width="10" height="14"/>
+<rect x="452" y="628" width="10" height="14"/>
+<rect x="466" y="628" width="10" height="14"/>
+<rect x="480" y="628" width="10" height="14"/>
+<rect x="494" y="628" width="10" height="14"/>
+<rect x="508" y="628" width="12" height="14"/>
+</g>
+
+<!-- Gatehouse flanking towers -->
+<rect x="425" y="620" width="22" height="155" fill="url(#stoneLit)"/>
+<rect x="425" y="620" width="9" height="155" fill="url(#stoneShade)" opacity="0.8"/>
+<rect x="513" y="620" width="22" height="155" fill="url(#stoneLit)"/>
+<rect x="513" y="620" width="9" height="155" fill="url(#stoneShade)" opacity="0.8"/>
+
+<!-- Flanking tower stones -->
+<g stroke="#3a2838" stroke-width="0.5" opacity="0.5">
+<line x1="425" y1="635" x2="447" y2="635"/>
+<line x1="425" y1="650" x2="447" y2="650"/>
+<line x1="425" y1="665" x2="447" y2="665"/>
+<line x1="425" y1="680" x2="447" y2="680"/>
+<line x1="425" y1="695" x2="447" y2="695"/>
+<line x1="425" y1="710" x2="447" y2="710"/>
+<line x1="425" y1="725" x2="447" y2="725"/>
+<line x1="425" y1="740" x2="447" y2="740"/>
+<line x1="425" y1="755" x2="447" y2="755"/>
+<line x1="513" y1="635" x2="535" y2="635"/>
+<line x1="513" y1="650" x2="535" y2="650"/>
+<line x1="513" y1="665" x2="535" y2="665"/>
+<line x1="513" y1="680" x2="535" y2="680"/>
+<line x1="513" y1="695" x2="535" y2="695"/>
+<line x1="513" y1="710" x2="535" y2="710"/>
+<line x1="513" y1="725" x2="535" y2="725"/>
+<line x1="513" y1="740" x2="535" y2="740"/>
+<line x1="513" y1="755" x2="535" y2="755"/>
+</g>
+
+<!-- Arrow slits on flanking towers -->
+<rect x="433" y="675" width="2" height="10" fill="#0e0810"/>
+<rect x="437" y="705" width="2" height="10" fill="#0e0810"/>
+<rect x="521" y="675" width="2" height="10" fill="#0e0810"/>
+<rect x="525" y="705" width="2" height="10" fill="#0e0810"/>
+
+<!-- Flanking conical roofs -->
+<path d="M422,622 L436,560 L450,622 Z" fill="url(#roof)"/>
+<path d="M436,560 L450,622 L444,622 Z" fill="#3a0e1a" opacity="0.7"/>
+<path d="M510,622 L524,560 L538,622 Z" fill="url(#roof)"/>
+<path d="M524,560 L538,622 L532,622 Z" fill="#3a0e1a" opacity="0.7"/>
+
+<!-- Roof finial banners on flanking towers -->
+<line x1="436" y1="560" x2="436" y2="525" stroke="#3a2418" stroke-width="1.2"/>
+<path d="M436,525 L455,530 L450,540 L436,538 Z" fill="#c83040"/>
+<path d="M436,525 L436,538 L432,538 Z" fill="#8a1a26"/>
+<line x1="524" y1="560" x2="524" y2="525" stroke="#3a2418" stroke-width="1.2"/>
+<path d="M524,525 L543,530 L538,540 L524,538 Z" fill="#c83040"/>
+<path d="M524,525 L524,538 L520,538 Z" fill="#8a1a26"/>
+
+<!-- ============ INNER COURTYARD STRUCTURES ============ -->
+<!-- Mid wall behind gatehouse -->
+<rect x="380" y="700" width="60" height="60" fill="url(#stoneShade)"/>
+<rect x="520" y="700" width="60" height="60" fill="url(#stoneLit)"/>
+<rect x="520" y="700" width="20" height="60" fill="url(#stoneShade)" opacity="0.7"/>
+
+<!-- Mid wall crenellations -->
+<g fill="url(#stoneShade)">
+<rect x="380" y="692" width="10" height="10"/>
+<rect x="394" y="692" width="10" height="10"/>
+<rect x="408" y="692" width="10" height="10"/>
+<rect x="422" y="692" width="10" height="10"/>
+</g>
+<g fill="url(#stoneLit)">
+<rect x="525" y="692" width="10" height="10"/>
+<rect x="539" y="692" width="10" height="10"/>
+<rect x="553" y="692" width="10" height="10"/>
+<rect x="567" y="692" width="10" height="10"/>
+</g>
+
+<!-- ============ SIDE TOWERS (mid-ground) ============ -->
+<!-- Left mid tower -->
+<rect x="345" y="600" width="36" height="170" fill="url(#stoneLit)"/>
+<rect x="345" y="600" width="15" height="170" fill="url(#stoneShade)" opacity="0.8"/>
+<g stroke="#3a2838" stroke-width="0.5" opacity="0.5">
+<line x1="345" y1="620" x2="381" y2="620"/>
+<line x1="345" y1="640" x2="381" y2="640"/>
+<line x1="345" y1="660" x2="381" y2="660"/>
+<line x1="345" y1="680" x2="381" y2="680"/>
+<line x1="345" y1="700" x2="381" y2="700"/>
+<line x1="345" y1="720" x2="381" y2="720"/>
+<line x1="345" y1="740" x2="381" y2="740"/>
+<line x1="345" y1="760" x2="381" y2="760"/>
+</g>
+<!-- Windows -->
+<rect x="358" y="650" width="6" height="14" fill="url(#window)"/>
+<rect x="358" y="690" width="6" height="14" fill="url(#window)"/>
+<rect x="358" y="730" width="6" height="14" fill="url(#window)"/>
+<!-- Crenellations -->
+<g fill="url(#stoneLit)">
+<rect x="343" y="592" width="8" height="10"/>
+<rect x="354" y="592" width="8" height="10"/>
+<rect x="365" y="592" width="8" height="10"/>
+<rect x="376" y="592" width="8" height="10"/>
+</g>
+<!-- Conical roof -->
+<path d="M340,594 L363,510 L386,594 Z" fill="url(#roof)"/>
+<path d="M363,510 L386,594 L378,594 Z" fill="#3a0e1a" opacity="0.7"/>
+<path d="M340,594 L363,510 L358,580 Z" fill="#d05060" opacity="0.4"/>
+<!-- Banner -->
+<line x1="363" y1="510" x2="363" y2="470" stroke="#3a2418" stroke-width="1.5"/>
+<circle cx="363" cy="508" r="2.5" fill="#d4a040"/>
+<path d="M363,470 L395,478 L388,494 L363,488 Z" fill="#c83040"/>
+<path d="M363,470 L363,488 L358,488 Z" fill="#8a1a26"/>
+<line x1="376" y1="475" x2="380" y2="477" stroke="#3a2418" stroke-width="0.5"/>
+
+<!-- Right mid tower -->
+<rect x="578" y="600" width="36" height="170" fill="url(#stoneLit)"/>
+<rect x="578" y="600" width="15" height="170" fill="url(#stoneShade)" opacity="0.7"/>
+<g stroke="#3a2838" stroke-width="0.5" opacity="0.5">
+<line x1="578" y1="620" x2="614" y2="620"/>
+<line x1="578" y1="640" x2="614" y2="640"/>
+<line x1="578" y1="660" x2="614" y2="660"/>
+<line x1="578" y1="680" x2="614" y2="680"/>
+<line x1="578" y1="700" x2="614" y2="700"/>
+<line x1="578" y1="720" x2="614" y2="720"/>
+<line x1="578" y1="740" x2="614" y2="740"/>
+<line x1="578" y1="760" x2="614" y2="760"/>
+</g>
+<rect x="591" y="650" width="6" height="14" fill="url(#window)"/>
+<rect x="591" y="690" width="6" height="14" fill="url(#window)"/>
+<rect x="591" y="730" width="6" height="14" fill="url(#window)"/>
+<g fill="url(#stoneLit)">
+<rect x="576" y="592" width="8" height="10"/>
+<rect x="587" y="592" width="8" height="10"/>
+<rect x="598" y="592" width="8" height="10"/>
+<rect x="609" y="592" width="8" height="10"/>
+</g>
+<path d="M573,594 L596,510 L619,594 Z" fill="url(#roof)"/>
+<path d="M596,510 L619,594 L611,594 Z" fill="#3a0e1a" opacity="0.7"/>
+<path d="M573,594 L596,510 L591,580 Z" fill="#d05060" opacity="0.4"/>
+<line x1="596" y1="510" x2="596" y2="470" stroke="#3a2418" stroke-width="1.5"/>
+<circle cx="596" cy="508" r="2.5" fill="#d4a040"/>
+<path d="M596,470 L628,478 L621,494 L596,488 Z" fill="#c83040"/>
+<path d="M596,470 L596,488 L591,488 Z" fill="#8a1a26"/>
+
+<!-- ============ KEEP (central tall tower, the heart) ============ -->
+<rect x="455" y="430" width="50" height="220" fill="url(#stoneLit)"/>
+<rect x="455" y="430" width="20" height="220" fill="url(#stoneShade)" opacity="0.85"/>
+
+<!-- Keep stone courses -->
+<g stroke="#3a2838" stroke-width="0.6" opacity="0.55">
+<line x1="455" y1="450" x2="505" y2="450"/>
+<line x1="455" y1="470" x2="505" y2="470"/>
+<line x1="455" y1="490" x2="505" y2="490"/>
+<line x1="455" y1="510" x2="505" y2="510"/>
+<line x1="455" y1="530" x2="505" y2="530"/>
+<line x1="455" y1="550" x2="505" y2="550"/>
+<line x1="455" y1="570" x2="505" y2="570"/>
+<line x1="455" y1="590" x2="505" y2="590"/>
+<line x1="455" y1="610" x2="505" y2="610"/>
+<line x1="455" y1="630" x2="505" y2="630"/>
+<line x1="470" y1="430" x2="470" y2="650"/>
+<line x1="485" y1="430" x2="485" y2="650"/>
+</g>
+
+<!-- Keep windows (vertical row, lit) -->
+<rect x="476" y="455" width="8" height="16" fill="url(#window)"/>
+<rect x="476" y="490" width="8" height="16" fill="url(#window)"/>
+<rect x="476" y="525" width="8" height="16" fill="url(#window)"/>
+<rect x="476" y="560" width="8" height="16" fill="url(#window)"/>
+<rect x="476" y="595" width="8" height="16" fill="url(#window)"/>
+
+<!-- Keep small flanking windows -->
+<rect x="461" y="495" width="4" height="8" fill="url(#window)"/>
+<rect x="494" y="495" width="4" height="8" fill="url(#window)"/>
+<rect x="461" y="565" width="4" height="8" fill="url(#window)"/>
+<rect x="494" y="565" width="4" height="8" fill="url(#window)"/>
+
+<!-- Machicolations (corbels) at top of keep -->
+<g fill="url(#stoneShade)">
+<rect x="452" y="424" width="56" height="8"/>
+</g>
+<g fill="#3a2838">
+<rect x="455" y="424" width="3" height="6"/>
+<rect x="463" y="424" width="3" height="6"/>
+<rect x="471" y="424" width="3" height="6"/>
+<rect x="479" y="424" width="3" height="6"/>
+<rect x="487" y="424" width="3" height="6"/>
+<rect x="495" y="424" width="3" height="6"/>
+<rect x="503" y="424" width="3" height="6"/>
+</g>
+
+<!-- Keep crenellations -->
+<g fill="url(#stoneLit)">
+<rect x="450" y="408" width="9" height="16"/>
+<rect x="464" y="408" width="9" height="16"/>
+<rect x="478" y="408" width="9" height="16"/>
+<rect x="492" y="408" width="9" height="16"/>
+<rect x="506" y="408" width="6" height="16"/>
+</g>
+<g fill="url(#stoneShade)">
+<rect x="450" y="408" width="9" height="16"/>
+</g>
+
+<!-- Keep conical roof (the grandest) -->
+<path d="M448,410 L480,260 L512,410 Z" fill="url(#roofTall)"/>
+<path d="M480,260 L512,410 L502,410 Z" fill="#2a0610" opacity="0.7"/>
+<path d="M448,410 L480,260 L470,395 Z" fill="#e05060" opacity="0.35"/>
+<!-- Roof ribs -->
+<line x1="464" y1="335" x2="468" y2="402" stroke="#2a0610" stroke-width="0.6" opacity="0.6"/>
+<line x1="480" y1="260" x2="480" y2="408" stroke="#2a0610" stroke-width="0.6" opacity="0.6"/>
+<line x1="496" y1="335" x2="492" y2="402" stroke="#2a0610" stroke-width="0.6" opacity="0.6"/>
+
+<!-- Roof finial + grand banner -->
+<line x1="480" y1="260" x2="480" y2="180" stroke="#2a1810" stroke-width="2"/>
+<circle cx="480" cy="258" r="4" fill="#f0c040"/>
+<circle cx="480" cy="258" r="2" fill="#fff4a0"/>
+<!-- Banner cloth -->
+<path d="M480,180 L530,188 L538,200 L530,210 L480,205 Z" fill="#c83040"/>
+<path d="M480,180 L480,205 L472,202 L472,182 Z" fill="#7a1620"/>
+<path d="M530,188 L538,200 L530,210 L527,203 L532,200 L527,196 Z" fill="#8a1a26"/>
+<!-- Banner emblem -->
+<circle cx="505" cy="195" r="5" fill="#f0c040"/>
+<path d="M505,191 L507,194 L510,195 L507,196 L505,199 L503,196 L500,195 L503,194 Z" fill="#7a1620"/>
+
+<!-- ============ REAR / BACKGROUND TOWERS ============ -->
+<!-- Left rear tower (smaller, atmospheric) -->
+<rect x="395" y="540" width="28" height="105" fill="#6a4858" opacity="0.85"/>
+<rect x="395" y="540" width="12" height="105" fill="#3a2838" opacity="0.7"/>
+<rect x="405" y="575" width="5" height="10" fill="url(#window)" opacity="0.85"/>
+<rect x="405" y="605" width="5" height="10" fill="url(#window)" opacity="0.85"/>
+<g fill="#6a4858">
+<rect x="393" y="534" width="7" height="8"/>
+<rect x="403" y="534" width="7" height="8"/>
+<rect x="413" y="534" width="7" height="8"/>
+</g>
+<path d="M390,536 L409,470 L428,536 Z" fill="#7a2838" opacity="0.92"/>
+<path d="M409,470 L428,536 L421,536 Z" fill="#3a0e1a" opacity="0.7"/>
+<line x1="409" y1="470" x2="409" y2="440" stroke="#3a2418" stroke-width="1.2"/>
+<path d="M409,440 L432,445 L427,455 L409,452 Z" fill="#c83040" opacity="0.9"/>
+
+<!-- Right rear tower -->
+<rect x="538" y="540" width="28" height="105" fill="#6a4858" opacity="0.85"/>
+<rect x="538" y="540" width="12" height="105" fill="#3a2838" opacity="0.7"/>
+<rect x="548" y="575" width="5" height="10" fill="url(#window)" opacity="0.85"/>
+<rect x="548" y="605" width="5" height="10" fill="url(#window)" opacity="0.85"/>
+<g fill="#6a4858">
+<rect x="536" y="534" width="7" height="8"/>
+<rect x="546" y="534" width="7" height="8"/>
+<rect x="556" y="534" width="7" height="8"/>
+</g>
+<path d="M533,536 L552,470 L571,536 Z" fill="#7a2838" opacity="0.92"/>
+<path d="M552,470 L571,536 L564,536 Z" fill="#3a0e1a" opacity="0.7"/>
+<line x1="552" y1="470" x2="552" y2="440" stroke="#3a2418" stroke-width="1.2"/>
+<path d="M552,440 L575,445 L570,455 L552,452 Z" fill="#c83040" opacity="0.9"/>
+
+<!-- Far back-left thin watchtower -->
+<rect x="305" y="635" width="22" height="125" fill="#54405a" opacity="0.78"/>
+<rect x="305" y="635" width="9" height="125" fill="#2a2030" opacity="0.7"/>
+<rect x="313" y="680" width="4" height="9" fill="url(#window)" opacity="0.7"/>
+<rect x="313" y="710" width="4" height="9" fill="url(#window)" opacity="0.7"/>
+<path d="M301,632 L316,580 L331,632 Z" fill="#6a2030" opacity="0.85"/>
+<line x1="316" y1="580" x2="316" y2="556" stroke="#3a2418" stroke-width="1"/>
+<path d="M316,556 L334,560 L330,568 L316,566 Z" fill="#c83040" opacity="0.85"/>
+
+<!-- Far back-right watchtower -->
+<rect x="632" y="635" width="22" height="125" fill="#54405a" opacity="0.78"/>
+<rect x="632" y="635" width="9" height="125" fill="#2a2030" opacity="0.7"/>
+<rect x="640" y="680" width="4" height="9" fill="url(#window)" opacity="0.7"/>
+<rect x="640" y="710" width="4" height="9" fill="url(#window)" opacity="0.7"/>
+<path d="M628,632 L643,580 L658,632 Z" fill="#6a2030" opacity="0.85"/>
+<line x1="643" y1="580" x2="643" y2="556" stroke="#3a2418" stroke-width="1"/>
+<path d="M643,556 L661,560 L657,568 L643,566 Z" fill="#c83040" opacity="0.85"/>
+
+<!-- ============ INNER UPPER CURTAIN connecting structures ============ -->
+<rect x="381" y="700" width="74" height="20" fill="url(#stoneLit)" opacity="0.9"/>
+<rect x="505" y="700" width="73" height="20" fill="url(#stoneLit)" opacity="0.9"/>
+<g fill="url(#stoneLit)" opacity="0.9">
+<rect x="381" y="693" width="8" height="8"/>
+<rect x="394" y="693" width="8" height="8"/>
+<rect x="407" y="693" width="8" height="8"/>
+<rect x="420" y="693" width="8" height="8"/>
+<rect x="433" y="693" width="8" height="8"/>
+<rect x="446" y="693" width="8" height="8"/>
+<rect x="514" y="693" width="8" height="8"/>
+<rect x="527" y="693" width="8" height="8"/>
+<rect x="540" y="693" width="8" height="8"/>
+<rect x="553" y="693" width="8" height="8"/>
+<rect x="566" y="693" width="8" height="8"/>
+</g>
+
+<!-- Subtle warm rim light on right-facing edges -->
+<g opacity="0.5">
+<rect x="505" y="430" width="2" height="220" fill="#ffc080"/>
+<rect x="535" y="600" width="2" height="170" fill="#ffc080"/>
+<rect x="615" y="600" width="2" height="170" fill="#ffc080"/>
+<rect x="380" y="600" width="1.5" height="170" fill="#ffc080" opacity="0.6"/>
+<rect x="517" y="620" width="2" height="155" fill="#ffc080"/>
+</g>
+
+<!-- Foreground silhouette grass tufts on hill -->
+<g fill="#150e1a">
+<path d="M280,940 q3,-10 6,0 q3,-8 6,0 q3,-10 6,0 Z"/>
+<path d="M340,910 q3,-10 6,0 q3,-8 6,0 Z"/>
+<path d="M420,870 q3,-8 6,0 q3,-6 6,0 Z"/>
+<path d="M700,920 q3,-10 6,0 q3,-8 6,0 Z"/>
+<path d="M820,960 q3,-10 6,0 q3,-8 6,0 q3,-10 6,0 Z"/>
+</g>
+
+<!-- Lone tree on the hillside -->
+<g>
+<line x1="640" y1="800" x2="640" y2="775" stroke="#1a1018" stroke-width="2"/>
+<path d="M640,755 q-14,5 -10,18 q-8,5 -2,12 q-4,8 6,8 q4,6 12,2 q8,6 14,-2 q10,0 6,-10 q6,-8 -2,-14 q4,-12 -10,-16 q-6,-6 -14,2 Z" fill="#1a0e18"/>
+</g>
+
+<!-- Atmospheric haze layer over distant towers -->
+<rect x="0" y="430" width="1024" height="220" fill="#e08060" opacity="0.05"/>
+
+<!-- Foreground dark vignette grass -->
+<path d="M0,1024 L0,980 Q200,960 400,990 Q600,1010 800,975 Q920,960 1024,980 L1024,1024 Z" fill="#0a0612"/>
+
+<!-- Foreground reeds at moat edge -->
+<g stroke="#1a1018" stroke-width="1.2" fill="none" opacity="0.9">
+<path d="M120,960 q1,-12 2,-22"/>
+<path d="M128,962 q1,-10 3,-18"/>
+<path d="M860,965 q1,-12 -2,-20"/>
+<path d="M870,968 q1,-10 -2,-18"/>
+<path d="M55,980 q1,-12 2,-22"/>
+</g>
+
+<!-- A few warm dust motes / fireflies near castle -->
+<g fill="#ffe090" opacity="0.7">
+<circle cx="600" cy="700" r="1.2"/>
+<circle cx="420" cy="720" r="1"/>
+<circle cx="550" cy="500" r="0.9"/>
+<circle cx="430" cy="540" r="0.8"/>
+<circle cx="650" cy="660" r="1"/>
+</g>
+</svg>
