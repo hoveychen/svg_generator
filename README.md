@@ -51,6 +51,10 @@ Flags:
 | `--png-size` | `0` | PNG preview pixel size; `0` = use `--canvas` |
 | `--refine-rounds` | `0` | vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer) |
 | `--animate` | `false` | produce a self-contained animated SVG (SMIL): movable parts get pivots + looping motion |
+| `--style` | (none) | style preset: `flat`, `line-art`, `realistic`, `pixel`, `isometric`, `watercolor`, `low-poly`, `retro` |
+| `--gif` | `false` | also export an animated GIF (needs Chrome + ffmpeg or ImageMagick); best with `--animate` |
+| `--gif-frames` | `24` | frames captured for the GIF |
+| `--gif-seconds` | `3.0` | seconds of the animation timeline sampled into the GIF |
 | `-v` | `false` | verbose: print the prompt and each attempt to stderr |
 
 With `--png`, `boat.svg` also produces `boat.png` (renderer chosen automatically:
@@ -104,11 +108,43 @@ Caveats:
   vision-critique loop cannot judge motion from a single frame, so `--refine-rounds`
   improves the static composition, not the animation timing.
 
+### Style presets (`--style`)
+
+`--style <name>` appends a treatment to the art-director brief without changing
+the subject. Presets: `flat`, `line-art`, `realistic`, `pixel`, `isometric`,
+`watercolor`, `low-poly`, `retro`. It composes with every other flag (e.g.
+`--style line-art --animate`).
+
+```sh
+generate_svg -p "a fox" -o fox.svg --style line-art
+```
+
+### GIF export (`--gif`)
+
+`--gif` rasterizes the result into an animated GIF: it screenshots the SVG at
+`--gif-frames` points across `--gif-seconds` of its animation timeline using
+Chrome's virtual clock, then assembles the frames with ffmpeg (preferred) or
+ImageMagick. Use it with `--animate` to get a moving GIF you can embed where
+SVG animation is not supported (e.g. GitHub READMEs, chat).
+
+```sh
+generate_svg -p "a lighthouse with a sweeping beam" -o lh.svg --animate --gif
+```
+
+Notes:
+
+- Needs Chrome/Chromium (set `GENERATE_SVG_CHROME` to override discovery) plus
+  `ffmpeg` or ImageMagick.
+- It is **slow**: each frame is a separate headless-Chrome launch, so a 24-frame
+  GIF means 24 launches. Lower `--gif-frames` for speed.
+- Without `--animate` the frames are identical, so the GIF will not move.
+
 ## Requirements
 
 - Go 1.22+ to build
 - the `claude` CLI on `PATH`, already authenticated
-- optional: `rsvg-convert` or macOS `qlmanage` for `--png` previews
+- optional: `rsvg-convert` or macOS `qlmanage` for `--png` previews and `--refine-rounds`
+- optional: Chrome/Chromium plus `ffmpeg` or ImageMagick for `--gif` export
 
 ## Install
 

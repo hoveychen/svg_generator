@@ -32,6 +32,10 @@ func main() {
 		pngSize      = flag.Int("png-size", 0, "PNG preview pixel size; 0 = use --canvas")
 		refineRounds = flag.Int("refine-rounds", 0, "vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer)")
 		animate      = flag.Bool("animate", false, "produce a self-contained animated SVG (SMIL): movable parts get pivots + looping motion")
+		style        = flag.String("style", "", "style preset: flat, line-art, realistic, pixel, isometric, watercolor, low-poly, retro")
+		gif          = flag.Bool("gif", false, "also export an animated GIF (needs Chrome + ffmpeg or ImageMagick); best with --animate")
+		gifFrames    = flag.Int("gif-frames", 24, "number of frames to capture for the GIF")
+		gifSeconds   = flag.Float64("gif-seconds", 3.0, "seconds of the animation timeline to sample into the GIF")
 		verbose      = flag.Bool("v", false, "verbose: stream claude output and progress to stderr")
 	)
 	flag.Usage = func() {
@@ -46,6 +50,10 @@ func main() {
 		fmt.Fprintln(os.Stderr, "\nerror: both -p and -o are required")
 		os.Exit(2)
 	}
+	if err := gen.ValidateStyle(*style); err != nil {
+		fmt.Fprintf(os.Stderr, "generate_svg: %v\n", err)
+		os.Exit(2)
+	}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -58,6 +66,7 @@ func main() {
 		Retries:      *retries,
 		RefineRounds: *refineRounds,
 		Animate:      *animate,
+		Style:        *style,
 		Timeout:      *timeout,
 		Verbose:      *verbose,
 		Log:          os.Stderr,
@@ -101,6 +110,23 @@ func main() {
 			fmt.Fprintf(os.Stderr, "generate_svg: PNG preview skipped: %v\n", err)
 		} else {
 			fmt.Fprintf(os.Stderr, "generate_svg: rendered preview %s (%dpx)\n", pngPath, size)
+		}
+	}
+
+	if *gif {
+		if !*animate {
+			fmt.Fprintln(os.Stderr, "generate_svg: note --gif without --animate; the SVG is static, so the GIF will not move")
+		}
+		size := *pngSize
+		if size <= 0 {
+			size = *canvas
+		}
+		gifPath := gen.GIFPath(*out)
+		durationMs := int(*gifSeconds * 1000)
+		if err := gen.RenderGIF(*out, gifPath, size, *gifFrames, durationMs); err != nil {
+			fmt.Fprintf(os.Stderr, "generate_svg: GIF export skipped: %v\n", err)
+		} else {
+			fmt.Fprintf(os.Stderr, "generate_svg: exported %s (%d frames over %.1fs)\n", gifPath, *gifFrames, *gifSeconds)
 		}
 	}
 }
