@@ -31,6 +31,7 @@ func main() {
 		png          = flag.Bool("png", false, "also render a PNG preview next to the SVG (needs rsvg-convert or macOS qlmanage)")
 		pngSize      = flag.Int("png-size", 0, "PNG preview pixel size; 0 = use --canvas")
 		refineRounds = flag.Int("refine-rounds", 0, "vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer)")
+		animate      = flag.Bool("animate", false, "produce a self-contained animated SVG (SMIL): movable parts get pivots + looping motion")
 		verbose      = flag.Bool("v", false, "verbose: stream claude output and progress to stderr")
 	)
 	flag.Usage = func() {
@@ -56,6 +57,7 @@ func main() {
 		MinElements:  *minElements,
 		Retries:      *retries,
 		RefineRounds: *refineRounds,
+		Animate:      *animate,
 		Timeout:      *timeout,
 		Verbose:      *verbose,
 		Log:          os.Stderr,
@@ -81,6 +83,10 @@ func main() {
 	if *refineRounds > 0 {
 		fmt.Fprintf(os.Stderr, "generate_svg: refined over %d round(s); best critique score %s\n",
 			res.RefineRounds, gen.ScoreLabel(res.Score))
+	}
+	if *animate {
+		fmt.Fprintf(os.Stderr, "generate_svg: animated with %d SMIL motion element(s) — open the .svg in a browser to see it move\n",
+			gen.CountAnimations(res.SVG))
 	}
 
 	if *png {

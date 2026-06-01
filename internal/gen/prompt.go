@@ -120,3 +120,38 @@ func RefineUserPrompt(request, critique string) string {
 		"\n\nArt director's critique of your latest rendered attempt — fix these in priority order:\n" + critique +
 		"\n\nRedraw a substantially improved illustration. Output ONLY the SVG."
 }
+
+// animationAppendix is appended to a system prompt to make the model emit a
+// self-contained animated SVG with sensible pivots. The pivot guidance (encode
+// the rotation center inline in the rotate args, and keep movable parts free of
+// a static group transform) sidesteps the two classic SMIL traps: rotating
+// about the canvas origin, and animateTransform clobbering an existing transform.
+const animationAppendix = `
+
+## Animation Mode
+Make this a SELF-CONTAINED ANIMATED SVG. Build the illustration with all the quality rules above, then bring it to life with subtle, looping ambient motion using SMIL — no JavaScript, no CSS, no <script>.
+
+How to structure it:
+- Identify the parts that would naturally move (wings, limbs, tail, steam/smoke, flames, glowing eyes, floating or hanging elements, water) and wrap EACH movable part in its own descriptively named group, e.g. <g id="wing-left">…</g>.
+- Animate with <animateTransform> (for rotate/translate/scale) and <animate> (for opacity/color), placed as children of the group they move.
+
+Pivot rules (critical — get these right or motion looks broken):
+- For rotation, encode the pivot in the rotate value itself: <animateTransform attributeName="transform" type="rotate" values="-6 PX PY; 6 PX PY; -6 PX PY" dur="3.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>, where PX,PY is the JOINT the part rotates around (e.g. a wing's shoulder), in absolute SVG coordinates.
+- Do NOT put a static transform="translate(...)" on a group you are going to animate with animateTransform — bake the part's position into its path/shape coordinates instead, so the animateTransform is the only transform on that group. (If you must combine, set additive="sum".)
+
+Motion taste:
+- Keep it subtle and alive, not frantic: rotation amplitudes about 3–8 degrees, gentle translations of a few pixels, durations 2–6s, all repeatCount="indefinite" and seamlessly looping (first and last values equal).
+- Good ambient motions: wings flap, tail/limbs sway, steam/smoke drifts up while fading, eyes/glow pulse, the whole subject bobs gently, water shimmers, hanging things swing.
+
+You MUST include at least a few <animateTransform>/<animate> elements. Still output ONLY the raw SVG (with the animation elements inside it).`
+
+// AnimateSystemPrompt is the system prompt for --animate: the full art-director
+// brief plus the animation appendix.
+func AnimateSystemPrompt(canvas, minElements int) string {
+	return SystemPrompt(canvas, minElements) + animationAppendix
+}
+
+// RefineSystemPromptAnimated keeps animation alive across refine redraws.
+func RefineSystemPromptAnimated(canvas, minElements int) string {
+	return RefineSystemPrompt(canvas, minElements) + animationAppendix
+}

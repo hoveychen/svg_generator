@@ -33,6 +33,7 @@ Flags:
 | `--png` | `false` | also render a PNG preview next to the SVG (needs `rsvg-convert` or macOS `qlmanage`) |
 | `--png-size` | `0` | PNG preview pixel size; `0` = use `--canvas` |
 | `--refine-rounds` | `0` | vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer) |
+| `--animate` | `false` | produce a self-contained animated SVG (SMIL): movable parts get pivots + looping motion |
 | `-v` | `false` | verbose: print the prompt and each attempt to stderr |
 
 With `--png`, `boat.svg` also produces `boat.png` (renderer chosen automatically:
@@ -62,6 +63,29 @@ Important and honest caveats:
   still the ceiling.
 - Cost scales: each round is roughly one render + one vision critique + one
   redraw (≈3 model calls). Complex subjects can be slow — raise `--timeout`.
+
+### Animation (`--animate`)
+
+SVG has no skeleton, and the plain output is a static illustration whose `<g>`
+groups exist only for draw order. `--animate` asks the model to instead build an
+*animation-aware* SVG: wrap each movable part (wings, limbs, tail, steam, glow)
+in its own named group and drive it with self-contained SMIL — `<animateTransform>`
+and `<animate>`, no JavaScript or CSS.
+
+The prompt bakes in the two pivot rules that make or break SVG motion: encode the
+rotation center inline in the `rotate` value (so a wing turns about its shoulder,
+not the canvas origin), and keep movable groups free of a static `transform` so
+the animation does not clobber it. Generation is rejected and repaired if it
+contains no animation elements.
+
+Caveats:
+
+- The output is a single animated `.svg` — **open it in a browser to see it move**.
+  `--png` and the refine renderer only rasterize one frame, so they cannot preview
+  motion.
+- Motion quality is the model's call: pivots can still land slightly off. The
+  vision-critique loop cannot judge motion from a single frame, so `--refine-rounds`
+  improves the static composition, not the animation timing.
 
 ## Requirements
 
