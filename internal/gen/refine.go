@@ -27,6 +27,7 @@ func refine(ctx context.Context, opts Options, runner Runner, initial *Result) (
 	if opts.Animate {
 		refineSys = RefineSystemPromptAnimated(opts.Canvas, opts.MinElements)
 	}
+	refineSys += opts.styleAppendix()
 
 	current := initial.SVG
 	best := initial.SVG

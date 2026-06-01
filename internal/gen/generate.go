@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 )
 
@@ -16,6 +17,7 @@ type Options struct {
 	Retries      int    // max repair attempts after the first try
 	RefineRounds int    // vision-critique redraw rounds (0 = off)
 	Animate      bool   // emit a self-contained animated SVG (SMIL)
+	Style        string // optional style preset name (see StyleNames)
 	Timeout      time.Duration
 	Verbose      bool
 	// Log receives human-readable progress lines (e.g. os.Stderr). May be nil.
@@ -66,7 +68,8 @@ func Generate(ctx context.Context, opts Options) (*Result, error) {
 	if opts.Animate {
 		system = AnimateSystemPrompt(opts.Canvas, opts.MinElements)
 	}
-	opts.logf("[generate_svg] initial generation (model=%s%s)", modelLabel(opts.Model), animateLabel(opts.Animate))
+	system += opts.styleAppendix()
+	opts.logf("[generate_svg] initial generation (model=%s%s%s)", modelLabel(opts.Model), animateLabel(opts.Animate), styleLabel(opts.Style))
 	svg, attempts, err := runWithRepair(ctx, runner, system, UserPrompt(opts.Request), opts)
 	if err != nil {
 		return nil, err
@@ -131,6 +134,20 @@ func animateLabel(animate bool) string {
 		return ", animated"
 	}
 	return ""
+}
+
+func styleLabel(style string) string {
+	if strings.TrimSpace(style) != "" {
+		return ", style=" + style
+	}
+	return ""
+}
+
+// styleAppendix returns the validated style guidance (empty if no/!valid style;
+// validity is enforced at the CLI boundary).
+func (o Options) styleAppendix() string {
+	s, _ := StyleAppendix(o.Style)
+	return s
 }
 
 func truncate(s string, max int) string {
