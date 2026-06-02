@@ -4,12 +4,18 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // rigMaxOutputTokens raises claude's output ceiling for the rig SVG call. The
 // capability spike showed detailed rig SVGs (lamp, robot) overflow the default
 // 32000-token cap; 64000 cleared every spike subject.
 const rigMaxOutputTokens = 64000
+
+// rigMinTimeout floors the per-call timeout in rig mode. A detailed rig SVG at
+// 64k output tokens routinely takes longer than the 3-minute default, so we
+// give each rig call at least this long unless the caller asked for more.
+const rigMinTimeout = 6 * time.Minute
 
 // RigResult is a successful rig generation: the layered appearance SVG plus the
 // extracted/designed rig and motion.
@@ -35,6 +41,9 @@ type RigResult struct {
 // each call's output bounded and keeps motion decoupled from appearance.
 func GenerateRig(ctx context.Context, opts Options) (*RigResult, error) {
 	opts.applyDefaults()
+	if opts.Timeout < rigMinTimeout {
+		opts.Timeout = rigMinTimeout
+	}
 	runner := Runner{Model: opts.Model, Verbose: opts.Verbose, MaxOutputTokens: rigMaxOutputTokens}
 
 	// --- call 1: the rig-ready appearance SVG ---
