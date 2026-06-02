@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#B0C2D6"/><stop offset="62%" stop-color="#CCBDAC"/><stop offset="100%" stop-color="#BCB0A2"/>
+  </linearGradient>
+  <linearGradient id="gDeskTop" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#967016"/><stop offset="38%" stop-color="#C28C2C"/><stop offset="100%" stop-color="#886010"/>
+  </linearGradient>
+  <linearGradient id="gDeskFace" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#684808"/><stop offset="100%" stop-color="#261804"/>
+  </linearGradient>
+  <linearGradient id="gArm" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#C6C2B0"/><stop offset="28%" stop-color="#ECEADA"/><stop offset="63%" stop-color="#F4F2E6"/><stop offset="100%" stop-color="#B6B2A2"/>
+  </linearGradient>
+  <linearGradient id="gBase" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#BFBDAD"/><stop offset="22%" stop-color="#E8E4D8"/><stop offset="54%" stop-color="#F2F0E4"/><stop offset="78%" stop-color="#DEDAD0"/><stop offset="100%" stop-color="#B4B0A2"/>
+  </linearGradient>
+  <radialGradient id="gJoint" cx="0.35" cy="0.3" r="0.65">
+    <stop offset="0%" stop-color="#F0EDE2"/><stop offset="55%" stop-color="#C4C0B2"/><stop offset="100%" stop-color="#848280"/>
+  </radialGradient>
+  <linearGradient id="gShade" x1="606" y1="531" x2="574" y2="549" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#F0EDE0"/><stop offset="50%" stop-color="#E2DECC"/><stop offset="100%" stop-color="#A8A498"/>
+  </linearGradient>
+  <radialGradient id="gGlow" cx="0.76" cy="0.5" r="0.72">
+    <stop offset="0%" stop-color="#FFF060"/><stop offset="40%" stop-color="#FFBC28"/><stop offset="100%" stop-color="#C05808" stop-opacity="0.45"/>
+  </radialGradient>
+  <radialGradient id="gPool" cx="0.5" cy="0.15" r="0.72">
+    <stop offset="0%" stop-color="#FFF8DC" stop-opacity="0.95"/><stop offset="44%" stop-color="#FFE860" stop-opacity="0.58"/><stop offset="100%" stop-color="#FFD040" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gShadow" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0%" stop-color="#180E06" stop-opacity="0.42"/><stop offset="100%" stop-color="#180E06" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gWallShad" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0%" stop-color="#6070A0" stop-opacity="0.17"/><stop offset="100%" stop-color="#6070A0" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+
+<!-- WALL -->
+<rect width="1024" height="1024" fill="url(#gWall)"/>
+<ellipse cx="478" cy="640" rx="255" ry="305" fill="url(#gWallShad)"/>
+
+<!-- DESK TOP SURFACE -->
+<rect x="0" y="810" width="1024" height="46" fill="url(#gDeskTop)"/>
+<line x1="0" y1="815" x2="1024" y2="815" stroke="#7A5A14" stroke-width="1.2" opacity="0.42"/>
+<line x1="0" y1="823" x2="1024" y2="823" stroke="#6A4E10" stroke-width="0.8" opacity="0.34"/>
+<line x1="0" y1="831" x2="1024" y2="831" stroke="#8A6A1C" stroke-width="1.0" opacity="0.27"/>
+<line x1="0" y1="840" x2="1024" y2="840" stroke="#6A4E10" stroke-width="0.6" opacity="0.2"/>
+<!-- DESK FRONT FACE -->
+<rect x="0" y="856" width="1024" height="168" fill="url(#gDeskFace)"/>
+<line x1="0" y1="856" x2="1024" y2="856" stroke="#CC8C1C" stroke-width="2.5" opacity="0.55"/>
+
+<!-- Light pool cast on desk by lamp -->
+<ellipse cx="752" cy="820" rx="195" ry="16" fill="url(#gPool)"/>
+<!-- Lit paper on desk -->
+<rect x="622" y="808" width="222" height="3" rx="1.5" fill="#F8F6EE" opacity="0.88"/>
+<!-- Base contact shadow -->
+<ellipse cx="368" cy="817" rx="88" ry="6" fill="url(#gShadow)"/>
+
+<!-- =================================================================
+     LAMP RIG  —  base ▶ lower-arm ▶ upper-arm ▶ head
+     No transform= on any data-part group; coordinates baked in.
+     ================================================================= -->
+
+<!-- BASE  pivot = centre bottom of slab on desk surface -->
+<g id="base" data-part="base" data-pivot="362 820">
+  <rect x="297" y="804" width="170" height="16" rx="5" fill="url(#gBase)"/>
+  <rect x="299" y="804" width="166" height="3" rx="2" fill="#F6F4EE" opacity="0.72"/>
+  <rect x="299" y="817" width="166" height="2" rx="1" fill="#888480" opacity="0.48"/>
+  <line x1="344" y1="805" x2="344" y2="819" stroke="#D4D0C2" stroke-width="1" opacity="0.48"/>
+  <line x1="420" y1="805" x2="420" y2="819" stroke="#D4D0C2" stroke-width="1" opacity="0.48"/>
+  <circle cx="320" cy="812" r="3.5" fill="url(#gJoint)" stroke="#888280" stroke-width="0.8"/>
+  <circle cx="448" cy="812" r="3.5" fill="url(#gJoint)" stroke="#888280" stroke-width="0.8"/>
+  <!-- Arm mounting post -->
+  <rect x="351" y="790" width="14" height="14" rx="2" fill="#D8D4C6"/>
+  <rect x="353" y="788" width="10" height="4" rx="2" fill="#C8C4B6"/>
+  <!-- Power cord -->
+  <path d="M462,819 C474,838 460,865 442,878 C422,892 386,902 356,942"
+        fill="none" stroke="#484040" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- LOWER ARM
+       Base-hinge (358,800) → elbow (430,600)
+       Dir unit (0.337,−0.942)  front-perp (0.942,0.337)
+       Linkage front-rod: (371,805)→(443,605)
+       Linkage back-rod:  (345,795)→(417,595)
+       Tube front-edge: (367,803)→(436,602)  back-edge: (350,797)→(424,598) -->
+  <g id="lower-arm" data-part="lower-arm" data-pivot="358 800">
+
+    <!-- Parallel four-bar linkage rods -->
+    <line x1="371" y1="805" x2="443" y2="605" stroke="#C4C0B2" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="345" y1="795" x2="417" y2="595" stroke="#C4C0B2" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- Main arm tube (tapered parallelogram) -->
+    <path d="M350,797 L367,803 L436,602 L424,598 Z" fill="url(#gArm)"/>
+    <!-- Top-edge highlight -->
+    <line x1="350" y1="797" x2="424" y2="598" stroke="#F4F2E8" stroke-width="1.5" opacity="0.65"/>
+
+    <!-- Tension spring coil along front side -->
+    <path d="M376,807 L373,785 L389,770 L386,749 L402,734 L399,712 L415,698 L412,676 L428,661 L425,640 L441,625 L443,605"
+          fill="none" stroke="#A8A49A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+
+    <!-- Base hinge disc (at lower-arm pivot) -->
+    <circle cx="358" cy="800" r="15" fill="url(#gJoint)" stroke="#888280" stroke-width="1.5"/>
+    <circle cx="358" cy="800" r="6"  fill="#787270" stroke="#606060" stroke-width="1"/>
+    <circle cx="354" cy="796" r="3.5" fill="#EEE8DC" opacity="0.72"/>
+
+    <!-- Elbow disc (also in lower-arm so it travels with it) -->
+    <circle cx="430" cy="600" r="15" fill="url(#gJoint)" stroke="#888280" stroke-width="1.5"/>
+    <circle cx="430" cy="600" r="6"  fill="#787270" stroke="#606060" stroke-width="1"/>
+    <circle cx="426" cy="596" r="3.5" fill="#EEE8DC" opacity="0.72"/>
+
+    <!-- UPPER ARM
+         Elbow (430,600) → neck (590,540)
+         Dir unit (0.936,−0.351)  front-perp (0.351,0.936)
+         Linkage front-rod: (435,613)→(595,553)
+         Linkage back-rod:  (425,587)→(585,527)
+         Tube front: (433,607)→(592,545)  back: (428,593)→(588,535) -->
+    <g id="upper-arm" data-part="upper-arm" data-pivot="430 600">
+
+      <line x1="435" y1="613" x2="595" y2="553" stroke="#C4C0B2" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="425" y1="587" x2="585" y2="527" stroke="#C4C0B2" stroke-width="3.5" stroke-linecap="round"/>
+
+      <path d="M428,593 L433,607 L592,545 L588,535 Z" fill="url(#gArm)"/>
+      <line x1="428" y1="593" x2="588" y2="535" stroke="#F4F2E8" stroke-width="1.5" opacity="0.65"/>
+
+      <!-- Upper spring coil -->
+      <path d="M437,618 L448,603 L466,607 L477,592 L495,596 L506,581 L524,585 L535,570 L553,574 L564,559 L582,563 L595,553"
+            fill="none" stroke="#A8A49A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+
+      <!-- Neck disc (travels with upper-arm) -->
+      <circle cx="590" cy="540" r="13" fill="url(#gJoint)" stroke="#888280" stroke-width="1.5"/>
+      <circle cx="590" cy="540" r="5.5" fill="#787270" stroke="#606060" stroke-width="1"/>
+      <circle cx="586" cy="536" r="3"   fill="#EEE8DC" opacity="0.72"/>
+
+      <!-- HEAD / SHADE
+           Shade axis 60° below horizontal: dir (0.500, 0.866)
+           Up-perp: (0.866, −0.500)
+           Neck edge:    top (606,531)  bottom (574,549)
+           Opening ctr:  (633,614)
+           Opening edge: top (661,598)  bottom (605,630)
+           Back closed by arc r=18 matching neck radius -->
+      <g id="head" data-part="head" data-pivot="590 540">
+
+        <!-- Shade body – gShade gradient lights top surface, darkens underside -->
+        <path d="M606,531 C628,525 650,545 661,600 L605,631 C590,621 575,596 574,549 A18,18 0 0 1 606,531 Z"
+              fill="url(#gShade)"/>
+
+        <!-- Underside shadow band -->
+        <path d="M574,549 C575,596 590,621 605,631 L603,637 C587,628 571,603 570,554 Z"
+              fill="#8C8880" opacity="0.65"/>
+
+        <!-- Top edge highlight -->
+        <path d="M606,531 C628,525 650,545 661,600"
+              fill="none" stroke="#F6F4EE" stroke-width="2.5" opacity="0.78"/>
+
+        <!-- Interior warm glow visible through opening -->
+        <path d="M661,600 L605,631 L614,622 L649,594 Z"
+              fill="url(#gGlow)" opacity="0.88"/>
+
+        <!-- Opening rim: major-axis perpendicular to shade axis (rotate 120°) -->
+        <ellipse cx="633" cy="614" rx="7" ry="32" fill="#281808" transform="rotate(120 633 614)"/>
+        <ellipse cx="633" cy="614" rx="5" ry="28" fill="url(#gGlow)" transform="rotate(120 633 614)"/>
+
+        <!-- Light bulb inside shade -->
+        <circle cx="612" cy="570" r="9"  fill="#FFF8B0" opacity="0.92"/>
+        <circle cx="612" cy="570" r="6"  fill="#FFFFFF" opacity="0.88"/>
+        <circle cx="612" cy="570" r="18" fill="#FFE860" opacity="0.26"/>
+
+        <!-- Neck clamp ring -->
+        <circle cx="590" cy="540" r="9" fill="url(#gJoint)" stroke="#888280" stroke-width="1.5"/>
+        <circle cx="590" cy="540" r="3.5" fill="#787270"/>
+
+      </g><!-- /head -->
+    </g><!-- /upper-arm -->
+  </g><!-- /lower-arm -->
+</g><!-- /base -->
+
+</svg>

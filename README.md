@@ -26,6 +26,8 @@ GitHub does not animate embedded SVGs — open the SVG to see motion.)
 | *"a cute boat floating on a riverside"* | *"a medieval castle on a hill at dusk"* | *"a neon cyberpunk alley in the rain"* |
 | [<img src="examples/ramen.png" width="240">](examples/ramen.svg) | [<img src="examples/lighthouse.png" width="240">](examples/lighthouse.svg) | [<img src="examples/aquarium.png" width="240">](examples/aquarium.svg) |
 | *"a steaming bowl of tonkotsu ramen"* | *"a lighthouse with a sweeping beam"* ▶ `--animate` | *"a home aquarium with tropical fish"* ▶ `--animate` |
+| [<img src="examples/lamp-rig-down.png" width="240">](examples/lamp-rig.svg) | [<img src="examples/lamp-rig-up.png" width="240">](examples/lamp-rig.svg) | [<img src="examples/lamp-rig-player.png" width="240">](examples/lamp-rig.svg) |
+| *"an articulated desk lamp"* ▶ `--rig` — one rig, posed down | the same rig, head nodded up | its generated `.html` player: sliders, cursor-follow, motion swap |
 
 > Sweet spot: scenes, architecture, objects, food, atmosphere. Hard for any
 > SVG generator: photorealistic human faces and flowing creature anatomy — see
