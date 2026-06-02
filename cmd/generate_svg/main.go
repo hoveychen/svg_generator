@@ -178,6 +178,7 @@ func main() {
 			Dither:     *pixelDither,
 			Cleanup:    *pixelCleanup,
 			Outline:    *pixelOutline,
+			Trim:       gen.PixelTypeIsSprite(*pixelType),
 		}); err != nil {
 			fmt.Fprintf(os.Stderr, "generate_svg: pixel-art render skipped: %v\n", err)
 		} else {

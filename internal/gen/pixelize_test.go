@@ -41,9 +41,9 @@ func TestNearestColor(t *testing.T) {
 		c    rgb
 		want int
 	}{
-		{rgb{10, 10, 10}, 0},     // near black
-		{rgb{240, 240, 240}, 1},  // near white
-		{rgb{200, 20, 20}, 2},    // near red
+		{rgb{10, 10, 10}, 0},    // near black
+		{rgb{240, 240, 240}, 1}, // near white
+		{rgb{200, 20, 20}, 2},   // near red
 	}
 	for _, tc := range cases {
 		if got := nearest(pal, tc.c); got != tc.want {
@@ -273,6 +273,28 @@ func TestPixelizeAutoPalette(t *testing.T) {
 	}
 	if len(seen) > 8 {
 		t.Errorf("auto palette produced %d colors, want <= 8", len(seen))
+	}
+}
+
+// trimToContent must crop transparent margins to the opaque bbox plus a 1px margin.
+func TestTrimToContent(t *testing.T) {
+	img := image.NewNRGBA(image.Rect(0, 0, 10, 10))
+	img.SetNRGBA(4, 5, color.NRGBA{R: 200, A: 255}) // lone opaque pixel
+	out := trimToContent(img, 1)
+	if out.Bounds().Dx() != 3 || out.Bounds().Dy() != 3 {
+		t.Fatalf("trimmed size = %v, want 3x3 (1px bbox + 1px margin each side)", out.Bounds())
+	}
+	if c := out.NRGBAAt(1, 1); c.A != 255 || c.R != 200 {
+		t.Errorf("center pixel = %v, want opaque red", c)
+	}
+}
+
+// trimToContent on a fully transparent image is a no-op.
+func TestTrimToContentEmpty(t *testing.T) {
+	img := image.NewNRGBA(image.Rect(0, 0, 8, 8))
+	out := trimToContent(img, 1)
+	if out.Bounds() != img.Bounds() {
+		t.Errorf("empty trim changed bounds to %v", out.Bounds())
 	}
 }
 

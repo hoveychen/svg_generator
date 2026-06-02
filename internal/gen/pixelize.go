@@ -49,6 +49,10 @@ type PixelizeOptions struct {
 	// transparent, at/above becomes fully opaque. Hard edges, no fuzzy AA halo.
 	// 0 uses the default (128).
 	AlphaCutoff uint8
+	// Trim crops the transparent margin down to the subject's bounding box
+	// (plus a 1px breathing margin) before upscaling, producing a tight sprite
+	// for game-asset types. No-op when the grid is fully opaque or empty.
+	Trim bool
 }
 
 // namedPalettes holds the built-in constrained palettes as hex strings.
@@ -184,7 +188,13 @@ func Pixelize(srcPNG, dstPNG string, opts PixelizeOptions) error {
 		outline(small, pal)
 	}
 
-	out := upscale(small, deriveScale(src.Bounds(), small.Bounds(), opts.OutScale))
+	// Derive the upscale factor from the pre-trim grid so a trimmed sprite keeps
+	// the same logical-pixel size as an untrimmed one of the same resolution.
+	scale := deriveScale(src.Bounds(), small.Bounds(), opts.OutScale)
+	if opts.Trim {
+		small = trimToContent(small, 1)
+	}
+	out := upscale(small, scale)
 
 	g, err := os.Create(dstPNG)
 	if err != nil {
@@ -573,6 +583,64 @@ func deriveScale(srcB, smallB image.Rectangle, explicit int) int {
 		s = 1
 	}
 	return s
+}
+
+// trimToContent crops img to the bounding box of its opaque pixels, expanded by
+// margin logical pixels on each side (clamped to the image). A fully transparent
+// or already-tight image is returned unchanged.
+func trimToContent(img *image.NRGBA, margin int) *image.NRGBA {
+	b := img.Bounds()
+	minX, minY := b.Max.X, b.Max.Y
+	maxX, maxY := b.Min.X, b.Min.Y
+	found := false
+	for y := b.Min.Y; y < b.Max.Y; y++ {
+		for x := b.Min.X; x < b.Max.X; x++ {
+			if img.NRGBAAt(x, y).A == 0 {
+				continue
+			}
+			found = true
+			if x < minX {
+				minX = x
+			}
+			if x > maxX {
+				maxX = x
+			}
+			if y < minY {
+				minY = y
+			}
+			if y > maxY {
+				maxY = y
+			}
+		}
+	}
+	if !found {
+		return img // nothing opaque; leave as-is
+	}
+	minX, minY = minX-margin, minY-margin
+	maxX, maxY = maxX+margin, maxY+margin
+	if minX < b.Min.X {
+		minX = b.Min.X
+	}
+	if minY < b.Min.Y {
+		minY = b.Min.Y
+	}
+	if maxX >= b.Max.X {
+		maxX = b.Max.X - 1
+	}
+	if maxY >= b.Max.Y {
+		maxY = b.Max.Y - 1
+	}
+	cw, ch := maxX-minX+1, maxY-minY+1
+	if cw == b.Dx() && ch == b.Dy() {
+		return img // already tight
+	}
+	dst := image.NewNRGBA(image.Rect(0, 0, cw, ch))
+	for y := 0; y < ch; y++ {
+		for x := 0; x < cw; x++ {
+			dst.SetNRGBA(x, y, img.NRGBAAt(minX+x, minY+y))
+		}
+	}
+	return dst
 }
 
 // upscale nearest-neighbor expands img by an integer factor so every logical
