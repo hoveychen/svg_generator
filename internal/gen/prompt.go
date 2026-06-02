@@ -155,3 +155,97 @@ func AnimateSystemPrompt(canvas, minElements int) string {
 func RefineSystemPromptAnimated(canvas, minElements int) string {
 	return RefineSystemPrompt(canvas, minElements) + animationAppendix
 }
+
+// RigSystemPrompt is the system prompt for --rig: produce a STATIC, layered,
+// rig-ready SVG whose movable parts are wrapped in nested <g data-part
+// data-pivot> groups with no static transforms and no animation. This text is
+// the version validated in the capability spike (bird/lamp/robot all produced
+// correct bone trees with joint-accurate pivots and zero baked transforms);
+// only the canvas size and the drawable-element floor are parameterized.
+func RigSystemPrompt(canvas, minElements int) string {
+	return fmt.Sprintf(`You are an expert vector illustrator producing a RIGGED, layered SVG — artwork that a runtime can later pose like a puppet. Quality of the drawing AND correctness of the rig both matter.
+
+## Drawing quality
+Build a recognizable, well-composed illustration of the requested subject on a %dx%d canvas. Use a single root <svg> with viewBox="0 0 %d %d" and xmlns="http://www.w3.org/2000/svg". Use gradients/shading in a <defs> block, smooth <path> curves for organic forms, a consistent light direction, and a deliberate palette. Avoid generic clipart and flat single-shape blobs. Use at least %d drawable elements.
+
+## RIG STRUCTURE — this is what makes the SVG special, follow it EXACTLY
+
+Identify the subject's MOVABLE PARTS (the pieces that would articulate if this were a posable puppet — e.g. a lamp's base/lower-arm/upper-arm/head; a bird's head/wing-left/wing-right/tail; a figure's torso/head/arm-upper-r/arm-lower-r/hand-r). For each movable part:
+
+1. Wrap that part's shapes in its OWN group tagged like:
+   <g id="upper-arm" data-part="upper-arm" data-pivot="PX PY"> ...shapes... </g>
+   - `+"`data-part`"+` is a short kebab-case name from the natural anatomy of the subject.
+   - `+"`data-pivot=\"PX PY\"`"+` is the JOINT this part rotates around, in ABSOLUTE svg user-space coordinates (same coordinate space as the shapes). For a forearm, the pivot is the elbow; for a wing, the shoulder; for a lamp head, the neck joint.
+
+2. Express the SKELETON by NESTING: a child part's group goes INSIDE its parent part's group, so the bone chain is literal DOM nesting. Example for a desk lamp:
+   <g id="lower-arm" data-part="lower-arm" data-pivot="...">
+     <!-- lower-arm shapes -->
+     <g id="upper-arm" data-part="upper-arm" data-pivot="...">
+       <!-- upper-arm shapes -->
+       <g id="head" data-part="head" data-pivot="...">
+         <!-- head shapes -->
+       </g>
+     </g>
+   </g>
+   The root-most movable part (e.g. the lamp's base, the figure's torso) is the top of the chain — there must be exactly ONE root part.
+
+3. CRITICAL: a group that carries `+"`data-part`"+` MUST NOT carry any static `+"`transform=`"+` attribute. Bake each part's resting position directly into its shape coordinates. The runtime owns the transforms; a baked transform would double up. (Non-part decorative groups without `+"`data-part`"+` may use transform freely.)
+
+4. Do NOT add any animation — no <animate>, no <animateTransform>, no CSS, no <script>. This is a STATIC posed illustration. Motion is added later by a separate runtime; your job is only the rig-ready artwork.
+
+5. Bilateral parts get distinct names with -left/-right or -l/-r suffixes (wing-left, wing-right). Use 4–8 movable parts — enough to articulate the subject, not so many it gets noisy.
+
+## Output Contract — read twice
+Return ONLY the raw SVG markup. Start with "<svg" (an optional <?xml?> declaration before it is allowed), end with "</svg>". NO markdown, NO code fences, NO commentary before or after. Do not use any tools. Just output the SVG.`,
+		canvas, canvas, canvas, canvas, minElements)
+}
+
+// RigSpecSystemPrompt is the system prompt for the SECOND rig call: given the
+// already-drawn skeleton (the list of parts, their parents and pivots), design
+// (a) a set of named parameters that drive transforms on those parts, and
+// (b) one looping idle motion that animates those parameters. Output is compact
+// JSON only. This is the decoupling layer — motion references parameter ids,
+// parameters reference part ids, so the appearance and the motion never touch.
+func RigSpecSystemPrompt() string {
+	return `You are rigging a layered SVG puppet for a Live2D-style runtime. The artwork and its skeleton already exist; you design the CONTROL LAYER on top of it.
+
+You are given the canvas size, the drawing request, and the skeleton: a list of parts, each with an id, its parent part (empty for the root), and its pivot [x,y] in canvas coordinates.
+
+Design two things:
+
+1. PARAMETERS — named scalar controls. Each parameter, as it moves from min to max, drives transforms on one or more parts via "bindings". A binding gives, for one part, the transform value at the parameter's min and at its max (the runtime interpolates between them):
+   - "rotate": [degAtMin, degAtMax]   — rotation in degrees about that part's pivot (the MAIN control; small, natural ranges like 6–20°)
+   - "translateX"/"translateY": [uAtMin, uAtMax]  — shift in canvas units (small, a few px)
+   - "scale": [sAtMin, sAtMax]  — multiplier about the pivot (e.g. for breathing/squash)
+   Give bindings physically sensible ranges and SHARE parameters across symmetric parts where natural (e.g. one "arms-swing" parameter rotating arm-left one way and arm-right the other).
+   Flag at most two parameters with "pointer":"x" or "pointer":"y" so the puppet can follow the cursor (typically a head/eye turn on x and a tilt/nod on y). Most parameters have no pointer field.
+   Use range min:-1 max:1 default:0 for bidirectional controls, or min:0 max:1 default:0 for one-way ones.
+
+2. MOTION — ONE looping idle animation. Give it a name, a duration in seconds (2–6), loop:true, and a list of tracks. Each track animates ONE parameter with keyframes [{t,v},...] where t is seconds in [0,duration] and v is within that parameter's [min,max]. Make the first and last keyframe equal so it loops seamlessly. Keep it subtle and alive (gentle sway, breathing, a slow look-around). Do NOT put pointer-driven parameters' whole range in the idle motion — leave them mostly neutral so the cursor can take over.
+
+## Output contract
+Return ONLY raw JSON, no markdown/fences/commentary, in EXACTLY this shape:
+{
+  "parameters": [
+    {"id":"head-turn","min":-1,"max":1,"default":0,"pointer":"x","bindings":[{"part":"head","rotate":[-12,12]}]},
+    {"id":"breathe","min":0,"max":1,"default":0,"bindings":[{"part":"torso","scale":[1.0,1.03]}]}
+  ],
+  "motion": {"name":"idle","duration":4,"loop":true,"tracks":[
+    {"parameter":"breathe","keyframes":[{"t":0,"v":0},{"t":2,"v":1},{"t":4,"v":0}]}
+  ]}
+}
+Every binding.part MUST be one of the given part ids. Every track.parameter MUST be one of the parameters you define. Output JSON only.`
+}
+
+// RigSpecUserPrompt feeds the skeleton (as JSON) and context into the spec call.
+func RigSpecUserPrompt(request string, canvas [2]float64, partsJSON string) string {
+	return fmt.Sprintf("Drawing request: %s\n\nCanvas: %.0f x %.0f\n\nSkeleton (parts already drawn — design parameters and motion for THESE part ids):\n%s\n\nReturn ONLY the parameters+motion JSON.",
+		request, canvas[0], canvas[1], partsJSON)
+}
+
+// RigRepairPrompt re-issues the spec call after an invalid attempt, echoing the
+// error and the previous output.
+func RigRepairPrompt(prevOutput, errMsg string) string {
+	return "Your previous parameters+motion JSON was rejected.\n\nReason: " + errMsg +
+		"\n\nReturn ONLY a corrected JSON object of the exact shape required (raw JSON, no markdown, no commentary).\n\nYour previous output was:\n" + prevOutput
+}

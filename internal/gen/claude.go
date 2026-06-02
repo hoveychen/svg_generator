@@ -19,6 +19,10 @@ type Runner struct {
 	Model string
 	// Verbose mirrors the claude stderr stream to our own stderr.
 	Verbose bool
+	// MaxOutputTokens, when > 0, raises claude's output token ceiling via the
+	// CLAUDE_CODE_MAX_OUTPUT_TOKENS env var. Rig-mode SVGs are large enough to
+	// blow past the default 32000 cap, so --rig sets this to ~64000.
+	MaxOutputTokens int
 }
 
 // Run executes `claude -p --system-prompt <system> --output-format text`,
@@ -59,6 +63,9 @@ func (r Runner) run(ctx context.Context, system, user string, extraArgs []string
 	cmd := exec.CommandContext(ctx, bin, args...)
 	cmd.Dir = os.TempDir()
 	cmd.Stdin = strings.NewReader(user)
+	if r.MaxOutputTokens > 0 {
+		cmd.Env = append(os.Environ(), fmt.Sprintf("CLAUDE_CODE_MAX_OUTPUT_TOKENS=%d", r.MaxOutputTokens))
+	}
 
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout

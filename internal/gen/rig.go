@@ -1,6 +1,7 @@
 package gen
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -232,6 +233,144 @@ func nearestParent(stack []string) string {
 		}
 	}
 	return ""
+}
+
+// rigSpec is the shape of the SECOND rig call's JSON output: the parameters and
+// the idle motion designed for an already-extracted skeleton.
+type rigSpec struct {
+	Parameters []RigParameter `json:"parameters"`
+	Motion     Motion         `json:"motion"`
+}
+
+// ParseRigSpec extracts the parameters+motion JSON from a raw model response,
+// tolerating markdown fences and surrounding prose, and returns the parameters
+// and motion. It does not cross-validate against the parts; ValidateRigSpec does.
+func ParseRigSpec(raw string) ([]RigParameter, Motion, error) {
+	js, err := extractJSONObject(raw)
+	if err != nil {
+		return nil, Motion{}, err
+	}
+	var spec rigSpec
+	dec := json.NewDecoder(strings.NewReader(js))
+	dec.DisallowUnknownFields()
+	if err := dec.Decode(&spec); err != nil {
+		// Retry leniently: unknown fields shouldn't hard-fail a usable spec.
+		if err2 := json.Unmarshal([]byte(js), &spec); err2 != nil {
+			return nil, Motion{}, fmt.Errorf("the parameters+motion JSON did not parse: %v", err2)
+		}
+	}
+	return spec.Parameters, spec.Motion, nil
+}
+
+// extractJSONObject pulls the first balanced {...} object out of a response,
+// stripping any ```json fences.
+func extractJSONObject(raw string) (string, error) {
+	s := strings.TrimSpace(raw)
+	if strings.HasPrefix(s, "```") {
+		if nl := strings.IndexByte(s, '\n'); nl >= 0 {
+			s = s[nl+1:]
+		}
+		if i := strings.LastIndex(s, "```"); i >= 0 {
+			s = s[:i]
+		}
+		s = strings.TrimSpace(s)
+	}
+	start := strings.IndexByte(s, '{')
+	end := strings.LastIndexByte(s, '}')
+	if start < 0 || end < 0 || end <= start {
+		return "", fmt.Errorf("no JSON object found in the response")
+	}
+	return s[start : end+1], nil
+}
+
+// ValidateRigSpec cross-checks the designed parameters and motion against the
+// extracted parts: every binding must target a real part, parameter ids must be
+// unique and have a non-degenerate range, pointer axes must be "x"/"y", and
+// every motion track must reference a real parameter. Errors are phrased for
+// model feedback.
+func ValidateRigSpec(parts []RigPart, params []RigParameter, motion Motion) error {
+	partIDs := make(map[string]bool, len(parts))
+	for _, p := range parts {
+		partIDs[p.ID] = true
+	}
+	if len(params) == 0 {
+		return fmt.Errorf("no parameters defined; design at least one named control with bindings to the parts")
+	}
+	paramIDs := make(map[string]bool, len(params))
+	for _, p := range params {
+		if strings.TrimSpace(p.ID) == "" {
+			return fmt.Errorf("a parameter has an empty id")
+		}
+		if paramIDs[p.ID] {
+			return fmt.Errorf("duplicate parameter id %q", p.ID)
+		}
+		paramIDs[p.ID] = true
+		if p.Max <= p.Min {
+			return fmt.Errorf("parameter %q has max (%g) <= min (%g); give it a real range", p.ID, p.Max, p.Min)
+		}
+		if p.Pointer != "" && p.Pointer != "x" && p.Pointer != "y" {
+			return fmt.Errorf("parameter %q has pointer %q; must be \"x\", \"y\", or omitted", p.ID, p.Pointer)
+		}
+		if len(p.Bindings) == 0 {
+			return fmt.Errorf("parameter %q has no bindings; bind it to at least one part", p.ID)
+		}
+		for _, b := range p.Bindings {
+			if !partIDs[b.Part] {
+				return fmt.Errorf("parameter %q binds part %q which does not exist in the skeleton", p.ID, b.Part)
+			}
+			if b.Rotate == nil && b.TranslateX == nil && b.TranslateY == nil && b.Scale == nil {
+				return fmt.Errorf("parameter %q has a binding to %q with no transform (set rotate/translateX/translateY/scale)", p.ID, b.Part)
+			}
+		}
+	}
+	if motion.Duration <= 0 {
+		return fmt.Errorf("motion.duration must be positive (seconds)")
+	}
+	if len(motion.Tracks) == 0 {
+		return fmt.Errorf("motion has no tracks; animate at least one parameter")
+	}
+	for _, tr := range motion.Tracks {
+		if !paramIDs[tr.Parameter] {
+			return fmt.Errorf("motion track references parameter %q which is not defined", tr.Parameter)
+		}
+		if len(tr.Keyframes) < 2 {
+			return fmt.Errorf("motion track for %q needs at least 2 keyframes", tr.Parameter)
+		}
+	}
+	return nil
+}
+
+// ExtractCanvas reads the SVG's viewBox (falling back to width/height, then a
+// 1024 square) and returns its [w,h] in user units.
+func ExtractCanvas(svg string) [2]float64 {
+	dec := xml.NewDecoder(strings.NewReader(svg))
+	for {
+		tok, err := dec.Token()
+		if err != nil {
+			break
+		}
+		se, ok := tok.(xml.StartElement)
+		if !ok || strings.ToLower(se.Name.Local) != "svg" {
+			continue
+		}
+		if vb := attr(se, "viewBox"); strings.TrimSpace(vb) != "" {
+			f := strings.FieldsFunc(vb, func(r rune) bool { return r == ' ' || r == ',' })
+			if len(f) == 4 {
+				w, e1 := strconv.ParseFloat(f[2], 64)
+				h, e2 := strconv.ParseFloat(f[3], 64)
+				if e1 == nil && e2 == nil && w > 0 && h > 0 {
+					return [2]float64{w, h}
+				}
+			}
+		}
+		w, e1 := strconv.ParseFloat(strings.TrimSpace(attr(se, "width")), 64)
+		h, e2 := strconv.ParseFloat(strings.TrimSpace(attr(se, "height")), 64)
+		if e1 == nil && e2 == nil && w > 0 && h > 0 {
+			return [2]float64{w, h}
+		}
+		break
+	}
+	return [2]float64{1024, 1024}
 }
 
 // parsePivot parses "PX PY" (space- or comma-separated) into absolute coords.

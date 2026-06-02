@@ -32,6 +32,7 @@ func main() {
 		pngSize      = flag.Int("png-size", 0, "PNG preview pixel size; 0 = use --canvas")
 		refineRounds = flag.Int("refine-rounds", 0, "vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer)")
 		animate      = flag.Bool("animate", false, "produce a self-contained animated SVG (SMIL): movable parts get pivots + looping motion")
+		rig          = flag.Bool("rig", false, "produce a Live2D-style rig: layered SVG + <base>.rig.json + <base>.motion.json + <base>.html player (motion decoupled from appearance, follows the pointer)")
 		style        = flag.String("style", "", "style preset: flat, line-art, realistic, pixel, isometric, watercolor, low-poly, retro")
 		gif          = flag.Bool("gif", false, "also export an animated GIF (needs Chrome + ffmpeg or ImageMagick); best with --animate")
 		gifFrames    = flag.Int("gif-frames", 24, "number of frames to capture for the GIF")
@@ -61,6 +62,10 @@ func main() {
 		fmt.Fprintf(os.Stderr, "generate_svg: %v\n", err)
 		os.Exit(2)
 	}
+	if *rig && *animate {
+		fmt.Fprintln(os.Stderr, "generate_svg: --rig and --animate are mutually exclusive (rig uses a runtime player, animate bakes SMIL into the SVG)")
+		os.Exit(2)
+	}
 	if *pixelize {
 		if err := gen.ValidatePalette(*palette); err != nil {
 			fmt.Fprintf(os.Stderr, "generate_svg: %v\n", err)
@@ -80,6 +85,22 @@ func main() {
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
+
+	if *rig {
+		runRig(ctx, *prompt, *out, gen.Options{
+			Request:     *prompt,
+			Model:       *model,
+			Canvas:      *canvas,
+			MinElements: *minElements,
+			Retries:     *retries,
+			Rig:         true,
+			Style:       *style,
+			Timeout:     *timeout,
+			Verbose:     *verbose,
+			Log:         os.Stderr,
+		}, *png, *pngSize)
+		return
+	}
 
 	res, err := gen.Generate(ctx, gen.Options{
 		Request:      *prompt,
@@ -184,6 +205,71 @@ func main() {
 		} else {
 			fmt.Fprintf(os.Stderr, "generate_svg: rendered pixel art %s (type %s, palette %s, %dpx grid)\n",
 				gen.PixelPNGPath(*out), *pixelType, *palette, res)
+		}
+	}
+}
+
+// runRig generates a Live2D-style rig and writes its four artifacts next to the
+// requested .svg path: the layered appearance SVG, the rig.json (skeleton +
+// parameters), the motion.json (idle timeline), and a self-contained HTML
+// player. It exits the process on failure (the SVG is the gating deliverable).
+func runRig(ctx context.Context, request, out string, opts gen.Options, png bool, pngSize int) {
+	res, err := gen.GenerateRig(ctx, opts)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "generate_svg: %v\n", err)
+		os.Exit(1)
+	}
+
+	if dir := filepath.Dir(out); dir != "" && dir != "." {
+		if mkErr := os.MkdirAll(dir, 0o755); mkErr != nil {
+			fmt.Fprintf(os.Stderr, "generate_svg: cannot create output directory: %v\n", mkErr)
+			os.Exit(1)
+		}
+	}
+
+	rigPath := gen.RigPath(out)
+	motionPath := gen.MotionPath(out)
+	harnessPath := gen.HarnessPath(out)
+
+	writes := []struct {
+		path string
+		data []byte
+		fn   func() error
+	}{
+		{path: out, data: []byte(res.SVG + "\n")},
+		{path: rigPath, fn: func() error { return gen.WriteRig(rigPath, res.Rig) }},
+		{path: motionPath, fn: func() error { return gen.WriteMotion(motionPath, res.Motion) }},
+		{path: harnessPath, fn: func() error { return gen.WriteHarness(harnessPath, request, res.SVG, res.Rig, res.Motion) }},
+	}
+	for _, w := range writes {
+		var werr error
+		if w.fn != nil {
+			werr = w.fn()
+		} else {
+			werr = os.WriteFile(w.path, w.data, 0o644)
+		}
+		if werr != nil {
+			fmt.Fprintf(os.Stderr, "generate_svg: cannot write %s: %v\n", w.path, werr)
+			os.Exit(1)
+		}
+	}
+
+	fmt.Fprintf(os.Stderr, "generate_svg: wrote rig %s (%d drawable elements, %d movable part(s), %d parameter(s); svg %d attempt(s), spec %d attempt(s))\n",
+		out, res.Elements, res.Parts, len(res.Rig.Parameters), res.SVGAttempts, res.SpecAttempts)
+	fmt.Fprintf(os.Stderr, "generate_svg:   rig    -> %s\n", rigPath)
+	fmt.Fprintf(os.Stderr, "generate_svg:   motion -> %s (%q, %.1fs)\n", motionPath, res.Motion.Name, res.Motion.Duration)
+	fmt.Fprintf(os.Stderr, "generate_svg:   player -> %s  (open in a browser; moves with the cursor)\n", harnessPath)
+
+	if png {
+		size := pngSize
+		if size <= 0 {
+			size = opts.Canvas
+		}
+		pngPath := gen.PNGPath(out)
+		if err := gen.RenderPNG(out, pngPath, size); err != nil {
+			fmt.Fprintf(os.Stderr, "generate_svg: PNG preview skipped: %v\n", err)
+		} else {
+			fmt.Fprintf(os.Stderr, "generate_svg: rendered static preview %s (%dpx)\n", pngPath, size)
 		}
 	}
 }
