@@ -18,9 +18,10 @@ type pixelTypeSpec struct {
 
 // spriteCommon is shared by every single-subject asset type: the defining
 // constraint that separates a game-asset sprite from a scene.
-const spriteCommon = `This is a SINGLE GAME-ASSET SPRITE, not a scene — it will be cut out and composed with other sprites in a game engine. Therefore:
-- Draw ONE subject only, centered and complete, filling most of the frame.
-- NO BACKGROUND: do not draw a background rectangle, sky, ground, floor, scenery, vignette, or border. Everything around the subject must be empty so it reads as transparent. The very first shapes must NOT be a full-canvas fill.
+const spriteCommon = `OVERRIDE — this request is a SINGLE GAME-ASSET SPRITE, not a scene. It will be cut out and composed with other sprites in a game engine. This REVERSES several rules stated earlier in this prompt, and the reversal wins:
+- DISREGARD the Build Order's step 1 (Background) and step 2 (Setting): draw NO background and NO setting. Skip straight to the subject silhouette.
+- DISREGARD the "Subject in a void" / "single object centered in a void" failure mode and judging note: for a sprite, an EMPTY background is exactly what is required, not a flaw. Do NOT add ground, horizon, sky, walls, environment, vignette, frame, or border.
+- The ONE subject must be centered and complete, filling most of the frame, on a fully transparent (empty) background. Do not emit any full-canvas rectangle or backdrop fill.
 - Give the subject a STRONG, READABLE SILHOUETTE, recognizable from its outline alone.
 - Build from BOLD, FLAT color regions and a LIMITED PALETTE; avoid smooth gradients, soft blur, and atmospheric haze — they turn to mush when downsampled.
 - Outline the subject so it pops against the empty background.`

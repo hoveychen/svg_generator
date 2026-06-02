@@ -56,8 +56,9 @@ Flags:
 | `--gif-frames` | `24` | frames captured for the GIF |
 | `--gif-seconds` | `3.0` | seconds of the animation timeline sampled into the GIF |
 | `--pixelize` | `false` | also render a true pixel-art PNG by post-processing a high-res render (needs a renderer) |
+| `--pixel-type` | `scene` | asset type: `icon`, `item`, `character`, `boss`, `tile`, `scene` — sets the resolution and co-designs the SVG for that kind of asset |
 | `--palette` | `db16` | pixel-art palette: `db16` (DawnBringer 16), `pico8` (PICO-8), or `auto` (median-cut from the image) |
-| `--pixel-res` | `240` | pixel-art logical resolution on the longest side (240–320 = scene-level; drop to ~64 for a single character sprite) |
+| `--pixel-res` | `0` | override the logical resolution on the longest side; `0` = use the `--pixel-type` default |
 | `--pixel-outline` | `true` | add a selective dark silhouette rim in pixel-art mode |
 | `--pixel-cleanup` | `true` | majority-filter the grid to dissolve orphan noise pixels (big readability win) |
 | `--pixel-dither` | `false` | selective Bayer dithering on gradient regions only (off by default; flat areas stay clean) |
@@ -162,29 +163,54 @@ logical pixel is a solid block.
 The defaults are tuned for *readability* — the thing that makes pixel art look
 like a sprite and not like noise. Two choices matter most:
 
-- **Resolution to match the subject.** `generate_svg` draws *scene-level* art,
-  so the default grid is `240` — the range (`240`–`320`) where scene pixel art
-  lives, enough to keep faces, signage, and props legible. Drop to ~`64` only
-  when the subject is a single character sprite. (Readability comes from the
-  cleanup pass and flat design, not from crushing the resolution.)
+- **Resolution by asset type.** Game pixel art is made one asset at a time at a
+  resolution that fits the asset, then composed in an engine. `--pixel-type`
+  picks that resolution for you (see below); `--pixel-res` overrides it.
+  (Readability comes from the cleanup pass and flat design, not from crushing
+  the resolution.)
 - **Dithering is off by default.** Carpet-bombing a flat sky with a Bayer
   cross-hatch destroys readability. When you *do* turn it on
   (`--pixel-dither`), it is applied *selectively* — only in locally
   high-variance gradient regions, never on flat fills.
 
+#### `--pixel-type`: the asset kind drives everything
+
+Pixel game assets aren't one giant picture — you generate a character, a barrel,
+a tile, a background *separately* and assemble them in the engine. The asset's
+kind determines both its resolution and how it should be drawn, so `--pixel-type`
+sets both:
+
+| type | default `--pixel-res` | the generator is told to… |
+|------|:---:|---|
+| `icon` | 32 | draw one simple, instantly-legible pickup on a transparent background |
+| `item` | 32 | draw one clean, iconic object on a transparent background |
+| `character` | 64 | draw one character — readable pose, chunky proportions — on a transparent background |
+| `boss` | 128 | draw one large creature, more detail, bold silhouette, transparent background |
+| `tile` | 32 | fill the canvas with a **seamless, tileable** material, no focal point |
+| `scene` | 240 | draw a full-bleed scene (the 240–320 range where scene pixel art lives) |
+
+The sprite types (`icon`/`item`/`character`/`boss`) make the generator draw a
+single subject on a **transparent background** — no sky, ground, or border — so
+the asset drops straight into a game. The post-process keeps that transparency
+and trims the empty margins to a tight sprite.
+
 ```sh
-generate_svg -p "a steaming bowl of tonkotsu ramen" -o ramen.svg \
-  --pixelize --palette db16
+# a character sprite, transparent background, 64px grid
+generate_svg -p "a fox warrior with a katana" -o fox.svg --pixelize --pixel-type character
+
+# a seamless grass tile
+generate_svg -p "lush grass terrain" -o grass.svg --pixelize --pixel-type tile
+
+# a full scene (the default)
+generate_svg -p "a steaming bowl of tonkotsu ramen" -o ramen.svg --pixelize
 ```
 
-This writes `ramen-pixel.png` next to the SVG. Tuning:
+This writes `<name>-pixel.png` next to the SVG. Further tuning:
 
 - `--palette db16 | pico8 | auto` — `db16`/`pico8` give that unmistakable retro
   game look (the palette *is* the flavor); `auto` extracts colors from the image
   itself (median-cut) for higher fidelity, best for color-sensitive moody scenes.
-- `--pixel-res` — the logical grid on the longest side. `240`–`320` is
-  scene-level (the default range); drop to `48`–`64` for a single chunky
-  character sprite.
+- `--pixel-res N` — override the type's default grid on the longest side.
 - `--pixel-cleanup=false` / `--pixel-outline=false` / `--pixel-dither` — toggle
   the noise filter, the dark rim, or selective dithering.
 
@@ -194,10 +220,10 @@ A post-process can only do so much: pixel art has *design tokens* — bold flat
 color regions, strong readable silhouettes, minimal gradients, a tight palette —
 and a richly-detailed painterly SVG was never built to survive downsampling. The real
 Dead Cells discipline starts at the source. So when you pass `--pixelize`, the
-generator also steers the SVG itself toward pixel-friendly forms (see
-[`internal/gen/style.go`](internal/gen/style.go)), giving the downsampler
-something that reads. It still composes with `--style pixel`, but it works on
-any SVG — it's a renderer *and* a co-designed source.
+generator also steers the SVG itself toward pixel-friendly forms for the chosen
+asset type (see [`internal/gen/assettype.go`](internal/gen/assettype.go)), giving
+the downsampler something that reads. It still composes with `--style pixel`, but
+it works on any SVG — it's a renderer *and* a co-designed source.
 
 ## Requirements
 
