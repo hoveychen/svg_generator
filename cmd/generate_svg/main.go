@@ -36,6 +36,11 @@ func main() {
 		gif          = flag.Bool("gif", false, "also export an animated GIF (needs Chrome + ffmpeg or ImageMagick); best with --animate")
 		gifFrames    = flag.Int("gif-frames", 24, "number of frames to capture for the GIF")
 		gifSeconds   = flag.Float64("gif-seconds", 3.0, "seconds of the animation timeline to sample into the GIF")
+		pixelize     = flag.Bool("pixelize", false, "also render a true pixel-art PNG: high-res render → downsample → palette quantize → dither → outline (needs rsvg-convert or macOS qlmanage)")
+		palette      = flag.String("palette", "db16", "pixel-art palette: db16, pico8, or auto (median-cut from the image)")
+		pixelRes     = flag.Int("pixel-res", 128, "pixel-art logical resolution on the longest side (lower = blockier)")
+		pixelOutline = flag.Bool("pixel-outline", true, "add a selective dark silhouette rim in pixel-art mode")
+		pixelDither  = flag.Bool("pixel-dither", true, "apply Bayer ordered dithering to gradients in pixel-art mode")
 		verbose      = flag.Bool("v", false, "verbose: stream claude output and progress to stderr")
 	)
 	flag.Usage = func() {
@@ -53,6 +58,12 @@ func main() {
 	if err := gen.ValidateStyle(*style); err != nil {
 		fmt.Fprintf(os.Stderr, "generate_svg: %v\n", err)
 		os.Exit(2)
+	}
+	if *pixelize {
+		if err := gen.ValidatePalette(*palette); err != nil {
+			fmt.Fprintf(os.Stderr, "generate_svg: %v\n", err)
+			os.Exit(2)
+		}
 	}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -129,4 +140,41 @@ func main() {
 			fmt.Fprintf(os.Stderr, "generate_svg: exported %s (%d frames over %.1fs)\n", gifPath, *gifFrames, *gifSeconds)
 		}
 	}
+
+	if *pixelize {
+		// Render a high-resolution source first, then post-process it into pixel
+		// art — the Dead Cells "render high, downsample smart" recipe. A render
+		// or post-process failure is a warning; the SVG is already written.
+		srcSize := *canvas
+		if srcSize < 512 {
+			srcSize = 512
+		}
+		if err := pixelizeFrom(*out, srcSize, gen.PixelizeOptions{
+			Resolution: *pixelRes,
+			Palette:    *palette,
+			Dither:     *pixelDither,
+			Outline:    *pixelOutline,
+		}); err != nil {
+			fmt.Fprintf(os.Stderr, "generate_svg: pixel-art render skipped: %v\n", err)
+		} else {
+			fmt.Fprintf(os.Stderr, "generate_svg: rendered pixel art %s (palette %s, %dpx grid)\n",
+				gen.PixelPNGPath(*out), *palette, *pixelRes)
+		}
+	}
+}
+
+// pixelizeFrom rasterizes the SVG to a high-resolution temporary PNG and runs
+// the pixel-art pipeline on it, writing "<base>-pixel.png" next to the SVG.
+func pixelizeFrom(svgPath string, srcSize int, opts gen.PixelizeOptions) error {
+	tmpDir, err := os.MkdirTemp("", "generate_svg_pixel_*")
+	if err != nil {
+		return fmt.Errorf("temp dir: %w", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	srcPNG := filepath.Join(tmpDir, "src.png")
+	if err := gen.RenderPNG(svgPath, srcPNG, srcSize); err != nil {
+		return err
+	}
+	return gen.Pixelize(srcPNG, gen.PixelPNGPath(svgPath), opts)
 }

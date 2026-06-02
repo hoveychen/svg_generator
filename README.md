@@ -55,6 +55,11 @@ Flags:
 | `--gif` | `false` | also export an animated GIF (needs Chrome + ffmpeg or ImageMagick); best with `--animate` |
 | `--gif-frames` | `24` | frames captured for the GIF |
 | `--gif-seconds` | `3.0` | seconds of the animation timeline sampled into the GIF |
+| `--pixelize` | `false` | also render a true pixel-art PNG by post-processing a high-res render (needs a renderer) |
+| `--palette` | `db16` | pixel-art palette: `db16` (DawnBringer 16), `pico8` (PICO-8), or `auto` (median-cut from the image) |
+| `--pixel-res` | `128` | pixel-art logical resolution on the longest side (lower = blockier) |
+| `--pixel-outline` | `true` | add a selective dark silhouette rim in pixel-art mode |
+| `--pixel-dither` | `true` | apply Bayer ordered dithering to gradients in pixel-art mode |
 | `-v` | `false` | verbose: print the prompt and each attempt to stderr |
 
 With `--png`, `boat.svg` also produces `boat.png` (renderer chosen automatically:
@@ -138,6 +143,37 @@ Notes:
 - It is **slow**: each frame is a separate headless-Chrome launch, so a 24-frame
   GIF means 24 launches. Lower `--gif-frames` for speed.
 - Without `--animate` the frames are identical, so the GIF will not move.
+
+### Pixel art (`--pixelize`)
+
+`--style pixel` *asks the model* to draw pixel-art SVG — but a language model
+can only fake it: the blocks never snap to a real grid, the palette drifts, and
+the vector renderer smooths the edges you wanted hard. Real pixel art is a
+*post-process*, not a generation trick.
+
+`--pixelize` does it the way games like Dead Cells do: render the vector art at
+high resolution, then intelligently downsample to a coarse logical grid, snap
+every color to a constrained palette, dither gradients into a regular
+cross-hatch, and add a selective dark silhouette rim. Hard edges are preserved
+by nearest-neighbor upscaling so each logical pixel is a solid block.
+
+```sh
+generate_svg -p "a steaming bowl of tonkotsu ramen" -o ramen.svg \
+  --pixelize --palette db16 --pixel-res 96
+```
+
+This writes `ramen-pixel.png` next to the SVG. Tuning:
+
+- `--palette db16 | pico8 | auto` — `db16`/`pico8` give that unmistakable retro
+  game look (the palette *is* the flavor); `auto` extracts colors from the image
+  itself (median-cut) for higher fidelity but less stylized output.
+- `--pixel-res` — the logical grid on the longest side. `64` is chunky and very
+  retro; `128` keeps more detail while still clearly pixel art.
+- `--pixel-outline=false` / `--pixel-dither=false` — turn off the dark rim or the
+  ordered dithering if you want a flatter, cleaner look.
+
+It composes with `--style pixel` (let the model lean blocky, then snap it to a
+real grid), but it works on any SVG — it's a renderer, not a prompt.
 
 ## Requirements
 
