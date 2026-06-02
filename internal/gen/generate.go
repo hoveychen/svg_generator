@@ -10,17 +10,17 @@ import (
 
 // Options controls a single SVG generation run.
 type Options struct {
-	Request       string // what to draw (required)
-	Model         string // claude model alias; empty = claude default
-	Canvas        int    // square viewBox size hinted to the model
-	MinElements   int    // drawable-element floor
-	Retries       int    // max repair attempts after the first try
-	RefineRounds  int    // vision-critique redraw rounds (0 = off)
-	Animate       bool   // emit a self-contained animated SVG (SMIL)
-	Style         string // optional style preset name (see StyleNames)
-	PixelFriendly bool   // co-design the SVG for pixelization (set with --pixelize)
-	Timeout       time.Duration
-	Verbose       bool
+	Request      string // what to draw (required)
+	Model        string // claude model alias; empty = claude default
+	Canvas       int    // square viewBox size hinted to the model
+	MinElements  int    // drawable-element floor
+	Retries      int    // max repair attempts after the first try
+	RefineRounds int    // vision-critique redraw rounds (0 = off)
+	Animate      bool   // emit a self-contained animated SVG (SMIL)
+	Style        string // optional style preset name (see StyleNames)
+	PixelType    string // asset type co-designed for pixelization; empty = none (set with --pixelize)
+	Timeout      time.Duration
+	Verbose      bool
 	// Log receives human-readable progress lines (e.g. os.Stderr). May be nil.
 	Log io.Writer
 }
@@ -148,8 +148,8 @@ func styleLabel(style string) string {
 // validity is enforced at the CLI boundary).
 func (o Options) styleAppendix() string {
 	s, _ := StyleAppendix(o.Style)
-	if o.PixelFriendly {
-		s += PixelFriendlyAppendix()
+	if strings.TrimSpace(o.PixelType) != "" {
+		s += PixelTypeAppendix(o.PixelType)
 	}
 	return s
 }
