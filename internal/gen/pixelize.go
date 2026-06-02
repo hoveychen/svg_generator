@@ -29,9 +29,15 @@ type PixelizeOptions struct {
 	Palette string
 	// AutoColors is the palette size when Palette == "auto" (default 16).
 	AutoColors int
-	// Dither enables Bayer 4x4 ordered dithering before quantization, which
-	// keeps gradients alive as a regular cross-hatch instead of flat banding.
+	// Dither enables Bayer 4x4 ordered dithering before quantization. It is
+	// applied *selectively* — only in locally high-variance (gradient/detail)
+	// regions — so flat areas like skies stay clean instead of turning into a
+	// carpet of checkerboard noise that drowns the silhouette.
 	Dither bool
+	// Cleanup runs a majority filter on the quantized grid to remove orphan
+	// "salt-and-pepper" pixels, letting color regions read as solid clusters.
+	// This is the single biggest readability win at low resolution.
+	Cleanup bool
 	// Outline darkens silhouette-boundary pixels, the selective dark rim that
 	// makes sprites pop against a background.
 	Outline bool
@@ -168,7 +174,12 @@ func Pixelize(srcPNG, dstPNG string, opts PixelizeOptions) error {
 
 	small := downsample(src, opts.Resolution, opts.AlphaCutoff)
 	pal := buildPalette(small, opts)
-	quantize(small, pal, opts.Dither)
+	w, h := small.Bounds().Dx(), small.Bounds().Dy()
+	idx := quantize(small, pal, opts.Dither)
+	if opts.Cleanup {
+		cleanup(idx, w, h)
+	}
+	applyPalette(small, idx, pal)
 	if opts.Outline {
 		outline(small, pal)
 	}
@@ -368,26 +379,148 @@ func average(box []rgb) rgb {
 	return rgb{s.r / n, s.g / n, s.b / n}
 }
 
-// quantize snaps every opaque pixel to its nearest palette color, optionally
-// applying Bayer ordered dithering as a pre-quantization perturbation.
-func quantize(img *image.NRGBA, pal []rgb, dither bool) {
+// quantize maps every pixel to a palette index (-1 for transparent), returning
+// the index grid in row-major order. When dither is set, Bayer perturbation is
+// applied *selectively* — only where the local neighborhood varies enough to be
+// a gradient or detail — so flat regions quantize cleanly.
+func quantize(img *image.NRGBA, pal []rgb, dither bool) []int {
 	const spread = 56.0 // perturbation magnitude for dithering
 	b := img.Bounds()
-	for y := b.Min.Y; y < b.Max.Y; y++ {
-		for x := b.Min.X; x < b.Max.X; x++ {
-			c := img.NRGBAAt(x, y)
+	w, h := b.Dx(), b.Dy()
+	idx := make([]int, w*h)
+
+	var mask []bool
+	if dither {
+		mask = gradientMask(img)
+	}
+
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			c := img.NRGBAAt(b.Min.X+x, b.Min.Y+y)
 			if c.A == 0 {
+				idx[y*w+x] = -1
 				continue
 			}
 			col := rgb{float64(c.R), float64(c.G), float64(c.B)}
-			if dither {
+			if dither && mask[y*w+x] {
 				t := bayer4[y&3][x&3] * spread
 				col.r += t
 				col.g += t
 				col.b += t
 			}
-			p := pal[nearest(pal, col)]
-			img.SetNRGBA(x, y, p.toNRGBA(255))
+			idx[y*w+x] = nearest(pal, col)
+		}
+	}
+	return idx
+}
+
+// gradientMask flags opaque pixels whose 3x3 neighborhood luminance variance
+// exceeds a threshold — i.e. gradient or detail regions where dithering helps,
+// as opposed to flat fills where it only adds noise.
+func gradientMask(img *image.NRGBA) []bool {
+	b := img.Bounds()
+	w, h := b.Dx(), b.Dy()
+	lum := func(x, y int) (float64, bool) {
+		c := img.NRGBAAt(b.Min.X+x, b.Min.Y+y)
+		if c.A == 0 {
+			return 0, false
+		}
+		return 0.299*float64(c.R) + 0.587*float64(c.G) + 0.114*float64(c.B), true
+	}
+	const threshold = 14.0 // std-dev of luminance above which we dither
+	mask := make([]bool, w*h)
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			if _, ok := lum(x, y); !ok {
+				continue
+			}
+			var sum, sumSq, n float64
+			for dy := -1; dy <= 1; dy++ {
+				for dx := -1; dx <= 1; dx++ {
+					nx, ny := x+dx, y+dy
+					if nx < 0 || ny < 0 || nx >= w || ny >= h {
+						continue
+					}
+					if l, ok := lum(nx, ny); ok {
+						sum += l
+						sumSq += l * l
+						n++
+					}
+				}
+			}
+			if n < 2 {
+				continue
+			}
+			mean := sum / n
+			variance := sumSq/n - mean*mean
+			if variance > threshold*threshold {
+				mask[y*w+x] = true
+			}
+		}
+	}
+	return mask
+}
+
+// cleanup is a majority filter over palette indices: an opaque pixel whose own
+// index is rare among its 8 neighbors while some other index dominates is
+// replaced by that dominant index. This dissolves salt-and-pepper noise so
+// color regions read as solid clusters — the biggest low-res readability win.
+func cleanup(idx []int, w, h int) {
+	src := make([]int, len(idx))
+	copy(src, idx)
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			self := src[y*w+x]
+			if self < 0 {
+				continue // leave transparency alone
+			}
+			counts := map[int]int{}
+			selfCount := 0
+			for dy := -1; dy <= 1; dy++ {
+				for dx := -1; dx <= 1; dx++ {
+					if dx == 0 && dy == 0 {
+						continue
+					}
+					nx, ny := x+dx, y+dy
+					if nx < 0 || ny < 0 || nx >= w || ny >= h {
+						continue
+					}
+					ni := src[ny*w+nx]
+					if ni < 0 {
+						continue
+					}
+					counts[ni]++
+					if ni == self {
+						selfCount++
+					}
+				}
+			}
+			best, bestN := self, 0
+			for k, n := range counts {
+				if n > bestN {
+					best, bestN = k, n
+				}
+			}
+			// Replace only clear outliers: self barely present, neighbor strongly dominant.
+			if selfCount <= 1 && bestN >= 5 {
+				idx[y*w+x] = best
+			}
+		}
+	}
+}
+
+// applyPalette writes the resolved palette colors back into img, preserving the
+// binary alpha already set by downsample.
+func applyPalette(img *image.NRGBA, idx []int, pal []rgb) {
+	b := img.Bounds()
+	w := b.Dx()
+	for y := 0; y < b.Dy(); y++ {
+		for x := 0; x < w; x++ {
+			i := idx[y*w+x]
+			if i < 0 {
+				continue
+			}
+			img.SetNRGBA(b.Min.X+x, b.Min.Y+y, pal[i].toNRGBA(255))
 		}
 	}
 }

@@ -38,9 +38,10 @@ func main() {
 		gifSeconds   = flag.Float64("gif-seconds", 3.0, "seconds of the animation timeline to sample into the GIF")
 		pixelize     = flag.Bool("pixelize", false, "also render a true pixel-art PNG: high-res render → downsample → palette quantize → dither → outline (needs rsvg-convert or macOS qlmanage)")
 		palette      = flag.String("palette", "db16", "pixel-art palette: db16, pico8, or auto (median-cut from the image)")
-		pixelRes     = flag.Int("pixel-res", 128, "pixel-art logical resolution on the longest side (lower = blockier)")
+		pixelRes     = flag.Int("pixel-res", 64, "pixel-art logical resolution on the longest side (lower = blockier, more readable)")
 		pixelOutline = flag.Bool("pixel-outline", true, "add a selective dark silhouette rim in pixel-art mode")
-		pixelDither  = flag.Bool("pixel-dither", true, "apply Bayer ordered dithering to gradients in pixel-art mode")
+		pixelCleanup = flag.Bool("pixel-cleanup", true, "majority-filter the grid to dissolve orphan noise pixels (big readability win)")
+		pixelDither  = flag.Bool("pixel-dither", false, "apply selective Bayer dithering to gradient regions only (off by default; flat areas stay clean)")
 		verbose      = flag.Bool("v", false, "verbose: stream claude output and progress to stderr")
 	)
 	flag.Usage = func() {
@@ -153,6 +154,7 @@ func main() {
 			Resolution: *pixelRes,
 			Palette:    *palette,
 			Dither:     *pixelDither,
+			Cleanup:    *pixelCleanup,
 			Outline:    *pixelOutline,
 		}); err != nil {
 			fmt.Fprintf(os.Stderr, "generate_svg: pixel-art render skipped: %v\n", err)

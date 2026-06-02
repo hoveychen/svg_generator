@@ -130,13 +130,45 @@ func TestQuantizeConstrainsToPalette(t *testing.T) {
 			img.SetNRGBA(x, y, color.NRGBA{R: uint8(x * 16), G: uint8(y * 16), B: 128, A: 255})
 		}
 	}
-	quantize(img, pal, true)
+	idx := quantize(img, pal, true)
+	applyPalette(img, idx, pal)
 	for y := 0; y < 16; y++ {
 		for x := 0; x < 16; x++ {
 			c := img.NRGBAAt(x, y)
 			if !palSet[c] {
 				t.Fatalf("pixel (%d,%d) = %v not in palette", x, y, c)
 			}
+		}
+	}
+}
+
+// cleanup must dissolve an isolated orphan pixel surrounded by a dominant index.
+func TestCleanupRemovesOrphans(t *testing.T) {
+	const w, h = 3, 3
+	idx := []int{
+		0, 0, 0,
+		0, 5, 0, // lone "5" orphan in a field of 0
+		0, 0, 0,
+	}
+	cleanup(idx, w, h)
+	if idx[4] != 0 {
+		t.Errorf("orphan pixel = %d, want 0 (replaced by dominant neighbor)", idx[4])
+	}
+}
+
+// cleanup must NOT erase a legitimate cluster (a 2x2 block is not an orphan).
+func TestCleanupKeepsClusters(t *testing.T) {
+	const w, h = 4, 4
+	idx := []int{
+		0, 0, 0, 0,
+		0, 5, 5, 0,
+		0, 5, 5, 0,
+		0, 0, 0, 0,
+	}
+	cleanup(idx, w, h)
+	for _, i := range []int{5, 6, 9, 10} {
+		if idx[i] != 5 {
+			t.Errorf("cluster pixel %d = %d, want 5 (clusters preserved)", i, idx[i])
 		}
 	}
 }

@@ -57,9 +57,10 @@ Flags:
 | `--gif-seconds` | `3.0` | seconds of the animation timeline sampled into the GIF |
 | `--pixelize` | `false` | also render a true pixel-art PNG by post-processing a high-res render (needs a renderer) |
 | `--palette` | `db16` | pixel-art palette: `db16` (DawnBringer 16), `pico8` (PICO-8), or `auto` (median-cut from the image) |
-| `--pixel-res` | `128` | pixel-art logical resolution on the longest side (lower = blockier) |
+| `--pixel-res` | `64` | pixel-art logical resolution on the longest side (lower = blockier, more readable) |
 | `--pixel-outline` | `true` | add a selective dark silhouette rim in pixel-art mode |
-| `--pixel-dither` | `true` | apply Bayer ordered dithering to gradients in pixel-art mode |
+| `--pixel-cleanup` | `true` | majority-filter the grid to dissolve orphan noise pixels (big readability win) |
+| `--pixel-dither` | `false` | selective Bayer dithering on gradient regions only (off by default; flat areas stay clean) |
 | `-v` | `false` | verbose: print the prompt and each attempt to stderr |
 
 With `--png`, `boat.svg` also produces `boat.png` (renderer chosen automatically:
@@ -153,27 +154,46 @@ the vector renderer smooths the edges you wanted hard. Real pixel art is a
 
 `--pixelize` does it the way games like Dead Cells do: render the vector art at
 high resolution, then intelligently downsample to a coarse logical grid, snap
-every color to a constrained palette, dither gradients into a regular
-cross-hatch, and add a selective dark silhouette rim. Hard edges are preserved
-by nearest-neighbor upscaling so each logical pixel is a solid block.
+every color to a constrained palette, **dissolve orphan noise pixels with a
+majority filter** so regions read as solid clusters, and add a selective dark
+silhouette rim. Hard edges are preserved by nearest-neighbor upscaling so each
+logical pixel is a solid block.
+
+The defaults are tuned for *readability* — the thing that makes pixel art look
+like a sprite and not like noise. Two choices matter most:
+
+- **Low resolution on purpose.** `--pixel-res 64` forces the silhouette to
+  simplify; a higher grid just preserves detail the eye reads as mush.
+- **Dithering is off by default.** Carpet-bombing a flat sky with a Bayer
+  cross-hatch destroys readability. When you *do* turn it on
+  (`--pixel-dither`), it is applied *selectively* — only in locally
+  high-variance gradient regions, never on flat fills.
 
 ```sh
 generate_svg -p "a steaming bowl of tonkotsu ramen" -o ramen.svg \
-  --pixelize --palette db16 --pixel-res 96
+  --pixelize --palette db16
 ```
 
 This writes `ramen-pixel.png` next to the SVG. Tuning:
 
 - `--palette db16 | pico8 | auto` — `db16`/`pico8` give that unmistakable retro
   game look (the palette *is* the flavor); `auto` extracts colors from the image
-  itself (median-cut) for higher fidelity but less stylized output.
-- `--pixel-res` — the logical grid on the longest side. `64` is chunky and very
-  retro; `128` keeps more detail while still clearly pixel art.
-- `--pixel-outline=false` / `--pixel-dither=false` — turn off the dark rim or the
-  ordered dithering if you want a flatter, cleaner look.
+  itself (median-cut) for higher fidelity, best for color-sensitive moody scenes.
+- `--pixel-res` — the logical grid on the longest side. `48`–`64` is chunky and
+  reads cleanly; push to `96`+ only when the source is already bold and flat.
+- `--pixel-cleanup=false` / `--pixel-outline=false` / `--pixel-dither` — toggle
+  the noise filter, the dark rim, or selective dithering.
 
-It composes with `--style pixel` (let the model lean blocky, then snap it to a
-real grid), but it works on any SVG — it's a renderer, not a prompt.
+### Pixel art is a design discipline, not just a filter
+
+A post-process can only do so much: pixel art has *design tokens* — bold flat
+color regions, strong readable silhouettes, minimal gradients, a tight palette —
+and a richly-detailed painterly SVG was never built to survive at 64px. The real
+Dead Cells discipline starts at the source. So when you pass `--pixelize`, the
+generator also steers the SVG itself toward pixel-friendly forms (see
+[`internal/gen/style.go`](internal/gen/style.go)), giving the downsampler
+something that reads. It still composes with `--style pixel`, but it works on
+any SVG — it's a renderer *and* a co-designed source.
 
 ## Requirements
 
