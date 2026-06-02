@@ -50,6 +50,23 @@ func StyleAppendix(style string) (string, bool) {
 	return "\n\n## Style\n" + block, true
 }
 
+// pixelFriendlyGuidance steers generation toward art that survives downsampling
+// to a coarse pixel grid: the "design tokens" of real pixel art. A post-process
+// filter alone can't rescue a richly-detailed painterly SVG at 64px — the
+// source has to be built to read at that size (the real Dead Cells discipline).
+const pixelFriendlyGuidance = `This illustration will be downsampled to a tiny pixel-art grid (~64px on the longest side), so it MUST be designed to read at that size. Pixel art is a design discipline, not a filter:
+- Build from BOLD, FLAT color regions. Avoid smooth gradients, soft blurs, and fine texture — they turn to mush when downsampled. A few hard-edged bands of color read as shading far better than a gradient.
+- Give every important object a STRONG, READABLE SILHOUETTE: recognizable from its outline alone. Favor chunky, simplified, generous forms over delicate detail.
+- Use a LIMITED PALETTE — a handful of distinct colors, not dozens of near-identical shades.
+- Keep CLEAR FIGURE-GROUND separation: a few large subjects against a simple background. Drop tiny details, thin lines, and clutter that would vanish below a few pixels wide.
+- Prefer crisp straight or boldly-curved edges; outline key shapes so they pop.`
+
+// PixelFriendlyAppendix returns the system-prompt block that co-designs the SVG
+// for pixelization (see --pixelize). It is additive on top of any --style preset.
+func PixelFriendlyAppendix() string {
+	return "\n\n## Pixel-friendly design\n" + pixelFriendlyGuidance
+}
+
 // ValidateStyle returns an error if style is a non-empty unknown name.
 func ValidateStyle(style string) error {
 	if _, ok := StyleAppendix(style); !ok {

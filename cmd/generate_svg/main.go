@@ -21,13 +21,13 @@ import (
 
 func main() {
 	var (
-		prompt      = flag.String("p", "", "the build request / what to draw (required)")
-		out         = flag.String("o", "", "output .svg file path (required)")
-		model       = flag.String("m", "", "model alias for `claude --model` (e.g. opus, sonnet); empty = claude default")
-		retries     = flag.Int("retries", 3, "max repair attempts when output is invalid")
-		minElements = flag.Int("min-elements", 8, "reject builds with fewer drawable elements")
-		canvas      = flag.Int("canvas", 1024, "square viewBox size hinted to the model")
-		timeout     = flag.Duration("timeout", 3*time.Minute, "per-attempt timeout for the claude call")
+		prompt       = flag.String("p", "", "the build request / what to draw (required)")
+		out          = flag.String("o", "", "output .svg file path (required)")
+		model        = flag.String("m", "", "model alias for `claude --model` (e.g. opus, sonnet); empty = claude default")
+		retries      = flag.Int("retries", 3, "max repair attempts when output is invalid")
+		minElements  = flag.Int("min-elements", 8, "reject builds with fewer drawable elements")
+		canvas       = flag.Int("canvas", 1024, "square viewBox size hinted to the model")
+		timeout      = flag.Duration("timeout", 3*time.Minute, "per-attempt timeout for the claude call")
 		png          = flag.Bool("png", false, "also render a PNG preview next to the SVG (needs rsvg-convert or macOS qlmanage)")
 		pngSize      = flag.Int("png-size", 0, "PNG preview pixel size; 0 = use --canvas")
 		refineRounds = flag.Int("refine-rounds", 0, "vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer)")
@@ -71,17 +71,18 @@ func main() {
 	defer stop()
 
 	res, err := gen.Generate(ctx, gen.Options{
-		Request:      *prompt,
-		Model:        *model,
-		Canvas:       *canvas,
-		MinElements:  *minElements,
-		Retries:      *retries,
-		RefineRounds: *refineRounds,
-		Animate:      *animate,
-		Style:        *style,
-		Timeout:      *timeout,
-		Verbose:      *verbose,
-		Log:          os.Stderr,
+		Request:       *prompt,
+		Model:         *model,
+		Canvas:        *canvas,
+		MinElements:   *minElements,
+		Retries:       *retries,
+		RefineRounds:  *refineRounds,
+		Animate:       *animate,
+		Style:         *style,
+		PixelFriendly: *pixelize,
+		Timeout:       *timeout,
+		Verbose:       *verbose,
+		Log:           os.Stderr,
 	})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "generate_svg: %v\n", err)
