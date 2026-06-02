@@ -38,7 +38,7 @@ func main() {
 		gifSeconds   = flag.Float64("gif-seconds", 3.0, "seconds of the animation timeline to sample into the GIF")
 		pixelize     = flag.Bool("pixelize", false, "also render a true pixel-art PNG: high-res render → downsample → palette quantize → dither → outline (needs rsvg-convert or macOS qlmanage)")
 		palette      = flag.String("palette", "db16", "pixel-art palette: db16, pico8, or auto (median-cut from the image)")
-		pixelRes     = flag.Int("pixel-res", 64, "pixel-art logical resolution on the longest side (lower = blockier, more readable)")
+		pixelRes     = flag.Int("pixel-res", 240, "pixel-art logical resolution on the longest side (240–320 = scene-level; drop to ~64 for a single character sprite)")
 		pixelOutline = flag.Bool("pixel-outline", true, "add a selective dark silhouette rim in pixel-art mode")
 		pixelCleanup = flag.Bool("pixel-cleanup", true, "majority-filter the grid to dissolve orphan noise pixels (big readability win)")
 		pixelDither  = flag.Bool("pixel-dither", false, "apply selective Bayer dithering to gradient regions only (off by default; flat areas stay clean)")
@@ -147,9 +147,14 @@ func main() {
 		// Render a high-resolution source first, then post-process it into pixel
 		// art — the Dead Cells "render high, downsample smart" recipe. A render
 		// or post-process failure is a warning; the SVG is already written.
-		srcSize := *canvas
-		if srcSize < 512 {
-			srcSize = 512
+		// Keep the source comfortably above the logical grid (~6x) so even a
+		// 240–320px scene grid downsamples from real detail, not a near-1:1 image.
+		srcSize := *pixelRes * 6
+		if srcSize < *canvas {
+			srcSize = *canvas
+		}
+		if srcSize > 2048 {
+			srcSize = 2048
 		}
 		if err := pixelizeFrom(*out, srcSize, gen.PixelizeOptions{
 			Resolution: *pixelRes,
