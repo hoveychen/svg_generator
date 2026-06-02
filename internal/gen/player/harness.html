@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__ — rig player</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.5 ui-sans-serif, system-ui, sans-serif;
+    background: #15171c; color: #e7e9ee; display: flex; min-height: 100vh; }
+  #stage { flex: 1; display: grid; place-items: center; padding: 24px; }
+  #stage svg { max-width: 100%; max-height: 92vh; height: auto;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,.5)); cursor: crosshair; }
+  #panel { width: 320px; flex: none; background: #1d2026; border-left: 1px solid #2c2f37;
+    padding: 18px; overflow-y: auto; }
+  h1 { font-size: 15px; margin: 0 0 4px; }
+  .sub { color: #8b909c; font-size: 12px; margin: 0 0 16px; }
+  .row { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
+  button { background: #2b6cff; color: #fff; border: 0; border-radius: 7px;
+    padding: 7px 12px; font-size: 13px; cursor: pointer; }
+  button.secondary { background: #2c2f37; }
+  label.toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .group { border-top: 1px solid #2c2f37; margin-top: 16px; padding-top: 12px; }
+  .group h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em;
+    color: #8b909c; margin: 0 0 10px; }
+  .param { margin: 8px 0; }
+  .param .name { display: flex; justify-content: space-between; font-size: 12px; color: #c3c7d1; }
+  .param .name .ptr { color: #5fd0a0; }
+  input[type=range] { width: 100%; }
+  input[type=file] { font-size: 12px; max-width: 100%; }
+  .hint { color: #6a6f7b; font-size: 11px; margin-top: 6px; }
+</style>
+</head>
+<body>
+  <div id="stage">__SVG__</div>
+  <div id="panel">
+    <h1>__TITLE__</h1>
+    <p class="sub">Live2D-style rig: appearance · skeleton · motion, decoupled.</p>
+
+    <div class="row">
+      <button id="playPause">Pause</button>
+      <button id="resetPose" class="secondary">Reset pose</button>
+    </div>
+    <div class="row">
+      <label class="toggle"><input type="checkbox" id="follow" checked> Follow pointer</label>
+    </div>
+    <p class="hint">Move the cursor over the artwork — parameters flagged with a pointer axis track it.</p>
+
+    <div class="group">
+      <h2>Swap motion</h2>
+      <input type="file" id="motionFile" accept=".json,application/json">
+      <p class="hint">Load a different motion.json — same rig, different animation. This is the decoupling: motion only references parameter names.</p>
+    </div>
+
+    <div class="group">
+      <h2>Parameters</h2>
+      <div id="params"></div>
+      <p class="hint">Drag to pose manually (pauses playback).</p>
+    </div>
+  </div>
+
+<script>__PLAYER_JS__</script>
+<script>
+(function () {
+  'use strict';
+  var RIG = __RIG_JSON__;
+  var MOTION = __MOTION_JSON__;
+
+  var svg = document.querySelector('#stage svg');
+  var player = new RigPlayer(svg, RIG, MOTION);
+
+  // --- pointer tracking: convert client coords into SVG user-space ---
+  function toUser(evt) {
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    var m = svg.getScreenCTM();
+    if (!m) return null;
+    var u = pt.matrixTransform(m.inverse());
+    return [u.x, u.y];
+  }
+  svg.addEventListener('pointermove', function (e) {
+    var u = toUser(e); if (u) player.setPointer(u[0], u[1]);
+  });
+  svg.addEventListener('pointerleave', function () { player.setPointer(null); });
+
+  // --- controls ---
+  var playPause = document.getElementById('playPause');
+  playPause.addEventListener('click', function () {
+    if (player.playing) { player.pause(); playPause.textContent = 'Play'; }
+    else { player.resume(); playPause.textContent = 'Pause'; }
+  });
+  document.getElementById('follow').addEventListener('change', function (e) {
+    player.followPointer = e.target.checked;
+  });
+  document.getElementById('motionFile').addEventListener('change', function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try { player.setMotion(JSON.parse(r.result)); player._t0 = 0;
+        player.resume(); playPause.textContent = 'Pause'; }
+      catch (err) { alert('Invalid motion JSON: ' + err.message); }
+    };
+    r.readAsText(f);
+  });
+
+  // --- parameter sliders (manual posing) ---
+  var box = document.getElementById('params');
+  var sliders = {};
+  RIG.parameters.forEach(function (p) {
+    var wrap = document.createElement('div'); wrap.className = 'param';
+    var name = document.createElement('div'); name.className = 'name';
+    var label = document.createElement('span'); label.textContent = p.id;
+    var ptr = document.createElement('span'); ptr.className = 'ptr';
+    if (p.pointer) ptr.textContent = 'pointer:' + p.pointer;
+    name.appendChild(label); name.appendChild(ptr);
+    var s = document.createElement('input');
+    s.type = 'range'; s.min = p.min; s.max = p.max;
+    s.step = (p.max - p.min) / 200 || 0.01; s.value = p.default || 0;
+    s.addEventListener('input', function () {
+      player.pause(); playPause.textContent = 'Play'; player.followPointer = false;
+      document.getElementById('follow').checked = false;
+      player.params[p.id] = parseFloat(s.value);
+      manualPose();
+    });
+    wrap.appendChild(name); wrap.appendChild(s); box.appendChild(wrap);
+    sliders[p.id] = s;
+  });
+
+  // Manual pose: apply current player.params directly (bypass motion/pointer).
+  function manualPose() {
+    var acc = {};
+    function ensure(id) { return acc[id] || (acc[id] = { rot: 0, tx: 0, ty: 0, sx: 1, sy: 1 }); }
+    RIG.parameters.forEach(function (param) {
+      var v = player.params[param.id];
+      var span = param.max - param.min;
+      var f = span === 0 ? 0 : Math.max(0, Math.min(1, (v - param.min) / span));
+      (param.bindings || []).forEach(function (b) {
+        var a = ensure(b.part);
+        if (b.rotate) a.rot += b.rotate[0] + (b.rotate[1] - b.rotate[0]) * f;
+        if (b.translateX) a.tx += b.translateX[0] + (b.translateX[1] - b.translateX[0]) * f;
+        if (b.translateY) a.ty += b.translateY[0] + (b.translateY[1] - b.translateY[0]) * f;
+        if (b.scale) { var sc = b.scale[0] + (b.scale[1] - b.scale[0]) * f; a.sx *= sc; a.sy *= sc; }
+      });
+    });
+    RIG.parts.forEach(function (p) {
+      var el = player.partEls[p.id]; if (!el) return;
+      var a = acc[p.id];
+      if (!a) { el.removeAttribute('transform'); return; }
+      var px = p.pivot[0], py = p.pivot[1], t = [];
+      if (a.tx || a.ty) t.push('translate(' + a.tx.toFixed(3) + ' ' + a.ty.toFixed(3) + ')');
+      if (a.rot) t.push('rotate(' + a.rot.toFixed(3) + ' ' + px + ' ' + py + ')');
+      if (a.sx !== 1 || a.sy !== 1) t.push('translate(' + px + ' ' + py + ') scale(' + a.sx.toFixed(4) + ' ' + a.sy.toFixed(4) + ') translate(' + (-px) + ' ' + (-py) + ')');
+      if (t.length) el.setAttribute('transform', t.join(' ')); else el.removeAttribute('transform');
+    });
+  }
+
+  document.getElementById('resetPose').addEventListener('click', function () {
+    RIG.parameters.forEach(function (p) { player.params[p.id] = p.default || 0;
+      if (sliders[p.id]) sliders[p.id].value = p.default || 0; });
+    player._t0 = 0; player.resume(); playPause.textContent = 'Pause';
+    document.getElementById('follow').checked = player.followPointer;
+  });
+
+  player.start();
+})();
+</script>
+</body>
+</html>

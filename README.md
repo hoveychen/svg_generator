@@ -51,6 +51,7 @@ Flags:
 | `--png-size` | `0` | PNG preview pixel size; `0` = use `--canvas` |
 | `--refine-rounds` | `0` | vision-critique redraw rounds: render, critique the image, redraw, keep best (needs a renderer) |
 | `--animate` | `false` | produce a self-contained animated SVG (SMIL): movable parts get pivots + looping motion |
+| `--rig` | `false` | produce a Live2D-style rig: layered SVG + `.rig.json` + `.motion.json` + `.html` player (motion decoupled from appearance, follows the pointer) |
 | `--style` | (none) | style preset: `flat`, `line-art`, `realistic`, `pixel`, `isometric`, `watercolor`, `low-poly`, `retro` |
 | `--gif` | `false` | also export an animated GIF (needs Chrome + ffmpeg or ImageMagick); best with `--animate` |
 | `--gif-frames` | `24` | frames captured for the GIF |
@@ -114,6 +115,40 @@ Caveats:
 - Motion quality is the model's call: pivots can still land slightly off. The
   vision-critique loop cannot judge motion from a single frame, so `--refine-rounds`
   improves the static composition, not the animation timing.
+
+### Rig (`--rig`) — Live2D-style decoupled puppet
+
+`--animate` bakes motion *into* the SVG: appearance and motion live in one file
+and the animation is fixed. `--rig` goes further and splits a drawing into three
+independent pieces, the way Live2D separates an avatar's artwork, skeleton, and
+motions:
+
+```
+generate_svg -p "an articulated desk lamp" -o lamp.svg --rig
+```
+
+writes four files:
+
+| File | What it is |
+|------|------------|
+| `lamp.svg` | the **appearance** — a static, layered illustration whose movable parts are nested `<g data-part="…" data-pivot="PX PY">` groups (the DOM nesting *is* the bone chain). No transforms, no animation. |
+| `lamp.rig.json` | the **rig** — the skeleton extracted from the SVG (parts, parents, pivots) plus named **parameters**. A parameter, as it moves over its range, drives rotate/translate/scale on one or more parts via bindings. Parameters are the decoupling seam. |
+| `lamp.motion.json` | a **motion** — a looping idle timeline that keyframes *parameters* (never parts directly). Swappable: drop in a different `motion.json` and the same rig animates differently. |
+| `lamp.html` | a **self-contained player** — open it in a browser (no server). It poses the rig, plays the idle motion, **follows the cursor** for pointer-flagged parameters, and has sliders to pose each parameter by hand and a file picker to load a different motion. |
+
+How it is built: one model call draws the rig-ready SVG (validated for nested
+named parts, joint pivots, no baked transforms, a single bone tree, no
+animation); the skeleton is then extracted mechanically, and a second call
+designs the parameters and idle motion for *those* part names. Because parts are
+DOM-nested, the runtime only sets each part's own local transform about its
+pivot — the browser composes the bone chain for free.
+
+Caveats:
+
+- `--rig` and `--animate` are mutually exclusive (one uses a runtime player, the
+  other bakes SMIL).
+- `--png` renders the static rest pose; the motion only exists at runtime, so use
+  the `.html` player to see it move.
 
 ### Style presets (`--style`)
 

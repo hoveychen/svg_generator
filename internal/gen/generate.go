@@ -17,6 +17,7 @@ type Options struct {
 	Retries      int    // max repair attempts after the first try
 	RefineRounds int    // vision-critique redraw rounds (0 = off)
 	Animate      bool   // emit a self-contained animated SVG (SMIL)
+	Rig          bool   // emit a Live2D-style rig (layered SVG + rig.json + motion.json + player)
 	Style        string // optional style preset name (see StyleNames)
 	PixelType    string // asset type co-designed for pixelization; empty = none (set with --pixelize)
 	Timeout      time.Duration
